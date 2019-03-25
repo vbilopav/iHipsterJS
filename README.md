@@ -4,7 +4,6 @@
 # iHipsterJS Web Application Framework
 
 Simple and fast JavaScript Web Framework for real Hipsters. 
-
 This JavaScript Framework is unique, different and totally cool. 
 
 Just like Hipsters. 
@@ -12,9 +11,7 @@ Just like Hipsters.
 Works best on Macbook Pro.
 
 
-Here is simple example:
-
-
+Here is the simplest example how to display remote data on your page:
 
 ```html
 <!DOCTYPE html>
@@ -39,9 +36,11 @@ Here is simple example:
 
   </body>
 </html>
-
 ```
 
+Pretty unique, isn't it. It's all just JavaScript.
+
+> **WARNING:** Framework is under construction. 
 
 
 
