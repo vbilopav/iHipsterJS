@@ -1,0 +1,5 @@
+src/ihjs/dist/
+demos/node_modules/
+src/tools/node_modules/
+.vscode/settings.json
+.vscode/launch.json

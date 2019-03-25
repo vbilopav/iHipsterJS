@@ -1,0 +1,47 @@
+${
+<script>
+    // render css files
+    this.template.css.import("demos/shared/css/todo.css", "demos/shared/css/todo-item.css")
+</script>
+}
+
+${
+<script>
+    // constructor in self-execute func
+    (() => {
+        [this.item] = this.template.import("composite!demos/todo-template2/todo-item.html")();
+        this.value = "initial value";
+    })()
+</script>
+}
+
+<div class="ToDo">
+    <h1 class="ToDo-Header">ihjs To Do demo</h1>
+    <div class="ToDo-Container">
+        <div class="ToDo-Content" id="content">
+            ${
+            <script>
+                // render default values from remote endpoint
+                async () => this.template.forEach(
+                    await(await fetch("../shared/todo.json")).json(), item =>  // this could be also await _app.fetch(...)
+                    this.item(item)
+                )
+            </script>
+            }
+        </div>
+        <input type="text" id="input" />
+        <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
+    </div>
+</div>
+
+${
+<script>
+    // set template context
+    this.template.context = {
+        input: this.value, // input initial value, binded via model context
+        createNewToDoItem: () => this.template.model.content.append(
+            this.item(this.template.model.input.value).toHTML()
+        )
+    }
+</script>
+}

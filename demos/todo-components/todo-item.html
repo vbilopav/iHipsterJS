@@ -1,0 +1,29 @@
+${<script>this.template.css.import("demos/shared/css/todo-item.css")</script>}
+
+<div class="ToDoItem" id="item">
+    <p class="ToDoItem-Text">${this.dataIndex + ". " + this.html}</p>
+    <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
+</div>
+${
+<script>
+    (
+        () => {
+            this.template.context = {
+                deleteClick: () => {
+                    this.template.parent.count--;
+                    this.template.model.item.remove();
+                }
+            }
+            this.template.id = value => {
+                this.id = value;
+                console.log("id atrribute set to " + value);
+            }
+            this.template.dataIndex = value => {
+                this.dataIndex = value;
+                console.log("dataIndex atrribute set to " + value);
+            }
+        }
+    )()
+</script>
+}
+

@@ -1,0 +1,56 @@
+
+<div class="">
+    <h3>Template variables</h3>
+    <p>
+        Templates can have variable. To declare variable, use arrow function that doesn't return anything, and set it to <code>this</code>
+        <br />
+        For example:
+    </p>
+${()=>{this.myVariable = "some_value"}}
+<pre>
+&dollar;{()=>{this.myVariable = "some_value"}}
+</pre>
+    <p>
+        Note that expression above allows multilne for more complex scenarios. If arrow function returns anything it will be redndered into in template.
+        Example for multilne expression:
+
+${
+    () => {
+        this.myVariable2 = "some_value_2";
+        this.myVariable3 = "some_value_3";
+    }
+}
+<pre>
+&dollar;{
+    () => {
+        this.myVariable2 = "some_value_2";
+        this.myVariable3 = "some_value_3";
+    }
+}
+</pre>
+        <br />
+        To retrieve variable, use arrow function again and return a value:
+<pre>
+&dollar;{()=>this.myVariable}
+</pre>
+    <br />
+    myVariable=${()=>this.myVariable}
+    <br />
+    myVariable2=${()=>this.myVariable2}
+    <br />
+    myVariable3=${()=>this.myVariable3}
+    <br /><br />
+    Except myVariable4, if you want to have variable value available immidietly - just enclose it in self-execute function:
+<pre>
+&dollar;{(() => {this.myVariable4 = "some_value_4"})()}
+</pre>
+${(() => {this.myVariable4 = "some_value_4"})()}
+    myVariable4 is accesible without arrow function:
+<pre>
+&dollar;{this.myVariable4}
+</pre>
+    myVariable4=${this.myVariable4}
+    </p>
+
+    
+</div>

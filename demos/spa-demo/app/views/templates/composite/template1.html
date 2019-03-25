@@ -1,0 +1,42 @@
+<div class="">
+    <h3>This composite template view!</h3>
+    <p>
+        Templates can be composed form other templates.<br />
+        To import other templates use <code>this.template.import</code> helper.<br />
+        Parametrized templates start with <code>"template!"</code> and they are functions that can receive parameters.
+        Plain text templates start with <code>"template!"</code> and they return string instead of function.<br />
+        Modules can be imported too.
+        <br /><br />
+        View location: 
+        <pre>/app/views/templates/composite/template1.html</pre>
+        <br />
+        Full route definition: 
+
+<pre>
+"/composite": {
+    view: "template!views/templates/composite/template1.html", 
+    data: {
+        title: "Composite template",
+        category: "templates"
+    },
+    paramsMap: (...params) => params // any 
+}</pre>
+        <br />
+        <div class="panel-group">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">template1.html panel</div>
+                <div class="panel-body">template1.html imports template2.html:
+                    <br /><br />
+                    ${this.template.import("template!views/templates/composite/template2.html")({class: "panel-primary", params: this})}
+                </div>
+            </div>
+        </div>
+        <br />
+        Also, template import can pass parameters to each other. This route can receive any parameter. 
+        <br />
+        Try to change them manually in adress bar to see what happens...
+        <br /><br />
+        <hr />
+    </p>
+</div>

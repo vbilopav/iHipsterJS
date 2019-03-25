@@ -1,0 +1,30 @@
+<!-- component 1 - simple template -->
+${`
+<div class="panel panel-default">
+    <div class="panel-heading">Simple component 1</div>
+    <div class="panel-body">component 1 - simple template</div>
+</div>`
+}
+<!-- component 2 - simple template -->
+${`
+<div class="panel panel-info">
+    <div class="panel-heading">Simple component 2</div>
+    <div class="panel-body">component 2 - simple template</div>
+</div>`
+}
+<!-- component 3 - template function -->
+${(heading, body) => `
+    <div class="panel panel-warning">
+        <div class="panel-heading">${heading}</div>
+        <div class="panel-body">${body}</div>
+    </div>`
+}
+<!-- component 4 - template promise -->
+${(heading, body) => new Promise(resolve => setTimeout(() => resolve(
+    `
+    <div class="panel panel-success">
+        <div class="panel-heading">${heading}</div>
+        <div class="panel-body">${body}</div>
+    </div>
+    `), 1000))
+}

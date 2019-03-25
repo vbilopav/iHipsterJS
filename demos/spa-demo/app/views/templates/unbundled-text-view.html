@@ -1,0 +1,25 @@
+<div class="">
+    <h3>This is a plain-text view which is not included in main bundle build!</h3>
+    <p>
+        Views that are not included in main bundle build will be loaded only when requested!<br />
+        <br />
+        View location: 
+        <pre>/app/views/templates/unbundled-text-view.html</pre>
+        <br />
+        Full route definition: 
+
+<pre>
+"/": {
+    view: "text!views/templates/unbundled-text-view.html",
+    data: {
+        title: "Plain text view",
+        category: "templates"
+    }
+}</pre>
+
+        <br />
+
+        <br /><br />
+        <hr />
+    </p>
+</div>

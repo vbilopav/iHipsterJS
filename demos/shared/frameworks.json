@@ -1,0 +1,65 @@
+{
+    "Ember": {
+        "Web": "https://www.emberjs.com/",
+        "Description": "Ember.js is an open-source JavaScript web framework, based on the Model–view–viewmodel pattern. It allows developers to create scalable single-page web applications by incorporating common idioms and best practices into the framework.",
+        "InitialRelease": "8 December 2011",
+        "StableRelease": "3.0.0 / February 14",
+        "WrittenIn": "JavaScript",
+        "DevelopedBy": "Yehuda Katz",
+        "Remarks": ""
+    }, 
+    "Angular2": {
+        "Web": "https://angular.io/",
+        "Description": "Angular is a TypeScript-based open-source front-end web application platform led by the Angular Team at Google and by a community of individuals and corporations. Angular is a complete rewrite from the same team that built AngularJS.",
+        "InitialRelease": "14 September 2016",
+        "StableRelease": "5.2.3 / 31 January 2018",
+        "WrittenIn": "TypeScript",
+        "DevelopedBy": "Google",
+        "Remarks": ""
+    },    
+    "AngularJS": {
+        "Web": "https://angularjs.org/",  
+        "Description": "AngularJS is a JavaScript-based open-source front-end web application framework mainly maintained by Google and by a community of individuals and corporations to address many of the challenges encountered in developing single-page applications.",
+        "InitialRelease": "October 20, 2010",
+        "StableRelease": "1.6.9 / February 3, 2018",
+        "WrittenIn": "JavaScript",
+        "DevelopedBy": "Google",
+        "Remarks": ""
+    },
+    "Vue": {
+        "Web": "https://vuejs.org/",  
+        "Description": "Vue.js is an open-source progressive JavaScript framework for building user interfaces. Integration into projects that use other JavaScript libraries is made easy with Vue because it is designed to be incrementally adoptable.",
+        "InitialRelease": "February 2014",
+        "StableRelease": "2.5.13 / December 19, 2017",
+        "WrittenIn": "JavaScript",
+        "DevelopedBy": "Evan You",
+        "Remarks": ""
+    },
+    "Inferno": {
+        "Web": "https://infernojs.org/",  
+        "Description": "Inferno is designed to be a light-weight and blazing fast React-like Javascript library for building modern interfaces. It was also designed to be React compatible, modular and isomorphic. The community supporting its development is tasked with continuously improving performance and exploring new and efficient methods.",
+        "InitialRelease": "January 2017",
+        "StableRelease": "5.0.0",
+        "WrittenIn": "JavaScript",
+        "DevelopedBy": "",
+        "Remarks": ""
+    },
+    "Preact": {
+        "Web": "https://preactjs.com/",  
+        "Description": "Fast 3kB alternative to React, with the same ES2015 API.",
+        "InitialRelease": "",
+        "StableRelease": "",
+        "WrittenIn": "JavaScript",
+        "DevelopedBy": "",
+        "Remarks": ""
+    },
+    "React": {
+        "Web": "https://reactjs.org/",
+        "Description": "In computing, React is a JavaScript library for building user interfaces. It is maintained by Facebook, Instagram and a community of individual developers and corporations",
+        "InitialRelease": "March 2013",
+        "StableRelease": "6.2.0 / November 28, 2017",
+        "WrittenIn": "JavaScript ",
+        "DevelopedBy": "Jordan Walke, Facebook, Instagram and community",
+        "Remarks": ""
+    }    
+}

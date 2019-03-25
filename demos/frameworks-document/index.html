@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="../shared/css/bootstrap.css">
+    
+    <title></title>
+  </head>
+  <body>
+
+    <script src="../shared/loading.js"></script>
+
+    <template id="frameworks">
+        <div class="container-fluid">
+            <p class="text-center">
+            <h2>JavaScript application frameworks</h2>
+            </p>
+            ${async () => this.template.forEach(await _app.fetch("../shared/frameworks.json"), (name, item) => 
+                `<div class="panel panel-default">
+                    <div class="panel-heading">${name}</div>
+                    <ul class="list-group">
+                        ${this.template.forEach(item, (key, value) => 
+                            `<li class="list-group-item">
+                                <strong>${key}: </strong>${value}
+                            </li>`
+                        )}
+                    </ul>
+                </div>`
+            )}
+        </div>
+        ${
+        <script>
+            () => this.template.rendered = element => {
+                console.log("Template rendered into element:");
+                console.log(element);
+                console.log();
+            }
+        </script>
+        }
+    </template>
+
+    <script type="module" src="../../src/ihjs/dev/ihjs.js"></script>
+
+  </body>
+</html>

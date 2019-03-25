@@ -1,0 +1,11 @@
+<div class="panel ${this.class}">
+    <div class="panel-heading">template6.html panel</div>
+    <div class="panel-body">template6.html doesn't import anyone, and so on...
+        <br />
+        <br /><br />
+        ${this.template.if(this.params.length === 0,
+            ``,
+            `${this.template.forEach(this.params, item => item + "<br />" )}`
+        )}
+    </div>
+</div>

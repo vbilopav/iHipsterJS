@@ -1,0 +1,14 @@
+<div class="navbar-header">
+    <a id="${this.home.id}" class="navbar-brand" href="${this.home.url}">${this.home.title}</a>
+</div>
+<div>
+
+    <div class="nav navbar-nav">
+
+        ${this.template.import("template!templates/menu.html")({title: "Templates", data: this.templates})}
+        ${this.template.import("template!templates/menu.html")({title: "Modules", data: this.modules})}
+        ${this.template.import("template!templates/menu.html")({title: "DI / Model binding", data: this.models})}
+        ${this.template.import("template!templates/menu.html")({title: "Advanced", data: this.advanced})}
+
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="">
+    <h3>This is a parametrized text view which is not included in main bundle build!</h3>
+    <p>
+        Views that are not included in main bundle build will be loaded only when requested!<br />
+        <br />
+        View location: 
+        <pre>/app/views/templates/unbundled-text-view.html</pre>
+        <br />
+        Full route definition: 
+
+<pre>
+"/": {
+    view: "text!views/templates/unbundled-text-view.html",
+    data: {
+        title: "Plain text view",
+        category: "templates"
+    }
+}</pre>
+        <label for="parameter value: " style="width: 50px">Name: </label>
+        <input name="parameter" id="parameter" type="text" value='${this.param}'
+        onkeydown="this.nextElementSibling.href='/#unbundled-parametrized-view/'+this.value;this.nextElementSibling.html('/#unbundled-parametrized-view/'+this.value);"/>
+        <a id="anchor" href="/#unbundled-parametrized-view/${this.param}">/#unbundled-parametrized-view/${this.param}</a>
+        <br />
+        Parameter value: <code>${this.param}</code>
+
+        <br /><br />
+        <hr />
+    </p>
+</div>

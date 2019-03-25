@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <h3>Github user data</h3>
+    <div class='panel panel-default'>
+        <div class='panel-heading'>${this.value}</div>
+        <div class='panel-body'>
+            <ul>
+            ${async () => this.template.forEach(await _app.fetch("https://api.github.com/users/" + this.value), (key, value) => 
+            `
+                <li class="list-group-item">
+                    <strong>${key}: </strong>${value}
+                </li>
+            `
+            )}
+            </ul>
+        </div>
+    </div>
+    <button onclick="window.history.back();">Go back</button>
+</div>

@@ -1,0 +1,46 @@
+${
+<script>
+    // render css files
+    this.template.css.import("demos/shared/css/todo.css", "demos/shared/css/todo-item.css")
+</script>
+}
+
+${
+<script>
+    // constructor in self-execute func, set initial values and load additional templates
+    (() => {
+        // load additional templates
+        [this.item] = this.template.import("composite!demos/todo-template1/todo-item.html")();
+        // set initial values
+        this.list = ["clean the house", "buy milk"];
+        this.value = "initial";
+    })()
+</script>
+}
+
+<div class="ToDo">
+    <h1 class="ToDo-Header">ihjs To Do demo</h1>
+    <div class="ToDo-Container">
+        <div class="ToDo-Content" id="content">
+            ${
+            <script>
+                // render component template
+                this.template.forEach(this.list, item => this.item(item))
+            </script>
+            }
+        </div>
+        <input type="text" id="input" value="${this.value}" />
+        <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
+    </div>
+</div>
+
+${
+<script>
+    // when template is rendered, create new model instance, bind it to element and set model context with even callback.
+    () => this.template.rendered = element => {
+        let model = new _app.Model().bind(element, {
+            createNewToDoItem: () => model.content.append(this.item(model.input.value).toHTML())
+        });
+    }
+</script>
+}

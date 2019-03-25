@@ -1,0 +1,33 @@
+{
+  "name": "ihjs",
+  "version": "2.0.0",
+  "description": "JavaScript framework built for simplicity and speed that utilizes heavily new ES6+ features",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vbilopav/ihjs.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "ES6",
+    "HTML",
+    "HTML5",
+    "SPA",
+    "Single Page Applications",
+    "Framework",
+    "Application Framework",
+    "Templates",
+    "Templating",
+    "Simple",
+    "Fast",
+    "Minimal"
+  ],
+  "author": "Vedran Bilopavlović <vbilopav@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vbilopav/ihjs/issues"
+  },
+  "homepage": "https://github.com/vbilopav/ihjs#readme"
+}

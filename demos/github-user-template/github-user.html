@@ -1,0 +1,13 @@
+<div class="container-fluid">
+    <h3>Github user data</h3>
+    <input type="text" name="username">
+    <button onclick="showClick">Show github user data</button>
+</div>
+${
+<script>
+    this.template.context = {
+        username: "vbilopav", // default value
+        showClick: () => window.location = "#/github-user-info/" + this.template.model.username.value
+    }
+</script>
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title></title>
+</head>
+<body>
+
+    <template id="todo-item">
+        ${<script>this.template.css.import("demos/shared/css/todo-item.css")</script>}
+        <div class="ToDoItem" id="item">
+            <p class="ToDoItem-Text">${this.dataIndex + ". " + this.html}</p>
+            <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
+        </div>
+        ${
+            <script>
+            () => {
+                this.template.context = {
+                    deleteClick: () => {
+                        this.template.parent.count--;
+                        this.template.model.item.remove();
+                    }
+                }
+            }
+            </script>
+        }
+    </template>
+
+    <div>
+        <script src="../shared/loading.js"></script>
+        <template>
+        ${<script>this.template.css.import("demos/shared/css/todo.css")</script>}
+        ${
+        <script>
+            (
+                () => {
+                    _app.customElements.define({tag: "todo-item", src: "document!todo-item"});
+                    this.template.context = {
+                    input: "initial value",
+                    createNewToDoItem: () => this.template.model.content.insertAdjacentHTML(
+                        "beforeend",
+                        `<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`
+                    )
+                }
+                }
+            )()
+        </script>
+        }
+        
+        <div class="ToDo">
+            <h1 class="ToDo-Header">ihjs To Do demo</h1>
+            <div class="ToDo-Container">
+                <div class="ToDo-Content" id="content">
+                    ${
+                        async () => this.template.forEach(await _app.fetch("../shared/todo.json"), (item, index) => 
+                        `
+                            <todo-item id="${'todo-item-' + index}" data-index="${this.count = index+1}">${item}</todo-item>
+                        `
+                        )
+                    }
+                </div>
+                <input type="text" id="input" />
+                <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
+            </div>
+        </div>
+        </template>
+    </div>
+
+    <script type="module" src="../../src/ihjs/dev/ihjs.js"></script>
+
+</body>
+</html>

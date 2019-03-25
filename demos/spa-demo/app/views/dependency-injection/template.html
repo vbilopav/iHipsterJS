@@ -1,0 +1,24 @@
+<div>
+    <h3>Dependency injection - template</h3>
+    <p>
+        Demonstration of dependency injection mechanism into template
+        <br />
+        This template, and all injected templates and modules are loaded at the same time asynchronously.
+        <br /><br />
+        View location: <pre>/app/views/dynamic-data/di/template.html</pre>
+        <br />
+        injected template.html:
+        ${this.template.injected[0]({
+            heading: "heading of injected injected/template.html to template.html",
+            body: "body of injected injected/template.html to template.html",
+        })} 
+        <br />
+        injected custom-module1: 
+        ${this.template.injected[1].getHtmlContent( 
+            "heading of injected injected/custom-module1 to template.html",
+            "body of injected injected/custom-module1 to template.html",
+        )}   
+        <hr />
+    </p>
+</div>
+${this.template.injected[2].sayHiToConsole()}

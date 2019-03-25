@@ -1,0 +1,48 @@
+<div class="">
+    
+    <h3>This view is is subroute from route <code>/parameterized</code></h3>
+        
+    <hr />
+    <p>
+        Routes can have subroutes. In this example route <code>/parameterized</code> have this sub-soute <code>/parameterized/sub-route</code> whicch displays this view!
+        <br /><br />
+        You can have as many sub-routes as you like. However, of lower level route is paramterized and 
+        it receives first parameter matching next sub-route name it will be interpreted as next sub-route.
+        <br /><br />
+        In this example if route <code>/parameterized</code> receives first parameter with value <code>sub-route</code> 
+        it will be interpreted as route <code>/parameterized/sub-route</code>
+    </p>
+    <p>    
+        View location: <pre>/app/views/templates/parameterized-sub-route.html</pre>
+        <br />
+        Route definition:
+        <pre>
+"/parameterized/sub-route": {
+    view: "template!views/templates/parameterized-sub-route.html", 
+    paramsMap: (...params) => {
+        if (params.length > 1) {
+            return false;
+        }
+        return {
+            firstAndOnly: params[0]
+        };
+    },
+    data: {
+        title: "Parameterized sub route",
+        category: "templates"
+    }
+}</pre>
+        <br />
+        Route accepts one optional, named paramater:
+        <br />
+        name: <code>firstAndOnly</code>, type: <code>string</code>
+        <br /><br />
+        Current value:
+        <br />
+        firstAndOnly: <code>${this.firstAndOnly}</code>
+        <br />
+        You may change url to change to test current value...
+        <br /><br />
+        <hr />
+    </p>
+</div>

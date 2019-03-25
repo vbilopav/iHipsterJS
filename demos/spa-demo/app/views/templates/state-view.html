@@ -1,0 +1,53 @@
+<div class="">
+    <h3>This is also a plain-text view!</h3>
+    <p>
+        But, it has some elements that can change state trough user input!<br />
+        When you navigate trough different views their previous state,
+        as well as scroll position - will be preserved.<br /><br />
+        Try it out. Enter some values and navigate around...<br /><br />
+        name: <input name="name" type="text"><br />
+        email: <input name="email" type="email"><br /><br />
+        
+        Select of frameworks: <br />
+        <select name="frameworks">
+            <option value="">select framework ...</option>
+            <option value="Ember">Ember</option>
+            <option value="Angular2">Angular2</option>
+            <option value="AngularJS">AngularJS</option>
+            <option value="Vue">Vue</option>
+            <option value="Inferno">Inferno</option>
+            <option value="Preact">Preact</option>
+            <option value="React">React</option>
+        </select>
+
+        <br /><br />
+        Checkbox of frameworks: <br />
+        <input type="checkbox" name="framework1" value="Ember" checked>Ember<br />
+        <input type="checkbox" name="framework3" value="Angular2" checked>Angular2<br />
+        <input type="checkbox" name="framework5" value="AngularJS" checked>AngularJS<br />
+        <input type="checkbox" name="framework6" value="Vue" checked>Vue<br />
+        <input type="checkbox" name="framework7" value="Inferno" checked>Inferno<br />
+        <input type="checkbox" name="framework8" value="Preact" checked>Preact<br />
+        <input type="checkbox" name="framework11" value="React" checked>React<br />
+
+        <br /><br />
+        View location: 
+        <pre>/app/views/templates/state-view.html</pre>
+        <br />
+        Full route definition: 
+
+<pre>
+"/keep-state": {
+    view: "text!views/templates/state-view.html",
+    data: {
+        title: "Plain text view - state handling",
+        category: "templates"
+    }
+}</pre>
+
+        <br />
+
+        <br /><br />
+        <hr />
+    </p>
+</div>

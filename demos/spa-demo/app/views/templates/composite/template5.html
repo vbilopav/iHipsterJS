@@ -1,0 +1,7 @@
+<div class="panel ${this.class}">
+    <div class="panel-heading">template5.html panel</div>
+    <div class="panel-body">template5.html imports template6.html
+        <br /><br />
+        ${this.template.import("template!views/templates/composite/template6.html")({class: "panel-danger", params: this.params})}
+    </div>
+</div>
