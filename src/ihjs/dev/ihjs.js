@@ -142,13 +142,13 @@
         paths: {
             libs: libsPath,
             sys: sysPath,
-            "text": sysPath + "/require-plugins/text",
-            "template": sysPath + "/require-plugins/template",
-            "document": sysPath + "/require-plugins/document",
-            "composite": sysPath + "/require-plugins/composite",
-            "cors-text": sysPath + "/require-plugins/cors-text",
-            "cors-template": sysPath + "/require-plugins/cors-template",
-            "extension": sysPath + "/require-plugins/extension"
+            "text": sysPath + "/plugins/text",
+            "template": sysPath + "/plugins/template",
+            "document": sysPath + "/plugins/document",
+            "composite": sysPath + "/plugins/composite",
+            "cors-text": sysPath + "/plugins/cors-text",
+            "cors-template": sysPath + "/plugins/cors-template",
+            "extension": sysPath + "/plugins/extension"
         }
     }
 

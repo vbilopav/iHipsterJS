@@ -44,7 +44,7 @@ class Builder {
     }
 
     buildBundle({
-        bundleDir, entryPoint="main", pluginsPath="require-plugins", indexModule="ihjs", sysPath="sys", useMin=true, skip=[]
+        bundleDir, entryPoint="main", pluginsPath="plugins", indexModule="ihjs", sysPath="sys", useMin=true, skip=[]
     }) {
 
         if (!this.minDir) {

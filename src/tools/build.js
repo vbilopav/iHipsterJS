@@ -6,7 +6,7 @@ builder.buildMin("../ihjs/dist/version/min/");
 builder.buildBundle({
     bundleDir: "../ihjs/dist/version/bundle/", 
     entryPoint: "main", 
-    pluginsPath: "require-plugins",
+    pluginsPath: "plugins",
     indexModule: "ihjs",
     sysPath:"sys",
     useMin: true,
