@@ -57,5 +57,5 @@ However, is you like what I'm doing and you find it useful, you can support me b
 ## License
 
 Copyright (c) Vedran Bilopavlović.  
-This source code is licensed under the [MIT license](https://github.com/vbilopav/ihjs/blob/master/src/ihjs/LICENSE.md).
+This source code is licensed under the [MIT license](https://github.com/vbilopav/iHipsterJS/blob/master/LICENSE).
 
