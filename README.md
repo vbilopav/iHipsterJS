@@ -40,7 +40,9 @@ Here is the simplest example how to display remote data on your page:
 
 Pretty unique, isn't it. It's all just JavaScript.
 
-> **WARNING:** Framework is under construction. 
+> *** WARNING: *** 
+> *** Work in progress ... ***
+> *** Framework is under construction. ***
 
 
 
