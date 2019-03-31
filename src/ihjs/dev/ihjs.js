@@ -1,7 +1,5 @@
 (function () {
 
-    const configure = () => {}
-
     const
         defaults = {
             version: "",
@@ -10,7 +8,7 @@
             appModule: "sys/single-view-app",
             appElementId: "app",
             appObjectName: "_app",
-            loaderUrl: "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.min.js"
+            loaderUrl: path => `${path}loader/loader.js`
         }
 
     const 
@@ -85,7 +83,7 @@
         appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
         settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
         cssFilesattrValue = scr.getAttribute("data-css-files"),
-        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl;
+        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl);
 
     if (!appUrl.startsWith("/")) {
         appUrl = "/" + appUrl;
@@ -136,6 +134,8 @@
         }
     }
 
+    const 
+        loaderLoaded = () => window.AMDLoader != undefined;
     window.require = {
         baseUrl: window[appObjectName].appUrl,
         __appObjName: appObjectName,
@@ -157,18 +157,21 @@
             let script = document.createElement("script");
             script.async = true;
             script.src = src;
-            script.setAttribute("data-main", "sys/main");
             document.body.appendChild(script);
             script.onload = onload;
             script.onerror = onload;
         };
 
-    loadLoader(loaderUrl, () => {
-        if (window.requirejs) {
-            configure();
-            return;
-        }
-        loadLoader(libsUrl + "requirejs/require.js", configure)
-    });
+    if (loaderLoaded()) {
+        require(["sys/main"], ()=>{});
+    } else {
+        loadLoader(loaderUrl, () => {
+            if (loaderLoaded()) {
+                require(["sys/main"], ()=>{});
+                return;
+            }
+            console.warn("Failed to load module loader.")
+        });
+    }
 
 })();

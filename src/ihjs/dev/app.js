@@ -1,1 +1,1 @@
-define([], () => window[requirejs.s.contexts._.config.__appObjName]);
+define([], () => window[require.getConfig().__appObjName]);

@@ -1,4 +1,4 @@
-define(["module", "sys/models/test-proto"], (_, test) => {
+define(["sys/models/test-proto"], test => {
     
     const 
         applyExtension = (element, extension) => {
@@ -17,8 +17,7 @@ define(["module", "sys/models/test-proto"], (_, test) => {
         };
 
     return {
-        version: '1.0.0',
-        load(name, req, onload, config) {
+        load(name, req, onload) {
             const 
                 [elementName, extensionName] = name.split("/");
             if (!["NodeList", "Document", "Window"].includes(elementName)) {
