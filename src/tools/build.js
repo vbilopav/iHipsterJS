@@ -10,5 +10,5 @@ builder.buildBundle({
     indexModule: "ihjs",
     sysPath:"sys",
     useMin: true,
-    skip: ["sys/models/pubsub", "sys/models/storage", "cors-template", "cors-text"]
+    skip: ["$/models/pubsub", "$/models/storage", "cors-template", "cors-text"]
 });

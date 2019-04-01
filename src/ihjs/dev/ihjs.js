@@ -5,7 +5,7 @@
             version: "",
             appUrl: "/",
             libsUrl: null,
-            appModule: "sys/single-view-app",
+            appModule: "$/single-view-app",
             appElementId: "app",
             appObjectName: "_app",
             loaderUrl: path => `${path}loader/loader.js`
@@ -141,14 +141,14 @@
         __appObjName: appObjectName,
         paths: {
             libs: libsPath,
-            "sys": sysPath,
-            "text": sysPath + "/plugins/text",
-            "template": sysPath + "/plugins/template",
-            "document": sysPath + "/plugins/document",
-            "composite": sysPath + "/plugins/composite",
-            "cors-text": sysPath + "/plugins/cors-text",
-            "cors-template": sysPath + "/plugins/cors-template",
-            "extension": sysPath + "/plugins/extension"
+            "$": sysPath,
+            "$text": sysPath + "/plugins/text",
+            "$template": sysPath + "/plugins/template",
+            "$document": sysPath + "/plugins/document",
+            "$composite": sysPath + "/plugins/composite",
+            "$cors-text": sysPath + "/plugins/cors-text",
+            "$cors-template": sysPath + "/plugins/cors-template",
+            "$extension": sysPath + "/plugins/extension"
         }
     }
 
@@ -163,11 +163,11 @@
         };
 
     if (loaderLoaded()) {
-        require(["sys/main"], ()=>{});
+        require(["$/main"], ()=>{});
     } else {
         loadLoader(loaderUrl, () => {
             if (loaderLoaded()) {
-                require(["sys/main"], ()=>{});
+                require(["$/main"], ()=>{});
                 return;
             }
             console.warn("Failed to load module loader.")

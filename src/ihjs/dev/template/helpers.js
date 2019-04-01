@@ -18,7 +18,7 @@ define([], () => {
                     }
                     document.head.appendChild(
                         `<style type="text/css">
-                            ${items.map(item => require(item.startsWith("text!") ? item : "text!" + item)).join("")}
+                            ${items.map(item => require(item.startsWith("$text!") ? item : "$text!" + item)).join("")}
                         </style>`.toHTML()
                     )
                     items.map(item => cssImported.push(item));

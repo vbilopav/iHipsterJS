@@ -1,7 +1,7 @@
 define([
-    "sys/template/helpers", 
-    "sys/template/import",
-    "sys/app"
+    "$/template/helpers", 
+    "$/template/import",
+    "$/app"
 ], (
     helpers, 
     importParser,

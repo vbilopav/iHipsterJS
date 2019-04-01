@@ -1,4 +1,4 @@
-define(["template!views/modules/_default.html"], template => class {
+define(["$template!views/modules/_default.html"], template => class {
 
     //
     // if callRenderOnlyOnce view option is set to true (false is default)

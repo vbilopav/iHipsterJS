@@ -1,7 +1,7 @@
 define([
-    "sys/template/parser", 
-    "sys/template/import",
-    "sys/template/tags",
+    "$/template/parser", 
+    "$/template/import",
+    "$/template/tags",
 ], (
     parser, 
     importParser,

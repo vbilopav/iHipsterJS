@@ -11,7 +11,7 @@
 <pre>
 &dollar;{
     () => {
-        let [part1, part2, part3] = this.template.import("composite!views/components/composed-template.html")(args);
+        let [part1, part2, part3] = this.template.import("$composite!views/components/composed-template.html")(args);
         this.compontent1 = part1;
         this.compontent2 = part2(1, 2);
         // etc
@@ -29,7 +29,7 @@
         ${
             <script>
             () => {
-                let [part1, part2, part3, part4] = this.template.import("composite!views/components/composed-template.html")();
+                let [part1, part2, part3, part4] = this.template.import("$composite!views/components/composed-template.html")();
                 this.compontent1 = part1;
                 this.compontent2 = part2;
                 this.compontent3 = part3;

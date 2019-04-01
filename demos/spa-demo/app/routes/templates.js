@@ -3,7 +3,7 @@ define([], () => {
     return {
 
         "/plain-text": {
-            view: "text!views/templates/plain-text-view.html",
+            view: "$text!views/templates/plain-text-view.html",
             data: {
                 title: "Plain text view",
                 category: "templates"
@@ -11,7 +11,7 @@ define([], () => {
         },
 
         "/keep-state": {
-            view: "text!views/templates/state-view.html",
+            view: "$text!views/templates/state-view.html",
             data: {
                 title: "Plain text view - state handling",
                 category: "templates"
@@ -19,7 +19,7 @@ define([], () => {
         }, 
 
         "/parameterized": {
-            view: "template!views/templates/parameterized.html", 
+            view: "$template!views/templates/parameterized.html", 
             paramsMap: params => {
                 if (params.length > 3) {
                     return false;
@@ -37,7 +37,7 @@ define([], () => {
         },
 
         "/parameterized/sub-route": {
-            view: "template!views/templates/parameterized-sub-route.html", 
+            view: "$template!views/templates/parameterized-sub-route.html", 
             paramsMap: params => {
                 if (params.length > 1) {
                     return false;
@@ -53,7 +53,7 @@ define([], () => {
         },
 
         "/composite": {
-            view: "template!views/templates/composite/template1.html", 
+            view: "$template!views/templates/composite/template1.html", 
             data: {
                 title: "Composite template",
                 category: "templates"
@@ -62,7 +62,7 @@ define([], () => {
         },
 
         "/unbundled-text-view": {
-            view: "text!views/templates/unbundled-text-view.html", 
+            view: "$text!views/templates/unbundled-text-view.html", 
             data: {
                 title: "Unbundled text template",
                 category: "templates"
@@ -70,7 +70,7 @@ define([], () => {
         },
 
         "/unbundled-parametrized-view": {
-            view: "template!views/templates/unbundled-parametrized-view.html", 
+            view: "$template!views/templates/unbundled-parametrized-view.html", 
             data: {
                 title: "Unbundled parametrized view template",
                 category: "templates"
@@ -86,7 +86,7 @@ define([], () => {
         },
 
         "/promise-in-template": {
-            view: "template!views/templates/promise-in-template.html",
+            view: "$template!views/templates/promise-in-template.html",
             paramsMap: async(params) => {
                 if (params.length !== 0) {
                     return false;
@@ -103,7 +103,7 @@ define([], () => {
         },
 
         "/template-variables": {
-            view: "template!views/templates/template-variables.html",
+            view: "$template!views/templates/template-variables.html",
             data: {
                 title: "Template variables",
                 category: "templates"
@@ -111,7 +111,7 @@ define([], () => {
         },
 
         "/async-in-template": {
-            view: "template!views/templates/async-template.html",
+            view: "$template!views/templates/async-template.html",
             data: {
                 title: "Async template",
                 category: "templates"
@@ -119,8 +119,8 @@ define([], () => {
         },
 
         "/crossdomain-text-example": {
-            view: "cors-text!https://crossdomain-example.netlify.com/text-module1.html",
-            //view: "cors-template!http://127.0.0.1:8081/template1.html",
+            view: "$cors-text!https://crossdomain-example.netlify.com/text-module1.html",
+            //view: "cors-$template!http://127.0.0.1:8081/template1.html",
             data: {
                 title: "Crossdomain text example",
                 category: "templates"
@@ -128,8 +128,8 @@ define([], () => {
         }, 
 
         "/crossdomain-template-example": {
-            view: "cors-template!https://crossdomain-example.netlify.com/template1.html",
-            //view: "cors-template!http://127.0.0.1:8081/template1.html",
+            view: "cors-$template!https://crossdomain-example.netlify.com/template1.html",
+            //view: "cors-$template!http://127.0.0.1:8081/template1.html",
             data: {
                 title: "Crossdomain template example",
                 category: "templates"

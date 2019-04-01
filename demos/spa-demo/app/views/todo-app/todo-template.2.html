@@ -11,7 +11,7 @@ ${this.template.css.import("../shared/css/todo.css", "../shared/css/todo-item.cs
 
 ${
     () => this.template.rendered = element => {
-        let [item] = this.template.import("composite!views/todo-app/todo-item-template.html")();
+        let [item] = this.template.import("$composite!views/todo-app/todo-item-template.html")();
         this.value = "";
         this.content = ["clean the house", "buy milk"].map(text => item(text)).join("");
         this.createNewToDoItem = () => model.content.append(item(model.input.value).toHTML());

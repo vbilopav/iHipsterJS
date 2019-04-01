@@ -22,14 +22,14 @@ define([
 
         "/": {
             id: "home",
-            view: "text!views/home.html",
+            view: "$text!views/home.html",
             data: {
                 title: "Home"
             }
         },
 
         "/not-found": {
-            view: "text!views/not-found.html"
+            view: "$text!views/not-found.html"
         }
 
     },

@@ -9,7 +9,7 @@ ${
 <script>
     // constructor in self-execute func
     (() => {
-        [this.item] = this.template.import("composite!demos/todo-template2/todo-item.html")();
+        [this.item] = this.template.import("$composite!demos/todo-template2/todo-item.html")();
         this.value = "initial value";
     })()
 </script>

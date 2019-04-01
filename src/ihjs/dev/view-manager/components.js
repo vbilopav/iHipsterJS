@@ -1,4 +1,4 @@
-define(["sys/app"], app => {
+define(["$/app"], app => {
 
     app.customElements = {
         _components: [],

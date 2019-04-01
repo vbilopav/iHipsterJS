@@ -1,7 +1,7 @@
 define([
-    "sys/view-manager/utils", 
-    "sys/app",
-    "sys/view-manager/components",
+    "$/view-manager/utils", 
+    "$/app",
+    "$/view-manager/components",
 ], (
     utils,
     app,
@@ -277,7 +277,7 @@ define([
                         options.css = options.css.filter(value => !cssImported.includes(value));
                     }
                     if (options.css && options.css.length) {
-                        require(options.css.map(item => item.startsWith("text!") ? item : "text!" + item), (...results) => {
+                        require(options.css.map(item => item.startsWith("$text!") ? item : "$text!" + item), (...results) => {
                             document.head.appendChild(
                                 `<style type="text/css">
                                     ${results.join("")}

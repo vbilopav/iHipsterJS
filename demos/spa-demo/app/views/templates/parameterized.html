@@ -27,7 +27,7 @@
         Route definition:
         <pre>
 "/parameterized": {
-    view: "template!views/templates/parameterized.html", 
+    view: "$template!views/templates/parameterized.html", 
     paramsMap: (...params) => {
         if (params.length > 3) {
             return false;

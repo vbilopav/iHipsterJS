@@ -18,7 +18,7 @@
         Route definition:
         <pre>
 "/parameterized/sub-route": {
-    view: "template!views/templates/parameterized-sub-route.html", 
+    view: "$template!views/templates/parameterized-sub-route.html", 
     paramsMap: (...params) => {
         if (params.length > 1) {
             return false;

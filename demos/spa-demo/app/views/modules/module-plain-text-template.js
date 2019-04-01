@@ -1,4 +1,4 @@
-define(["template!views/modules/_default.html"], (template) => template({
+define(["$template!views/modules/_default.html"], (template) => template({
     header: "This is module view that returns plain-text from template",
     firstLine: "View modules can return simple, plain text.",
     secondLine: "",     

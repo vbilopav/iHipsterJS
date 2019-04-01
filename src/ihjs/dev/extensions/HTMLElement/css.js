@@ -1,4 +1,4 @@
-define(["sys/models/test-proto", "sys/extensions/String/toCamelCase"], test => {
+define(["$/models/test-proto", "$/extensions/String/toCamelCase"], test => {
         
     test(HTMLElement, ["css", "_styles"]);
 

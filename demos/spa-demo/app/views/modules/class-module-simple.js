@@ -1,4 +1,4 @@
-define(["template!views/modules/_default.html"], template => class {
+define(["$template!views/modules/_default.html"], template => class {
 
     //
     // constructor is optional, it receives view id and view element

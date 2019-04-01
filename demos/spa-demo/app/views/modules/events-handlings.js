@@ -1,4 +1,4 @@
-define(["template!views/modules/_default.html"], template => {
+define(["$template!views/modules/_default.html"], template => {
 
     var module,
         handleButtonClickEvent = event => {

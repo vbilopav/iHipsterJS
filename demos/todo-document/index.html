@@ -38,7 +38,7 @@
         <script>
             (
                 () => {
-                    _app.customElements.define({tag: "todo-item", src: "document!todo-item"});
+                    _app.customElements.define({tag: "todo-item", src: "$document!todo-item"});
                     this.template.context = {
                     input: "initial value",
                     createNewToDoItem: () => this.template.model.content.insertAdjacentHTML(

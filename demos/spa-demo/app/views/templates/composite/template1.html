@@ -3,8 +3,8 @@
     <p>
         Templates can be composed form other templates.<br />
         To import other templates use <code>this.template.import</code> helper.<br />
-        Parametrized templates start with <code>"template!"</code> and they are functions that can receive parameters.
-        Plain text templates start with <code>"template!"</code> and they return string instead of function.<br />
+        Parametrized templates start with <code>"$template!"</code> and they are functions that can receive parameters.
+        Plain text templates start with <code>"$template!"</code> and they return string instead of function.<br />
         Modules can be imported too.
         <br /><br />
         View location: 
@@ -14,7 +14,7 @@
 
 <pre>
 "/composite": {
-    view: "template!views/templates/composite/template1.html", 
+    view: "$template!views/templates/composite/template1.html", 
     data: {
         title: "Composite template",
         category: "templates"
@@ -28,7 +28,7 @@
                 <div class="panel-heading">template1.html panel</div>
                 <div class="panel-body">template1.html imports template2.html:
                     <br /><br />
-                    ${this.template.import("template!views/templates/composite/template2.html")({class: "panel-primary", params: this})}
+                    ${this.template.import("$template!views/templates/composite/template2.html")({class: "panel-primary", params: this})}
                 </div>
             </div>
         </div>

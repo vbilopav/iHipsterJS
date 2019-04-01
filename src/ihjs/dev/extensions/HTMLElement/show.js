@@ -1,4 +1,4 @@
-define(["sys/models/test-proto", "sys/extensions/HTMLElement/css"], test => {
+define(["$/models/test-proto", "$/extensions/HTMLElement/css"], test => {
         
     test(HTMLElement, ["show"]);
 

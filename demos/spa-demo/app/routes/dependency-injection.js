@@ -4,9 +4,9 @@ define([], () => {
 
         "/dependency-injection-template": {
             view: {
-                name: "template!views/dependency-injection/template.html",
+                name: "$template!views/dependency-injection/template.html",
                 inject: [
-                    "template!views/dependency-injection/injected/template.html",
+                    "$template!views/dependency-injection/injected/template.html",
                     "views/dependency-injection/injected/custom-module1",
                     "views/dependency-injection/injected/custom-module2"
                 ] 
@@ -21,7 +21,7 @@ define([], () => {
             view: {
                 name: "views/dependency-injection/class-module",
                 inject: [
-                    "template!views/dependency-injection/injected/template.html",
+                    "$template!views/dependency-injection/injected/template.html",
                     "views/dependency-injection/injected/custom-module1",
                     "views/dependency-injection/injected/custom-module2"
                 ]

@@ -1,5 +1,5 @@
 define(
-    ["sys/app"], app => 
+    ["$/app"], app => 
         id => {
             const parseQueryString = input => 
                 input.slice(input.indexOf('?') + 1)
@@ -15,12 +15,12 @@ define(
                 } else {
                     let template = templates[templates.length-1];
                     template.id = _app.config.name;
-                    app.config.view = "document!" + _app.config.name;
+                    app.config.view = "$document!" + _app.config.name;
                     element = template.parentElement;
                 }
-            } else if (app.config.view.startsWith("document!") && (!id || id==="app")) {
+            } else if (app.config.view.startsWith("$document!") && (!id || id==="app")) {
                 let getElement = () => {
-                    id = app.config.view.replace("document!", "");
+                    id = app.config.view.replace("$document!", "");
                     return (document.getElementById(id) || document.getElementsByName(id)).parentElement;
                 }
                 if (!id) {
@@ -28,7 +28,7 @@ define(
                 } else {
                     element = document.getElementById(id);
                     if (!element) {
-                        id = app.config.view.replace("document!", "");
+                        id = app.config.view.replace("$document!", "");
                         element = getElement();
                     }
                 }

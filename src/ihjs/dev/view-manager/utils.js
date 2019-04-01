@@ -1,7 +1,7 @@
-define(["sys/view-manager/components"], ({getTags})  => {
+define(["$/view-manager/components"], ({getTags})  => {
 
     const 
-        isTemplate = name => name.indexOf("template!") !== -1 || name.indexOf("document!") !== -1,
+        isTemplate = name => name.indexOf("$template!") !== -1 || name.indexOf("$document!") !== -1,
         prefix = "_view",
         getId = uriHash => prefix + "-" + uriHash,
         types = {template: 1, class: 2, string: 3},
