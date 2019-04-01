@@ -395,6 +395,7 @@ var AMDLoader;
             for (let i = 0, len = this.sortedPathsRules.length; i < len; i++) {
                 pathRule = this.sortedPathsRules[i];
                 if (AMDLoader.Utilities.startsWith(moduleId, pathRule.from)) {
+                //if (moduleId.indexOf("/") !== -1 && moduleId.split("/")[0] === pathRule.from) {
                     let result = [];
                     for (let j = 0, lenJ = pathRule.to.length; j < lenJ; j++) {
                         result.push(pathRule.to[j] + moduleId.substr(pathRule.from.length));

@@ -141,7 +141,7 @@
         __appObjName: appObjectName,
         paths: {
             libs: libsPath,
-            sys: sysPath,
+            "sys": sysPath,
             "text": sysPath + "/plugins/text",
             "template": sysPath + "/plugins/template",
             "document": sysPath + "/plugins/document",

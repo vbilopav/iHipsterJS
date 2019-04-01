@@ -1,7 +1,7 @@
 define([
     "sys/spa/router",
     "sys/spa/view-manager",
-    "template!/demos/spa-demo/app/templates/layout.html",
+    "template!html-templates/layout.html",
     "routes/main"
 ], (
     Router,
