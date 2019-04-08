@@ -28,4 +28,4 @@ define(["$/app"], app => {
         getEntry: name => app.customElements._components[name.toUpperCase()]
     }
 
- });
+});

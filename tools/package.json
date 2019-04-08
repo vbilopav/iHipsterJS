@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "uglify-es": "^3.3.9"
+  },
+  "scripts": {
+    "start": "node build"
+  }
+}
