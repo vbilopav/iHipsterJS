@@ -42,28 +42,25 @@ module.exports = {
             fs.rmdirSync(pathName);
         }
     },
-    mkDirByPathSync: targetDir => {
+    mkDirByPathSync: (targetDir, log) => {
         const
             isRelativeToScript = false,
             sep = path.sep,
             initDir = path.isAbsolute(targetDir) ? sep : '',
             baseDir = isRelativeToScript ? __dirname : '.';
-    
+        if (!log) {
+            log = console.log;
+        }
         targetDir.split(sep).reduce((parentDir, childDir) => {
             const curDir = path.resolve(baseDir, parentDir, childDir);
             if (!fs.existsSync(curDir)) {
-                console.log(`>>> Creating new dir ${curDir}`);
+                log(`>>> Creating new dir ${curDir}`);
                 fs.mkdirSync(curDir);
             }
             return curDir;
         }, initDir);
     },
-
     cleanPath: name => name.replace(/[\\/]/g, path.sep),
-
-    fs: fs,
-    path: path,
-
     readConfig: name => eval(fs.readFileSync(name).toString()),
     getVersion: () => {
         try {
@@ -71,7 +68,7 @@ module.exports = {
             let jsonContent = JSON.parse(contents);
             return jsonContent.version;
         } catch(error) {
-            console.log(error);
+            console.warn(error);
             return "";
         }
     },

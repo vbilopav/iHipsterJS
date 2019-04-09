@@ -1,35 +1,65 @@
-const uglifyEs = require("uglify-es");
 const os = require("os");
+const fs = require("fs");
+const path = require("path");
 const {
     walkSync, 
     rmdirSync, 
     mkDirByPathSync, 
     cleanPath, 
-    fs, 
-    path,
     readConfig,
     getVersion,
     templateStr
 } = require("./utils");
+const minify = require("./minifier");
 
-class Builder {
-    constructor() {
-        this.config = readConfig("./build-config.js");
-        this.config.version = getVersion();
-        for (let [key, value] of Object.entries(this.config)) {
-            if (typeof value === "string") {
-                let tmpValue = templateStr(value, this.config);
-                if (key.endsWith("Dir") || key.endsWith("Path")) {
-                    tmpValue = cleanPath(tmpValue);
-                }
-                this.config[key] = tmpValue;
+const getConfig = function() {
+    const config = readConfig("./build-config.js");
+    config.version = getVersion();
+    for (let [key, value] of Object.entries(config)) {
+        if (typeof value === "string") {
+            let tmpValue = templateStr(value, config);
+            if (key.endsWith("Dir") || key.endsWith("Path")) {
+                tmpValue = cleanPath(tmpValue);
             }
+            config[key] = tmpValue;
         }
-
-
-        console.log("config:");
-        console.log(this.config);
     }
+    return config;
+};
+
+const config = getConfig();
+
+const log = function() {
+    if (!config.verbose) {
+        return
+    }
+    console.log(...arguments);
 }
 
-new Builder();
+const buildOutputDir = function() {
+    log(`>>> Removing min dir ${this.outputDir}`);
+    rmdirSync(this.outputDir);
+
+    for (let sourceItem of walkSync(this.sourceDir)) {
+        const 
+            dirName = cleanPath(sourceItem.dir).replace(this.sourceDir, this.outputDir),
+            fileName = cleanPath(sourceItem.full).replace(this.sourceDir, this.outputDir),
+            moduleName = sourceItem.full.replace(this.sourceDir, "");
+
+        log(moduleName);
+
+        if (path.extname(sourceItem.full) !== ".js") {
+            continue;
+        }
+
+        //mkDirByPathSync(dirName, log);
+
+        //log(`>>> Minifying "${sourceItem.full}" to "${fileName}" ...`);
+        //let content = minify.call(this, sourceItem.full, fileName, log);
+        
+        //fs.writeFileSync(fileName, content.code, "utf8");
+    }
+};
+
+
+buildOutputDir.call(config);
