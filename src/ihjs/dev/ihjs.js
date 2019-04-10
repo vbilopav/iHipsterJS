@@ -136,7 +136,8 @@
 
     const 
         loaderLoaded = () => window.AMDLoader != undefined;
-    window.require = {
+    
+    const config = {
         baseUrl: window[appObjectName].appUrl,
         __appObjName: appObjectName,
         paths: {
@@ -163,10 +164,12 @@
         };
 
     if (loaderLoaded()) {
+        require.config(config);
         require(["$/main"], ()=>{});
     } else {
         loadLoader(loaderUrl, () => {
             if (loaderLoaded()) {
+                require.config(config);
                 require(["$/main"], ()=>{});
                 return;
             }

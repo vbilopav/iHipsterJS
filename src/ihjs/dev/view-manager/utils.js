@@ -59,4 +59,4 @@ define(["$/view-manager/components"], ({getTags})  => {
 
     }
 
- });
+});

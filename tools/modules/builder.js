@@ -133,7 +133,9 @@ const build = function() {
 
     const
         loaderDir = path.dirname(this.loaderFile),
+        //loaderContet = "(function () {" + getContentByOptions(this.loaderFile, this.minifyLoader) + "}).call(window);";
         loaderContet = getContentByOptions(this.loaderFile, this.minifyLoader);
+
     log('>>> Writting module loader to bundle ...');
     fs.appendFileSync(bundleFile, loaderContet, "utf8");
     log();
@@ -158,18 +160,26 @@ const build = function() {
             continue;
         }
 
-        log(frameworkFile, moduleNameClean)
-    
-        const 
+        if (frameworkFile == sourceFile) {
+            continue;
+        }
+
+        let 
             moduleContent = getContent(frameworkFile, moduleNameClean);
         if (this.lazyModules.includes(moduleNameClean)) {
             log(">>> Creating file ", fileNameClean);
             mkDirByPathSync(dirNameClean);
             fs.writeFileSync(fileNameClean, moduleContent, "utf8");
         } else {
-            log('>>> Writting file to bundle ...', frameworkFile);
-            fs.appendFileSync(bundleFile, moduleContent, "utf8");
+            const 
+                moduleName = "$/" + moduleNameClean.replace(new RegExp("\\"+path.sep, 'g'), "/").replace(".js", "");
+            if (!moduleContent.endsWith(";")) {
+                moduleContent = moduleContent + ";";
+            }
+            log('>>> Bundling module ...', moduleName);
+            fs.appendFileSync(bundleFile, moduleContent.replace("define([", "define('" + moduleName + "',["), "utf8");
         }
+    
     }
 
     const 
