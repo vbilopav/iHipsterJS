@@ -42,36 +42,35 @@ module.exports = {
             fs.rmdirSync(pathName);
         }
     },
-    mkDirByPathSync: (targetDir, log) => {
+    mkDirByPathSync: (targetDir, oncreate) => {
         const
             isRelativeToScript = false,
             sep = path.sep,
             initDir = path.isAbsolute(targetDir) ? sep : '',
             baseDir = isRelativeToScript ? __dirname : '.';
-        if (!log) {
-            log = console.log;
-        }
         targetDir.split(sep).reduce((parentDir, childDir) => {
             const curDir = path.resolve(baseDir, parentDir, childDir);
             if (!fs.existsSync(curDir)) {
-                log(`>>> Creating new dir ${curDir}`);
-                fs.mkdirSync(curDir);
+                oncreate && oncreate(curDir);
+                fs.mkdirSync(curDir + path.sep);
             }
             return curDir;
         }, initDir);
     },
     cleanPath: name => name.replace(/[\\/]/g, path.sep),
     readConfig: name => eval(fs.readFileSync(name).toString()),
-    getVersion: () => {
-        try {
-            let contents = fs.readFileSync("../src/ihjs/package.json");
-            let jsonContent = JSON.parse(contents);
-            return jsonContent.version;
-        } catch(error) {
-            console.warn(error);
-            return "";
-        }
-    },
-    templateStr: (s, o) => (s.indexOf("$") !== -1 ? new Function("return `" + s + "`;").call(o) : s)
+    templateStr: (s, o) => (s.indexOf("$") !== -1 ? new Function("return `" + s + "`;").call(o) : s),
+    getTimeStamp: () => {
+        let date = new Date();
+        return (
+            date.getFullYear() + "-" + 
+            ("0" + (date.getMonth() + 1).toString()).slice(-2) + "-" + 
+            ("0" + date.getDate().toString()).slice(-2) + " " + 
+            ("0" + (date.getHours()).toString()).slice(-2) + ":" + 
+            ("0" + date.getMinutes().toString()).slice(-2) + ":" + 
+            ("0" + date.getSeconds().toString()).slice(-2) + ":" + 
+            (date.getMilliseconds().toString())
+        )
+    }
 }
 

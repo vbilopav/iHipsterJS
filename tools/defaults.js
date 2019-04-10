@@ -1,23 +1,39 @@
+// 
+// Following values will replace any missing value in configuration file.
+// This file is read only. 
+// Values can be overriden in configuration files.
+//
 ({
     //
     // Source dir is location of framework source code, relative to location of this script
     //
     frameworkDir: "../src/ihjs/dev/",
     //
+    // Entry point file name in framework dir
+    //
+    entryPointFile: 'ihjs.js',
+    //
     // Build output directory, recreated on every build
     // ${this.version} is substitute for version value found in ../src/ihjs/package.json
     //
     outputDir: "../src/ihjs/build/${this.version}/",
     //
-    // Name of output file saved in output dir. If not specified it will be 'ihjs.js'
+    // Name of output file saved in output dir.
     //
-    bundleName: null,
+    bundleFile: 'ihjs.js',
+    //
+    // Name of output file saved in output dir.
+    //
+    bundleComment: 'ihjs, build: ${this.timestamp}, version: ${this.version}',
+    //
+    // Name of default package.json file that will be used to read current version.
+    //
+    packageFile: '../src/ihjs/package.json',
     //
     // Default file operation - copy or minify and if minify how
     // false or null value will leave source file intact as is.
     // true value will use default uglifyEs options. 
-    // To specify specific options use options object. 
-    // For more info on minify options go to: https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
+    // To specify specific options use options object -> https://github.com/mishoo/UglifyJS2/tree/harmony#minify-options
     // To use different minify engine modify ./modules/minify.js
     //
     minifyDefault: true,
@@ -39,6 +55,14 @@
     // Example: skipModules: ['spa/router.js', 'spa/view-manager.js'] // since we don't use spa application, we don't need them
     //
     skipModules: [],
+    //
+    //
+    //
+    loaderFile: "../src/ihjs/dev/loader/loader-min.js",
+    //
+    //
+    //
+    minifyLoader: false,
     //
     // Output detailed log to console
     //
