@@ -27,6 +27,6 @@ define([
     _app.fetch = async (url, opts) => await(await fetch(url, opts)).json();
     _app.render = async (view, elementOrId, params) => 
         await reveal({view: view, elementOrId: elementOrId, params: params});
-    require([_app.config.module], app => app(_app.config.elementId));
+    require([_app.config.module], app => (app.default || app)(_app.config.elementId));
 
 });
