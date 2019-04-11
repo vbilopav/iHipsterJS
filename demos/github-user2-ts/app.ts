@@ -1,4 +1,6 @@
+//@ts-ignore
 import Router from "$/spa/router"; 
+//@ts-ignore
 import Manager from "$/spa/view-manager";
 
 export default (appElementId: string) => {
