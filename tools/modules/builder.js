@@ -132,13 +132,20 @@ const build = function() {
     }
 
     const
-        loaderDir = path.dirname(this.loaderFile),
-        //loaderContet = "(function () {" + getContentByOptions(this.loaderFile, this.minifyLoader) + "}).call(window);";
-        loaderContet = getContentByOptions(this.loaderFile, this.minifyLoader);
+        loaderDir = path.dirname(this.loaderFile);
 
     log('>>> Writting module loader to bundle ...');
-    fs.appendFileSync(bundleFile, loaderContet, "utf8");
+    fs.appendFileSync(
+        bundleFile, 
+        "(function(){" + getContentByOptions(this.loaderFile, this.minifyLoader) + "}).call(window);", 
+        "utf8"
+    );
     log();
+
+
+    let 
+        bundleContent = " require.config({_modules:{",
+        hasBundles = false;
 
     for (let frameworkItem of walkSync(this.frameworkDir)) {
         const 
@@ -171,23 +178,35 @@ const build = function() {
             mkDirByPathSync(dirNameClean);
             fs.writeFileSync(fileNameClean, moduleContent, "utf8");
         } else {
-            const 
-                moduleName = "$/" + moduleNameClean.replace(new RegExp("\\"+path.sep, 'g'), "/").replace(".js", "");
-            if (!moduleContent.endsWith(";")) {
-                moduleContent = moduleContent + ";";
+            let 
+                moduleName = moduleNameClean.replace(new RegExp("\\"+path.sep, 'g'), "/").replace(".js", "");
+            if (moduleName.startsWith(this.plugins)) {
+                moduleName = moduleName.replace(this.plugins, "$");
+            } else {
+                moduleName = "$/" + moduleName;
             }
             log('>>> Bundling module ...', moduleName);
-            fs.appendFileSync(bundleFile, moduleContent.replace("define([", "define('" + moduleName + "',["), "utf8");
+            bundleContent = bundleContent + `'${moduleName}': [`;
+            bundleContent = bundleContent + moduleContent.substring(moduleContent.indexOf("(") + 1, moduleContent.lastIndexOf(")"));
+            bundleContent = bundleContent + '],';
+            hasBundles = true;
         }
-    
     }
 
-    const 
-        entryPointContent = getContent(sourceFile, this.entryPointFile);
-    
-    fs.appendFileSync(bundleFile, entryPointContent, "utf8");
+    if (hasBundles) {
+        log('>>> Writing bundle content...');
+        fs.appendFileSync(bundleFile, bundleContent + "}});", "utf8");
+        log('>>> Done!');
+        log();
+    }
+
+    log('>>> Writing entry point ...');
+    fs.appendFileSync(bundleFile, getContent(sourceFile, this.entryPointFile), "utf8");
+    log('>>> Done!');
+    log();
 };
 
 log('>>> STARTED');
 log();
 build.call(config);
+log('>>> FINISHED');

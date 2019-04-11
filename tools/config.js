@@ -3,7 +3,6 @@
 // config.js will be used as default configuration if not specified othwerwise in build command
 //
 ({
-    minifyDefault: false,
-    loaderFile: "../src/ihjs/dev/loader/loader.js",
-    minifyLoader: false,
+    //minifyDefault: false,
+    //minifyLoader: false,
 })

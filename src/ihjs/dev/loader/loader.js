@@ -1387,6 +1387,13 @@ var AMDLoader;
             }
             this._knownModules2[moduleId] = true;
             let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
+            if (this._config.options._modules) {
+                let _module =  this._config.options._modules[strModuleId];
+                if (_module) {
+                    this.defineModule(strModuleId, _module[0], _module[1], null, null);
+                    return;
+                }
+            }
             let paths = this._config.moduleIdToPaths(strModuleId);
             let scopedPackageRegex = /^@[^\/]+\/[^\/]+$/; // matches @scope/package-name
             if (this._env.isNode && (strModuleId.indexOf('/') === -1 || scopedPackageRegex.test(strModuleId))) {

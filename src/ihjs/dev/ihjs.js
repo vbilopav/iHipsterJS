@@ -135,7 +135,7 @@
     }
 
     const 
-        loaderLoaded = () => window.AMDLoader != undefined;
+        loaderLoaded = () => window.require != undefined;
     
     const config = {
         baseUrl: window[appObjectName].appUrl,

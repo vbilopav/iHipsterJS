@@ -56,13 +56,17 @@
     //
     skipModules: [],
     //
+    // Default module loader that is bundled
     //
+    loaderFile: "../src/ihjs/dev/loader/loader.js",
     //
-    loaderFile: "../src/ihjs/dev/loader/loader-min.js",
+    // Should loader be minified
     //
+    minifyLoader: true,
     //
+    // Plugins module dir
     //
-    minifyLoader: false,
+    plugins: "plugins/",
     //
     // Output detailed log to console
     //
