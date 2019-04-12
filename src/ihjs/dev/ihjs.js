@@ -79,7 +79,10 @@
         version = scr.getAttribute("data-version") === null ? defaults.version : scr.getAttribute("data-version"),
         appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
         sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
-        appModule = scr.getAttribute("data-app-module") === null ? defaults.appModule : scr.getAttribute("data-app-module"),
+        appModule = 
+            scr.getAttribute("data-app-module") === null ? 
+            (scr.getAttribute("data-view-module") === null && scr.getAttribute("data-app-container-id") === null ? null : defaults.appModule) : 
+            scr.getAttribute("data-app-module"),
         viewModule = scr.getAttribute("data-view-module"),
         appElementId = scr.getAttribute("data-app-container-id") === null ? defaults.appElementId : scr.getAttribute("data-app-container-id"),
         appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
@@ -94,7 +97,7 @@
     let 
         libsUrl = scr.getAttribute("data-libs-url") === null ? defaults.libsUrl : scr.getAttribute("data-libs-url");
 
-    window[appObjectName] = {
+    window[appObjectName] ={...(window[appObjectName] || {}), ...{
         dev: dev,
         version: version,
         appUrl: appUrl,
@@ -107,7 +110,7 @@
             name: appObjectName
         },
         relative: relative
-    };
+    }};
 
     if (!libsUrl) {
         libsUrl = sysUrl.substring(0, sysUrl.indexOf("ihjs"));
@@ -167,12 +170,12 @@
 
     if (loaderLoaded()) {
         require.config(config);
-        require(["$/main"], ()=>{});
+        require(["$/main"], ()=>(window[appObjectName].onload && window[appObjectName].onload(appElementId)));
     } else {
         loadLoader(loaderUrl, () => {
             if (loaderLoaded()) {
                 require.config(config);
-                require(["$/main"], ()=>{});
+                require(["$/main"], ()=>(window[appObjectName].onload && window[appObjectName].onload(appElementId)));
                 return;
             }
             console.warn("Failed to load module loader.")

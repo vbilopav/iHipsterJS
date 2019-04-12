@@ -17,7 +17,7 @@
     var script = document.createElement("script");
     element.innerHTML = "Detecting features...";
     script.async = true;
-    script.src = "../shared/feature-detect.js";
+    script.src = "../../shared/feature-detect.js";
     document.head.appendChild(script);
 
     script.onload = function() {

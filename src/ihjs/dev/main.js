@@ -2,21 +2,37 @@ define([
     "$/app",
     "$/models/model",
     "$/view-manager/reveal",
+
+    "$/extensions/HTMLElement/addClass",
+    "$/extensions/HTMLElement/attr",
+    "$/extensions/HTMLElement/css",
+    "$/extensions/HTMLElement/data",
     "$/extensions/HTMLElement/find",
     "$/extensions/HTMLElement/findAll",
     "$/extensions/HTMLElement/forEachChild",
-    "$/extensions/HTMLElement/show",
+    "$/extensions/HTMLElement/hasClass",
     "$/extensions/HTMLElement/hide",
-    "$/extensions/HTMLElement/on",
     "$/extensions/HTMLElement/html",
+    "$/extensions/HTMLElement/off",
+    "$/extensions/HTMLElement/on",
+    "$/extensions/HTMLElement/overflownX",
+    "$/extensions/HTMLElement/overflownY",
+    "$/extensions/HTMLElement/removeClass",
+    "$/extensions/HTMLElement/setFocus",
+    "$/extensions/HTMLElement/show",
+    "$/extensions/HTMLElement/toggleClass",
+    "$/extensions/HTMLElement/trigger",
+    "$/extensions/HTMLElement/visible",
+
+    "$extension!Window/on",
+    "$extension!Window/off",
+
     "$/extensions/String/hashCode",
     "$/extensions/String/html",
     "$/extensions/String/toHTML",
-    "$extension!Window/on",
-    "$extension!Window/off",
-    "$/extensions/HTMLElement/addClass",
-    "$/extensions/HTMLElement/removeClass",
-    "$/extensions/HTMLElement/attr",
+    "$/extensions/String/toCamelCase",
+    "$/extensions/String/createElement",
+
     "$/template/parser",
     "$/view-manager/components"
 
@@ -27,6 +43,6 @@ define([
     _app.fetch = async (url, opts) => await(await fetch(url, opts)).json();
     _app.render = async (view, elementOrId, params) => 
         await reveal({view: view, elementOrId: elementOrId, params: params});
-    require([_app.config.module], app => (app.default || app)(_app.config.elementId));
+    _app.config.module && require([_app.config.module], app => (app.default || app)(_app.config.elementId));
 
 });

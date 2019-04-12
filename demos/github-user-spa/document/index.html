@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="../../shared/css/bootstrap.css">
+    
+    <title></title>
+  </head>
+  <body>
+
+    <div id="app">
+        <script src="../../shared/loading.js"></script>
+    </div>
+
+    <template id="github-user-info">
+        <div class="container-fluid">
+            <h3>Github user data</h3>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>${this.value}</div>
+                <div class='panel-body'>
+                    <ul>
+                    ${async () => this.template.forEach(await _app.fetch("https://api.github.com/users/" + this.value), (key, value) => 
+                    `
+                        <li class="list-group-item">
+                            <strong>${key}: </strong>${value}
+                        </li>
+                    `
+                    )}
+                    </ul>
+                </div>
+            </div>
+            <button onclick="window.history.back();">Go back</button>
+        </div>
+    </template>
+
+    <template id="github-user">
+        <div class="container-fluid">
+            <h3>Github user data</h3>
+            <input type="text" name="username">
+            <button onclick="showClick">Show github user data</button>
+        </div>
+        ${
+        <script>
+            this.template.context = {
+                username: "vbilopav", // default value
+                showClick: () => window.location = "#/github-user-info/" + this.template.model.username.value
+            }
+        </script>
+        }
+    </template>
+
+    <script type="module"  src="../../../src/ihjs/dev/ihjs.js"> </script>
+
+    <script>
+      _app = {};
+      _app.onload = appElementId => 
+        require(["$/spa/router", "$/spa/view-manager"], (Router, Manager) => {
+
+          const 
+              app = document.getElementById(appElementId);
+
+          new Router({
+              routes: {
+                "/": {view: "$document!github-user"},
+                "/github-user-info": {
+                  view: "$document!github-user-info",
+                  paramsMap: params => (params.length === 1 ? params[0] : false)
+                }
+              },
+              error: event => console.log(event)
+          })
+          .useViewManager(new Manager(app))
+          .start();
+
+          app.html("").show();
+        });
+    </script>
+
+  </body>
+</html>
