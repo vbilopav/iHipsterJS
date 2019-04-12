@@ -1,8 +1,6 @@
-console.log("\n");
-console.log(" *** To start browsing demos, navigate to /demos/ ***");
-console.log("\n");
+const open = require('open');
+const exec = require('child_process').exec("http-server");
 
-const exec = require('child_process').exec("http-server ../ -o");
 exec.stdout.on('data', data => console.log(data));
 exec.stderr.on('data', data => {
     console.log("\n");
@@ -14,3 +12,5 @@ exec.stderr.on('data', data => {
     console.log(data);
 });
 exec.on('exit', data => console.log(data));
+
+open('http://localhost:8080/demos/');

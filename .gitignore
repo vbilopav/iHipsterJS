@@ -4,3 +4,4 @@ src/tools/node_modules/
 tools/node_modules/
 .vscode/settings.json
 .vscode/launch.json
+node_modules/
