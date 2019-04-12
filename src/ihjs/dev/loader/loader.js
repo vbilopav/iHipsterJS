@@ -1,3 +1,4 @@
+(function () {
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1361,6 +1362,7 @@ var AMDLoader;
             }
         }
         AMDLoader.global.require = RequireFunc;
+        AMDLoader.global.define = DefineFunc;
     }
     AMDLoader.init = init;
     if (typeof AMDLoader.global.define !== 'function' || !AMDLoader.global.define.amd) {
@@ -1379,3 +1381,5 @@ var AMDLoader;
         }
     }
 })(AMDLoader || (AMDLoader = {}));
+
+}).call(window);

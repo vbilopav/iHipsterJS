@@ -80,6 +80,9 @@ const
         config.minifyModules = getCleanedObject(config.minifyModules);
         config.lazyModules = getCleanedArray(config.lazyModules);
         config.skipModules = getCleanedArray(config.skipModules);
+        if (!config.plugins.endsWith("/")) {
+            config.plugins = config.plugins + "/";
+        }
         return config;
     },
     config = getConfig(),
@@ -137,7 +140,7 @@ const build = function() {
     log('>>> Writting module loader to bundle ...');
     fs.appendFileSync(
         bundleFile, 
-        "(function(){" + getContentByOptions(this.loaderFile, this.minifyLoader) + "}).call(window);", 
+        getContentByOptions(this.loaderFile, this.minifyLoader), 
         "utf8"
     );
     log();
@@ -187,7 +190,7 @@ const build = function() {
             }
             log('>>> Bundling module ...', moduleName);
             bundleContent = bundleContent + `'${moduleName}': [`;
-            bundleContent = bundleContent + moduleContent.substring(moduleContent.indexOf("(") + 1, moduleContent.lastIndexOf(")"));
+            bundleContent = bundleContent + moduleContent.substring(moduleContent.indexOf("define(") + "define(".length, moduleContent.lastIndexOf(")"));
             bundleContent = bundleContent + '],';
             hasBundles = true;
         }

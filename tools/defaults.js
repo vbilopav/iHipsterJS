@@ -64,9 +64,9 @@
     //
     minifyLoader: true,
     //
-    // Plugins module dir
+    // Plugins module dir name
     //
-    plugins: "plugins/",
+    plugins: "plugins",
     //
     // Output detailed log to console
     //

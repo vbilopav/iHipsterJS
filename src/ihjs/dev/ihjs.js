@@ -1,5 +1,7 @@
 (function () {
-
+    if (this) {
+        throw "ihjs script must be included as module, add type='module' to your script tag!";
+    }
     const
         defaults = {
             version: "",

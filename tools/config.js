@@ -5,4 +5,7 @@
 ({
     //minifyDefault: false,
     //minifyLoader: false,
+
+    //lazyModules: ['spa/router.js', 'spa/view-manager.js']
+    //skipModules: ['spa/router.js', 'spa/view-manager.js']
 })
