@@ -7,16 +7,16 @@
     //
     // Source dir is location of framework source code, relative to location of this script
     //
-    frameworkDir: "../src/ihjs/dev/",
+    frameworkDir: "../dev/",
     //
     // Entry point file name in framework dir
     //
     entryPointFile: 'ihjs.js',
     //
     // Build output directory, recreated on every build
-    // ${this.version} is substitute for version value found in ../src/ihjs/package.json
+    // ${this.version} is substitute for version value found in ../package.json
     //
-    outputDir: "../src/ihjs/build/${this.version}/",
+    outputDir: "../build/${this.version}/",
     //
     // Name of output file saved in output dir.
     //
@@ -28,7 +28,7 @@
     //
     // Name of default package.json file that will be used to read current version.
     //
-    packageFile: '../src/ihjs/package.json',
+    packageFile: '../package.json',
     //
     // Default file operation - copy or minify and if minify how
     // false or null value will leave source file intact as is.
@@ -58,7 +58,7 @@
     //
     // Default module loader that is bundled
     //
-    loaderFile: "../src/ihjs/dev/loader/loader.js",
+    loaderFile: "../dev/loader/loader.js",
     //
     // Should loader be minified
     //
