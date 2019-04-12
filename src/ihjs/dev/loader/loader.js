@@ -27,21 +27,11 @@ var AMDLoader;
         constructor() {
             this._detected = false;
             this._isWindows = false;
-            this._isNode = false;
-            this._isElectronRenderer = false;
             this._isWebWorker = false;
         }
         get isWindows() {
             this._detect();
             return this._isWindows;
-        }
-        get isNode() {
-            this._detect();
-            return this._isNode;
-        }
-        get isElectronRenderer() {
-            this._detect();
-            return this._isElectronRenderer;
         }
         get isWebWorker() {
             this._detect();
@@ -53,8 +43,6 @@ var AMDLoader;
             }
             this._detected = true;
             this._isWindows = Environment._isWindows();
-            this._isNode = (typeof module !== 'undefined' && !!module.exports);
-            this._isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
             this._isWebWorker = (typeof AMDLoader.global.importScripts === 'function');
         }
         static _isWindows() {
@@ -62,9 +50,6 @@ var AMDLoader;
                 if (navigator.userAgent && navigator.userAgent.indexOf('Windows') >= 0) {
                     return true;
                 }
-            }
-            if (typeof process !== 'undefined') {
-                return (process.platform === 'win32');
             }
             return false;
         }
@@ -271,32 +256,7 @@ var AMDLoader;
             if (!Array.isArray(options.nodeModules)) {
                 options.nodeModules = [];
             }
-            if (typeof options.nodeCachedData === 'object') {
-                if (typeof options.nodeCachedData.seed !== 'string') {
-                    options.nodeCachedData.seed = 'seed';
-                }
-                if (typeof options.nodeCachedData.writeDelay !== 'number' || options.nodeCachedData.writeDelay < 0) {
-                    options.nodeCachedData.writeDelay = 1000 * 7;
-                }
-                if (typeof options.nodeCachedData.onData !== 'function') {
-                    options.nodeCachedData.onData = (err) => {
-                        if (err && err.errorCode === 'cachedDataRejected') {
-                            console.warn('Rejected cached data from file: ' + err.path);
-                        }
-                        else if (err && err.errorCode) {
-                            console.error('Problems handling cached data file: ' + err.path);
-                            console.error(err.detail);
-                        }
-                        else if (err) {
-                            console.error(err);
-                        }
-                    };
-                }
-                if (!options.nodeCachedData.path || typeof options.nodeCachedData.path !== 'string') {
-                    options.nodeCachedData.onData('INVALID cached data configuration, \'path\' MUST be set');
-                    options.nodeCachedData = undefined;
-                }
-            }
+            
             return options;
         }
         static mergeConfigurationOptions(overwrite = null, base = null) {
@@ -325,20 +285,8 @@ var AMDLoader;
             this._env = env;
             this.options = ConfigurationOptionsUtil.mergeConfigurationOptions(options);
             this._createIgnoreDuplicateModulesMap();
-            this._createNodeModulesMap();
             this._createSortedPathsRules();
-            if (this.options.baseUrl === '') {
-                if (this.options.nodeRequire && this.options.nodeRequire.main && this.options.nodeRequire.main.filename && this._env.isNode) {
-                    let nodeMain = this.options.nodeRequire.main.filename;
-                    let dirnameIndex = Math.max(nodeMain.lastIndexOf('/'), nodeMain.lastIndexOf('\\'));
-                    this.options.baseUrl = nodeMain.substring(0, dirnameIndex + 1);
-                }
-                if (this.options.nodeMain && this._env.isNode) {
-                    let nodeMain = this.options.nodeMain;
-                    let dirnameIndex = Math.max(nodeMain.lastIndexOf('/'), nodeMain.lastIndexOf('\\'));
-                    this.options.baseUrl = nodeMain.substring(0, dirnameIndex + 1);
-                }
-            }
+            
         }
         _createIgnoreDuplicateModulesMap() {
             // Build a map out of the ignoreDuplicateModules array
@@ -347,13 +295,7 @@ var AMDLoader;
                 this.ignoreDuplicateModulesMap[this.options.ignoreDuplicateModules[i]] = true;
             }
         }
-        _createNodeModulesMap() {
-            // Build a map out of nodeModules array
-            this.nodeModulesMap = Object.create(null);
-            for (const nodeModule of this.options.nodeModules) {
-                this.nodeModulesMap[nodeModule] = true;
-            }
-        }
+
         _createSortedPathsRules() {
             // Create an array our of the paths rules, sorted descending by length to
             // result in a more specific -> less specific order
@@ -431,17 +373,6 @@ var AMDLoader;
          * Transform a module id to a location. Appends .js to module ids
          */
         moduleIdToPaths(moduleId) {
-            if (this.nodeModulesMap[moduleId] === true) {
-                // This is a node module...
-                if (this.isBuild()) {
-                    // ...and we are at build time, drop it
-                    return ['empty:'];
-                }
-                else {
-                    // ...and at runtime we create a `shortcut`-path
-                    return ['node|' + moduleId];
-                }
-            }
             let result = moduleId;
             let results;
             if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.isAbsolutePath(result)) {
@@ -539,9 +470,7 @@ var AMDLoader;
             if (!this._scriptLoader) {
                 this._scriptLoader = (this._env.isWebWorker
                     ? new WorkerScriptLoader()
-                    : this._env.isNode
-                        ? new NodeScriptLoader(this._env)
-                        : new BrowserScriptLoader());
+                    : new BrowserScriptLoader());
             }
             let scriptCallbacks = {
                 callback: callback,
@@ -615,234 +544,7 @@ var AMDLoader;
             }
         }
     }
-    class NodeScriptLoader {
-        constructor(env) {
-            this._env = env;
-            this._didInitialize = false;
-            this._didPatchNodeRequire = false;
-            this._hasCreateCachedData = false;
-        }
-        _init(nodeRequire) {
-            if (this._didInitialize) {
-                return;
-            }
-            this._didInitialize = true;
-            // capture node modules
-            this._fs = nodeRequire('fs');
-            this._vm = nodeRequire('vm');
-            this._path = nodeRequire('path');
-            this._crypto = nodeRequire('crypto');
-            // check for `createCachedData`-api
-            this._hasCreateCachedData = typeof (new this._vm.Script('').createCachedData) === 'function';
-        }
-        // patch require-function of nodejs such that we can manually create a script
-        // from cached data. this is done by overriding the `Module._compile` function
-        _initNodeRequire(nodeRequire, moduleManager) {
-            const { nodeCachedData } = moduleManager.getConfig().getOptionsLiteral();
-            if (!nodeCachedData || this._didPatchNodeRequire) {
-                return;
-            }
-            this._didPatchNodeRequire = true;
-            const that = this;
-            const Module = nodeRequire('module');
-            function makeRequireFunction(mod) {
-                const Module = mod.constructor;
-                let require = function require(path) {
-                    try {
-                        return mod.require(path);
-                    }
-                    finally {
-                        // nothing
-                    }
-                };
-                require.resolve = function resolve(request) {
-                    return Module._resolveFilename(request, mod);
-                };
-                require.main = process.mainModule;
-                require.extensions = Module._extensions;
-                require.cache = Module._cache;
-                return require;
-            }
-            Module.prototype._compile = function (content, filename) {
-                // remove shebang
-                content = content.replace(/^#!.*/, '');
-                // create wrapper function
-                const wrapper = Module.wrap(content);
-                const cachedDataPath = that._getCachedDataPath(nodeCachedData.seed, nodeCachedData.path, filename);
-                const options = { filename };
-                try {
-                    options.cachedData = that._fs.readFileSync(cachedDataPath);
-                }
-                catch (e) {
-                    options.produceCachedData = !that._hasCreateCachedData;
-                }
-                const script = new that._vm.Script(wrapper, options);
-                const compileWrapper = script.runInThisContext(options);
-                const dirname = that._path.dirname(filename);
-                const require = makeRequireFunction(this);
-                const args = [this.exports, require, this, filename, dirname, process, _commonjsGlobal, Buffer];
-                const result = compileWrapper.apply(this.exports, args);
-                that._processCachedData(moduleManager, script, wrapper, cachedDataPath, !options.cachedData);
-                return result;
-            };
-        }
-        load(moduleManager, scriptSrc, callback, errorback) {
-            const opts = moduleManager.getConfig().getOptionsLiteral();
-            const nodeRequire = (opts.nodeRequire || AMDLoader.global.nodeRequire);
-            const nodeInstrumenter = (opts.nodeInstrumenter || function (c) { return c; });
-            this._init(nodeRequire);
-            this._initNodeRequire(nodeRequire, moduleManager);
-            let recorder = moduleManager.getRecorder();
-            if (/^node\|/.test(scriptSrc)) {
-                let pieces = scriptSrc.split('|');
-                let moduleExports = null;
-                try {
-                    moduleExports = nodeRequire(pieces[1]);
-                }
-                catch (err) {
-                    errorback(err);
-                    return;
-                }
-                moduleManager.enqueueDefineAnonymousModule([], () => moduleExports);
-                callback();
-            }
-            else {
-                scriptSrc = AMDLoader.Utilities.fileUriToFilePath(this._env.isWindows, scriptSrc);
-                this._fs.readFile(scriptSrc, { encoding: 'utf8' }, (err, data) => {
-                    if (err) {
-                        errorback(err);
-                        return;
-                    }
-                    let normalizedScriptSrc = this._path.normalize(scriptSrc);
-                    let vmScriptSrc = normalizedScriptSrc;
-                    // Make the script src friendly towards electron
-                    if (this._env.isElectronRenderer) {
-                        let driveLetterMatch = vmScriptSrc.match(/^([a-z])\:(.*)/i);
-                        if (driveLetterMatch) {
-                            // windows
-                            vmScriptSrc = `file:///${(driveLetterMatch[1].toUpperCase() + ':' + driveLetterMatch[2]).replace(/\\/g, '/')}`;
-                        }
-                        else {
-                            // nix
-                            vmScriptSrc = `file://${vmScriptSrc}`;
-                        }
-                    }
-                    let contents, prefix = '(function (require, define, __filename, __dirname) { ', suffix = '\n});';
-                    if (data.charCodeAt(0) === NodeScriptLoader._BOM) {
-                        contents = prefix + data.substring(1) + suffix;
-                    }
-                    else {
-                        contents = prefix + data + suffix;
-                    }
-                    contents = nodeInstrumenter(contents, normalizedScriptSrc);
-                    if (!opts.nodeCachedData) {
-                        this._loadAndEvalScript(moduleManager, scriptSrc, vmScriptSrc, contents, { filename: vmScriptSrc }, recorder, callback, errorback);
-                    }
-                    else {
-                        const cachedDataPath = this._getCachedDataPath(opts.nodeCachedData.seed, opts.nodeCachedData.path, scriptSrc);
-                        this._fs.readFile(cachedDataPath, (_err, cachedData) => {
-                            // create script options
-                            const options = {
-                                filename: vmScriptSrc,
-                                produceCachedData: !this._hasCreateCachedData && typeof cachedData === 'undefined',
-                                cachedData
-                            };
-                            const script = this._loadAndEvalScript(moduleManager, scriptSrc, vmScriptSrc, contents, options, recorder, callback, errorback);
-                            this._processCachedData(moduleManager, script, contents, cachedDataPath, !options.cachedData);
-                        });
-                    }
-                });
-            }
-        }
-        _loadAndEvalScript(moduleManager, scriptSrc, vmScriptSrc, contents, options, recorder, callback, errorback) {
-            // create script, run script
-            recorder.record(31 /* NodeBeginEvaluatingScript */, scriptSrc);
-            const script = new this._vm.Script(contents, options);
-            const r = script.runInThisContext(options);
-            const globalDefineFunc = moduleManager.getGlobalAMDDefineFunc();
-            let receivedDefineCall = false;
-            const localDefineFunc = function () {
-                receivedDefineCall = true;
-                return globalDefineFunc.apply(null, arguments);
-            };
-            localDefineFunc.amd = globalDefineFunc.amd;
-            r.call(AMDLoader.global, moduleManager.getGlobalAMDRequireFunc(), localDefineFunc, vmScriptSrc, this._path.dirname(scriptSrc));
-            // signal done
-            recorder.record(32 /* NodeEndEvaluatingScript */, scriptSrc);
-            if (receivedDefineCall) {
-                callback();
-            }
-            else {
-                errorback(new Error(`Didn't receive define call in ${scriptSrc}!`));
-            }
-            return script;
-        }
-        _getCachedDataPath(seed, basedir, filename) {
-            const hash = this._crypto.createHash('md5').update(filename, 'utf8').update(seed, 'utf8').digest('hex');
-            const basename = this._path.basename(filename).replace(/\.js$/, '');
-            return this._path.join(basedir, `${basename}-${hash}.code`);
-        }
-        _processCachedData(moduleManager, script, contents, cachedDataPath, createCachedData) {
-            if (script.cachedDataRejected) {
-                // data rejected => delete cache file
-                moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData({
-                    errorCode: 'cachedDataRejected',
-                    path: cachedDataPath
-                });
-                NodeScriptLoader._runSoon(() => this._fs.unlink(cachedDataPath, err => {
-                    if (err) {
-                        moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData({
-                            errorCode: 'unlink',
-                            path: cachedDataPath,
-                            detail: err
-                        });
-                    }
-                }), moduleManager.getConfig().getOptionsLiteral().nodeCachedData.writeDelay / 2);
-            }
-            else if (script.cachedDataProduced) {
-                // data produced => tell outside world
-                moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData(undefined, {
-                    path: cachedDataPath
-                });
-                // data produced => write cache file
-                NodeScriptLoader._runSoon(() => this._fs.writeFile(cachedDataPath, script.cachedData, err => {
-                    if (err) {
-                        moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData({
-                            errorCode: 'writeFile',
-                            path: cachedDataPath,
-                            detail: err
-                        });
-                    }
-                }), moduleManager.getConfig().getOptionsLiteral().nodeCachedData.writeDelay);
-            }
-            else if (this._hasCreateCachedData && createCachedData) {
-                // NEW world
-                // data produced => tell outside world
-                moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData(undefined, {
-                    path: cachedDataPath
-                });
-                // soon'ish create and save cached data
-                NodeScriptLoader._runSoon(() => {
-                    const data = script.createCachedData(contents);
-                    this._fs.writeFile(cachedDataPath, data, err => {
-                        if (!err) {
-                            return;
-                        }
-                        moduleManager.getConfig().getOptionsLiteral().nodeCachedData.onData({
-                            errorCode: 'writeFile',
-                            path: cachedDataPath,
-                            detail: err
-                        });
-                    });
-                }, moduleManager.getConfig().getOptionsLiteral().nodeCachedData.writeDelay);
-            }
-        }
-        static _runSoon(callback, minTimeout) {
-            const timeout = minTimeout + Math.ceil(Math.random() * minTimeout);
-            setTimeout(callback, timeout);
-        }
-    }
-    NodeScriptLoader._BOM = 0xFEFF;
+
     function createScriptLoader(env) {
         return new OnlyOnceScriptLoader(env);
     }
@@ -1377,7 +1079,6 @@ var AMDLoader;
             result.getStats = () => {
                 return this.getLoaderEvents();
             };
-            result.__$__nodeRequire = AMDLoader.global.nodeRequire;
             return result;
         }
         _loadModule(moduleId) {
@@ -1387,6 +1088,8 @@ var AMDLoader;
             }
             this._knownModules2[moduleId] = true;
             let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
+            
+            // easy bundling support
             if (this._config.options._modules) {
                 let _module =  this._config.options._modules[strModuleId];
                 if (_module) {
@@ -1394,11 +1097,9 @@ var AMDLoader;
                     return;
                 }
             }
+            //
+
             let paths = this._config.moduleIdToPaths(strModuleId);
-            let scopedPackageRegex = /^@[^\/]+\/[^\/]+$/; // matches @scope/package-name
-            if (this._env.isNode && (strModuleId.indexOf('/') === -1 || scopedPackageRegex.test(strModuleId))) {
-                paths.push('node|' + strModuleId);
-            }
             let lastPathIndex = -1;
             let loadNextPath = (err) => {
                 lastPathIndex++;
@@ -1659,16 +1360,7 @@ var AMDLoader;
                 RequireFunc.__$__nodeRequire = nodeRequire;
             }
         }
-        if (env.isNode && !env.isElectronRenderer) {
-            module.exports = RequireFunc;
-            require = RequireFunc;
-        }
-        else {
-            if (!env.isElectronRenderer) {
-                AMDLoader.global.define = DefineFunc;
-            }
-            AMDLoader.global.require = RequireFunc;
-        }
+        AMDLoader.global.require = RequireFunc;
     }
     AMDLoader.init = init;
     if (typeof AMDLoader.global.define !== 'function' || !AMDLoader.global.define.amd) {
