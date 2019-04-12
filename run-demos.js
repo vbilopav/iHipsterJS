@@ -1,5 +1,5 @@
 const open = require('open');
-const exec = require('child_process').exec("http-server");
+const exec = require('child_process').exec("http-server -p 8080");
 
 exec.stdout.on('data', data => console.log(data));
 exec.stderr.on('data', data => {
