@@ -22,5 +22,5 @@
 
     setTimeout(function() {
         element.innerHTML = "Please update your browser to latest version of Chrome, Firefox or Edge...";
-    }, 250);
+    }, 3000);
 })();

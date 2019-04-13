@@ -1,4 +1,4 @@
-define(["$/spa/router", "$/spa/view-manager"], (Router, Manager) => appElementId => {
+define(["$/spa"], ({Router, Manager}) => appElementId => {
 
     const 
         app = document.getElementById(appElementId);
