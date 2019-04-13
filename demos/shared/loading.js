@@ -2,37 +2,25 @@
 
     var 
         element = document.createElement("div"),
-        id = document.currentScript.getAttribute("data-element-id") || "loading-screen",
-        parent = document.currentScript.parentElement;
+        parent = (document.currentScript ? document.currentScript.parentElement : document.getElementById("app"));
         
-    element.id = id;
+    element.id = "loading-screen";
     element.style.display = "none";
-    element.style.width = "100%";
-    element.style["margin-left"] = "40%";
+    element.style.width = "80%";
+    element.style["margin-left"] = "10%";
+    element.style["margin-right"] = "40%";
     element.style["margin-top"] = "10%";
     element.style["font-family"] = "Arial";
     element.style["font-size"] = "5em";
     parent.appendChild(element);
 
-    var script = document.createElement("script");
-    element.innerHTML = "Detecting features...";
-    script.async = true;
-    script.src = "../../shared/feature-detect.js";
-    document.head.appendChild(script);
+    element.innerHTML = "Loading...";
 
-    script.onload = function() {
-        for (var feature in Modernizr) {
-            if (!Modernizr[feature]) {
-                window.location = "/not-supported.html";
-                return;
-            }
-        }
-        
-        element.innerHTML = "Loading...";
+    setTimeout(function() {
+        element.style.display = "";
+    }, 250);
 
-        setTimeout(function() {
-            element.style.display = "";
-        }, 250);
-    };
-
+    setTimeout(function() {
+        element.innerHTML = "Please update your browser to latest version of Chrome, Firefox or Edge...";
+    }, 250);
 })();

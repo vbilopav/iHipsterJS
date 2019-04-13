@@ -53,31 +53,28 @@
         }
     </template>
 
-    <script type="module"  src="../../../src/ihjs/dev/ihjs.js"> </script>
+    <script type="module"  src="../../../src/ihjs/build/1.0.0/ihjs.js"> </script>
 
     <script>
-      _app = {};
-      _app.onload = appElementId => 
-        require(["$/spa/router", "$/spa/view-manager"], (Router, Manager) => {
+      window.onload = () => require(["$/spa/router", "$/spa/view-manager"], (Router, Manager) => {
+        const 
+              app = document.getElementById("app");
 
-          const 
-              app = document.getElementById(appElementId);
+        new Router({
+          routes: {
+            "/": { view: "$document!github-user" },
+            "/github-user-info": {
+              view: "$document!github-user-info",
+              paramsMap: params => (params.length === 1 ? params[0] : false)
+            }
+          },
+          error: event => console.error(event)
+        })
+        .useViewManager(new Manager(app))
+        .start();
 
-          new Router({
-              routes: {
-                "/": {view: "$document!github-user"},
-                "/github-user-info": {
-                  view: "$document!github-user-info",
-                  paramsMap: params => (params.length === 1 ? params[0] : false)
-                }
-              },
-              error: event => console.log(event)
-          })
-          .useViewManager(new Manager(app))
-          .start();
-
-          app.html("").show();
-        });
+        app.html("").show();
+      });
     </script>
 
   </body>
