@@ -29,7 +29,7 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
 
     _forEachDeclarative(element) {
         // name first, id second
-        if (!this._assignProps(element.name || element.id, element)) {
+        if (!this._assignProps(element.getAttribute("name") || element.id, element)) {
             return;
         }
     }
@@ -62,14 +62,29 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
             if (!attr.startsWith("on")) {
                 continue;
             }
-            const val = this._instance[node.value.toCamelCase()];
-            if (typeof val !== "function") {
+            let val = this._instance[node.value.toCamelCase()];
+            if (typeof val === "function") {
+                this._assignEvent(element, attr, val);
                 continue;
+            } else {
+                if (node.value.startsWith("javascript:")) {
+                    continue;
+                }
+                if (typeof node.value === "string") {
+                    this._assignEvent(element, attr, node.value);
+                }
             }
-            element.removeAttribute(attr);
-            const instance = this._instance;
-            element.on(attr.replace("on", "").toLowerCase(), function() {
-                val.call(instance, ...arguments);
+        }
+    }
+
+    _assignEvent(element, attr, val) {
+        element.removeAttribute(attr);
+        let inst = this._instance;
+        if (typeof val === "function") {
+            element.on(attr.replace("on", "").toLowerCase(), () => val.apply(inst, arguments));
+        } else {
+            element.on(attr.replace("on", "").toLowerCase(), () => {
+                return (function() { return eval(val).apply(this, arguments); }).apply(inst, arguments)
             });
         }
     }
