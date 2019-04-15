@@ -79,16 +79,31 @@
         version = scr.getAttribute("data-version") === null ? defaults.version : scr.getAttribute("data-version"),
         appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
         sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
-        appModule = 
-            scr.getAttribute("data-app-module") === null ? 
-            (scr.getAttribute("data-view-module") === null && scr.getAttribute("data-app-container-id") === null ? null : defaults.appModule) : 
-            scr.getAttribute("data-app-module"),
         viewModule = scr.getAttribute("data-view-module"),
         appElementId = scr.getAttribute("data-app-container-id") === null ? defaults.appElementId : scr.getAttribute("data-app-container-id"),
         appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
         settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
         cssFilesattrValue = scr.getAttribute("data-css-files"),
         loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl);
+
+    let 
+        appModule = null,
+        appModuleAttr = scr.getAttribute("data-app-module");
+    if (appModuleAttr !== null) {
+        appModule = appModuleAttr;
+    } else {
+        let i = 0,
+            scripts = document.getElementsByTagName("script");
+        for (let currentScript of scripts) {
+            i++;
+            if (currentScript === scr) {
+                if (scripts.length === i){
+                    appModule = defaults.appModule;
+                }
+                break;
+            }
+        }
+    }
 
     if (!appUrl.startsWith("/")) {
         appUrl = "/" + appUrl;

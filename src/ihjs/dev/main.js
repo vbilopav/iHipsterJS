@@ -43,6 +43,8 @@ define([
     _app.fetch = async (url, opts) => await(await fetch(url, opts)).json();
     _app.render = async (view, elementOrId, params) => 
         await reveal({view: view, elementOrId: elementOrId, params: params});
+
+    // require if current script tag is last
     _app.config.module && require([_app.config.module], app => (app.default || app)(_app.config.elementId));
 
 });
