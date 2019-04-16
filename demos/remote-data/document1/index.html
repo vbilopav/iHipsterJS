@@ -6,10 +6,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-
     <link rel="stylesheet" href="../../shared/css/water/dark.css">
-    <link rel="stylesheet" href="../../remote-data/default.css">
-    <!-- <link rel="stylesheet" href="../../shared/css/water/light.css"> -->
+    <link rel="stylesheet" href="../../shared/css/remote-data.css">
 
     <title></title>
 </head>
@@ -17,7 +15,7 @@
 
     <script src="../../shared/loading.js"></script>
 
-    <template id="frameworks">
+    <template>
         <div>
             <p>
                 <h2>JavaScript application frameworks</h2>
@@ -26,14 +24,14 @@
                 `<div class="panel panel-default" name="${name}">
                     <div class="panel-heading">
                         <span>${name}</span>
-                        <a data-open-modal="1" style="float: right;" href='#' onclick="() => this.showDescription('${name}', '${item.Description}');">show description</a>
+                        <a data-open-modal="1" style="float: right;" href='#' onclick="() => this.showDescriptionClick('${name}', '${item.Description}');">show description</a>
                     </div>
                     <ul>
-                        ${this.template.forEach(item, (key, value) => this.template.if(key != "Description", 
+                        ${this.template.forEach(item, (key, value) => (key != "Description" ? 
                             `<li class="list-group-item">
                                 <strong>${key}: </strong>${value}
-                            </li>`,
-                        ""))}
+                            </li>`
+                        : ""))}
                     </ul>
                 </div>`
             )}
@@ -47,23 +45,21 @@
             </div>
         </div>
 
-        ${
+    ${
         <script>
         () => {
 
-            this.showDescription = (name, description)  => {
+            this.showDescriptionClick = (name, description)  => {
                 this.template.model.title.html(name);
                 this.template.model.description.html(description);
                 this.template.model.modalWin.show();
                 return false;
             };
-
             window.on("click", e => {
                 if (e.target.data("openModal") != "1") {
                     this.template.model.modalWin.hide();
                 }
             });
-
             this.template.rendered = element => {
                 console.log("Template rendered into element:");
                 console.log(element);
@@ -72,11 +68,11 @@
             }
         }
         </script>
-        }
+    }
     </template>
 
-    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
-    <!-- <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script> -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <link rel="stylesheet" href="../../shared/css/water/dark.css">
+    <link rel="stylesheet" href="../../shared/css/remote-data.css">
+
+    <title></title>
+</head>
+<body>
+
+    <script src="../../shared/loading.js"></script>
+
+    <template>
+            ${
+            <script>
+                // constructor 
+                (() => {
+                    this._descriptionsDict = {};
+                    this.addDescription = (name, desc) => {
+                        this._descriptionsDict[name] = desc;
+                        return "";
+                    }
+                })()
+            </script>
+            }
+        <div>
+            <p>
+                <h2>JavaScript application frameworks</h2>
+            </p>
+            ${async () => this.template.forEach(await _app.fetch("../../shared/frameworks.json"), (name, item) => 
+                `<div class="panel panel-default" name="${name}">
+                    <div class="panel-heading">
+                        <span>${name}</span>
+                        <a data-open-modal="1" data-name="${name}" style="float: right;" href='#' onclick="showDescriptionClick">show description</a>
+                    </div>
+                    <ul>
+                        ${this.addDescription(name, item.Description)}
+                        ${this.template.forEach(item, (key, value) => key != "Description" ?
+                            `<li class="list-group-item">
+                                <strong>${key}: </strong>${value}
+                            </li>`
+                            : "")}
+                    </ul>
+                </div>`
+            )}
+        </div>
+
+        <div name="modalWin" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="()=>this.template.model.modalWin.hide();">&times;</span>
+                <p name="title"></p>
+                <p name="description"></p>
+            </div>
+        </div>
+
+    ${
+        <script>
+        () => {
+
+            this.showDescriptionClick = element  => {
+                let name = element.data("name");
+                this.template.model.title.html(name);
+                this.template.model.description.html(this._descriptionsDict[name]);
+                this.template.model.modalWin.show();
+                return false;
+            };
+            window.on("click", e => {
+                if (e.target.data("openModal") != "1") {
+                    this.template.model.modalWin.hide();
+                }
+            });
+            this.template.rendered = element => {
+                console.log("Template rendered into element:");
+                console.log(element);
+                console.log("I also have following model defined:");
+                console.log(this.template.model);
+            }
+
+        }
+        </script>
+    }
+    </template>
+
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script>
+
+</body>
+</html>

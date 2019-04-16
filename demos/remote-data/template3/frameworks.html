@@ -1,0 +1,33 @@
+${
+<script>
+// constructor 
+(() => {
+    // any template or module imported with template.import is imported synchronously
+    const templates = this.template.import("$composite!demos/remote-data/module-view3/templates.html")();
+    this.header = templates[0];
+    this.item = templates[1];
+    console.log(templates);
+
+    this.template.rendered = element => {
+        console.log("Template rendered into element:");
+        console.log(element);
+        console.log("I also have following model defined:");
+        console.log(this.template.model);
+    }
+})()
+</script>
+}
+
+<div>
+    <p>
+        <h2>JavaScript application frameworks</h2>
+    </p>
+    ${async () => this.template.forEach(await _app.fetch("../../shared/frameworks.json"), (name, item) => 
+        `<div class="panel panel-default" name="${name}">
+            ${this.header(name)}
+            <ul>
+                ${this.template.forEach(item, (key, value) => this.item(key, value))}
+            </ul>
+        </div>`
+    )}
+</div>

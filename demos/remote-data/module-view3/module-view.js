@@ -1,6 +1,8 @@
-define([], () => class {
+define(["$composite!demos/remote-data/module-view3/templates.html"], templates => class {
 
     async render() {
+        let [headerTemplate, itemTemplate] = templates();
+
         let result = String.html`
             <div class="container-fluid">
                 <p class="text-center">
@@ -11,16 +13,12 @@ define([], () => class {
         for(let [name, item] of Object.entries(await _app.fetch("../../shared/frameworks.json"))) {
             result += String.html`
                 <div class="panel panel-default">
-                    <div class="panel-heading">${name}</div>
+                    ${headerTemplate(name)}
                     <ul class="list-group">
                 `;
             
             for(let [key, value] of Object.entries(item)) {
-                result += String.html`
-                    <li class="list-group-item">
-                        <strong>${key}: </strong>${value}
-                    </li>
-                `;
+                result += itemTemplate(key, value);
             }
 
             result += String.html`
@@ -32,10 +30,12 @@ define([], () => class {
         return result;
     }
 
+
     rendered({element}) {
-        console.log("Module rendered into element:");
+        console.log("Template rendered into element:");
         console.log(element);
-        console.log();
+        console.log("I also have following model defined:");
+        console.log(this.model);
     }
 
 })

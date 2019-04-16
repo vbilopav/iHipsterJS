@@ -165,7 +165,6 @@
             "$": sysPath,
             "$text": sysPath + "/plugins/text",
             "$template": sysPath + "/plugins/template",
-            "$document": sysPath + "/plugins/document",
             "$composite": sysPath + "/plugins/composite",
             "$cors-text": sysPath + "/plugins/cors-text",
             "$cors-template": sysPath + "/plugins/cors-template",

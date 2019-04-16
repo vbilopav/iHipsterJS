@@ -63,9 +63,9 @@
 
         new Router({
           routes: {
-            "/": { view: "$document!github-user" },
+            "/": { view: "$template!github-user" },
             "/github-user-info": {
-              view: "$document!github-user-info",
+              view: "$template!github-user-info",
               paramsMap: params => (params.length === 1 ? params[0] : false)
             }
           },

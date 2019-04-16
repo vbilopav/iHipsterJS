@@ -1,18 +1,10 @@
-define([
-    "$/template/parser", 
-    "$/template/import",
-    "$/template/tags",
-], (
-    parser, 
-    importParser,
-    tagsParser
-) => {
-
+define(["$/template/load-text", "$/template/import", "$/template/parser"], (load, importParser, parser) => {
+    
     return {
         load(name, req, onload) {
-            req(["$text!" + name], text => 
-            importParser.parseImportsAsync(text).then(() => 
-                    onload(() => (data, locale) => parser.parseComposite(tagsParser.parse(text), data, locale, name))));
+            load(name, req).then(text => importParser.parseImportsAsync(text).then(() => 
+                onload(() => (data, locale) => parser.parseComposite(text, data, locale, name))));
+            
         }
     };
 

@@ -54,7 +54,7 @@ Script tag can have additional and optional data attributes that can further con
 
 - `data-view-module` - Module View ID that will be rendered by deafault by `$/single-view-app` on initialization.
 
-- `data-app-container-id` - Application container element ID. Passed as only function parameter for every custom entry point module. Not needed when using document template (`$document!id` type view module) and default `$/single-view-app`. In that case parent element with id from `$document!id` is used or parent element from last `template` tag if view module not present. Otherwise `app` is default value.
+- `data-app-container-id` - Application container element ID. Passed as only function parameter for every custom entry point module. Not needed when using document template (`$template!id` type view module) and default `$/single-view-app`. In that case parent element with id from `$template!id` is used or parent element from last `template` tag if view module not present. Otherwise `app` is default value.
 
 - `data-app-object-name` - Name of default application root object. Default is `_app`.
 
@@ -78,7 +78,7 @@ Typical example would be:
 
 There are few module type already mentioned so far:
 
-- **document** - Document templates have module id in this format `$document!id` where id is element from within document (usually template element but not necessary) id that contains your template (which is basically just html that can contain standard JavaScript template string syntax).
+- **document** - Document templates have module id in this format `$template!id` where id is element from within document (usually template element but not necessary) id that contains your template (which is basically just html that can contain standard JavaScript template string syntax).
 
 - **template** - Template view is html file that is your template and uses standard JavaScript template string syntax. It has following format `$template!your-view-in-html-file.html`. Your view in html file would have path relative to application path configured in script tag as described above.
 
