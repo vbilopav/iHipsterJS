@@ -68,6 +68,23 @@
     //
     plugins: "plugins",
     //
+    // Application root directory relative to location of this script
+    // This dir will be used to join appBundleModules and appBundleDirs if custom is enabled
+    //
+    appDir: null,
+    //
+    // Prefix that will be added to module name in custom build
+    //
+    moduleNamePrefix: "",
+    //
+    // File list included in custom build relative to appDir
+    //
+    appBundleModules: [],
+    //
+    // Dir list included in custom build relative to appDir
+    //
+    appBundleDirs: [],
+    //
     // Output detailed log to console
     //
     verbose: true

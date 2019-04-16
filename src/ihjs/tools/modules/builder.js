@@ -66,7 +66,7 @@ const
             defaults =  readConfig("defaults.js"),
             config = {...defaults, ...configValue};
 
-        config.version = getVersion(config.packageFile);
+        config.version = config.version || getVersion(config.packageFile);
         config.timestamp = getTimeStamp();
         for (let [key, value] of Object.entries(config)) {
             if (typeof value === "string") {
@@ -83,6 +83,8 @@ const
         if (!config.plugins.endsWith("/")) {
             config.plugins = config.plugins + "/";
         }
+        config.appBundleModules = getCleanedArray(config.appBundleModules);
+        config.appBundleDirs = getCleanedArray(config.appBundleDirs);
         return config;
     },
     config = getConfig(),
@@ -193,6 +195,13 @@ const build = function() {
             bundleContent = bundleContent + moduleContent.substring(moduleContent.indexOf("define(") + "define(".length, moduleContent.lastIndexOf(")"));
             bundleContent = bundleContent + '],';
             hasBundles = true;
+        }
+    }
+
+    if (this.appDir && this.appBundleModules) {
+        for (let module of this.appBundleModules) {
+            let fileNameClean = cleanPath(path.join(this.appDir, module));
+            log(fileNameClean);
         }
     }
 
