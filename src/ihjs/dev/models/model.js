@@ -71,6 +71,9 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
                     continue;
                 }
                 if (typeof node.value === "string") {
+                    if (!node.value.startsWith("()")) {
+                        continue;
+                    }
                     this._assignEvent(element, attr, node.value);
                 }
             }

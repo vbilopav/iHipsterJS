@@ -43,6 +43,15 @@ define([
     _app.fetch = async (url, opts) => await(await fetch(url, opts)).json();
     _app.render = async (view, elementOrId, params) => 
         await reveal({view: view, elementOrId: elementOrId, params: params});
+    
+    _app.queryString = (input => {
+        let i = input.slice(input.indexOf('?') + 1),
+            v = i.match(/[\w\d%\-!.~'()\*]+=[\w\d%\-!.~'()\*]+/g);
+        if (!v) {
+            return i;
+        }
+        return v.map(s => s.split('=').map(decodeURIComponent)).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
+    })(document.location.search);
 
     // require if current script tag is last
     _app.config.module && require([_app.config.module], app => (app.default || app)(_app.config.elementId));
