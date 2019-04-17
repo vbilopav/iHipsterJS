@@ -3,7 +3,6 @@ To rebuild run following command from "src/ihjs/tools" dir:
 node build ..\..\..\demos\remote-data\module-view3-custom-build\build-config.js
 */
 ({
-
     //
     // version number will be part of output dir
     //
@@ -36,5 +35,4 @@ node build ..\..\..\demos\remote-data\module-view3-custom-build\build-config.js
     // bundle these into custom build
     //
     appBundleModules: ["module-view.js", "templates.html"]
-
 })

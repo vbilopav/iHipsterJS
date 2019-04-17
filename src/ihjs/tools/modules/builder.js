@@ -111,12 +111,16 @@ const build = function() {
                 return minify(fs.readFileSync(filename).toString(), options);
             }
         }
-        getContent = (filename, moduleName) => {
+        getContent = (filename, moduleName, isText=false) => {
             let options;
-            if (this.minifyModules[moduleName] !== undefined) {
-                options = this.minifyModules[moduleName];
+            if (isText) {
+                options = null;
             } else {
-                options = this.minifyDefault;
+                if (this.minifyModules[moduleName] !== undefined) {
+                    options = this.minifyModules[moduleName];
+                } else {
+                    options = this.minifyDefault;
+                }
             }
             return getContentByOptions(filename, options);
         };
@@ -198,16 +202,77 @@ const build = function() {
         }
     }
 
+    const additionalPaths = {};
+    const buildAppModule = appModule => {
+        let 
+            sourceFileNameClean = cleanPath(path.join(this.appDir, appModule)),
+            moduleName = path.join(this.moduleNamePrefix, appModule).replace(new RegExp("\\"+path.sep, 'g'), "/"),
+            moduleNameClean,
+            fileNameClean =  cleanPath(path.join(this.outputDir, appModule)),
+            dirNameClean =  path.dirname(fileNameClean),
+            isText = false;
+
+        if (path.extname(moduleName).toLowerCase() === ".js") {
+            moduleNameClean = moduleName.replace(".js", "");
+        } else {
+            moduleNameClean = "$text!" + moduleName;
+            isText = true;
+        }
+
+        if (this.skipModules.includes(appModule)) {
+            return;
+        }
+
+        let 
+            moduleContent = getContent(sourceFileNameClean, appModule, isText);
+
+        if (this.lazyModules.includes(appModule)) {
+            log(">>> Creating file ", fileNameClean);
+            mkDirByPathSync(dirNameClean);
+            fs.writeFileSync(fileNameClean, moduleContent, "utf8");
+            additionalPaths[path.dirname(moduleName).replace(new RegExp("\\"+path.sep, 'g'), "/")] = 
+                path.join(this.moduleNamePrefix, path.dirname(fileNameClean.replace(this.appDir, ""))).replace(new RegExp("\\"+path.sep, 'g'), "/");
+        } else {
+            log('>>> Bundling app module ...', moduleNameClean);
+            bundleContent = bundleContent + `'${moduleNameClean}': [`;
+            bundleContent = bundleContent + ( 
+                isText ?
+                ("'" + moduleContent.replace(/'/g, "\\'").replace(/\r/g, "\\r").replace(/\n/g, "\\n") + "'")
+                :
+                moduleContent.substring(moduleContent.indexOf("define(") + "define(".length, moduleContent.lastIndexOf(")"))
+            );
+            bundleContent = bundleContent + '],';
+            hasBundles = true;
+        }
+    };
+
     if (this.appDir && this.appBundleModules) {
-        for (let module of this.appBundleModules) {
-            let fileNameClean = cleanPath(path.join(this.appDir, module));
-            log(fileNameClean);
+
+        for (let appModule of this.appBundleModules) {
+            buildAppModule(appModule);
+        }
+
+        for (let appDir of this.appBundleDirs) {
+            let 
+                dirClean = cleanPath(path.join(this.appDir, appDir));
+
+            for (let appFile of walkSync(dirClean)) {
+                buildAppModule(appFile.full.replace(this.appDir, ""));
+            }
+            
         }
     }
 
     if (hasBundles) {
         log('>>> Writing bundle content...');
         fs.appendFileSync(bundleFile, bundleContent + "}});", "utf8");
+        log('>>> Done!');
+        log();
+    }
+
+    if (Object.keys(additionalPaths).length) {
+        log('>>> Writing additional paths ...', additionalPaths);
+        fs.appendFileSync(bundleFile, "; require.config({paths:" + JSON.stringify(additionalPaths) + "});", "utf8");
         log('>>> Done!');
         log();
     }
