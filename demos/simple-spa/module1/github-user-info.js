@@ -11,27 +11,32 @@ define([], () => class {
         let user = params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
         let response = await fetch(`https://api.github.com/users/${user}`);
         let result = String.html`
-            <div class="container-fluid">
-                <h3>Github user data</h3>
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>${user}</div>
-                    <div class='panel-body'>
-                        <ul>`;
+            <div>
+                <h2>Github user data</h2>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan=2>${user}</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
 
         for (let [key, value] of Object.entries(await response.json())) {
             result += String.html`
-                            <li class="list-group-item">
-                                <strong>${key}: </strong>${value}
-                            </li>`
+                            <tr>
+                                <td>${key}</td>
+                                <td>${value}</td>
+                            </tr>`
         }
 
         result += String.html`
-                        </ul>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
                 <button onclick="window.history.back();">Go back</button>
-            </div>
-            `
+            </div>`;
+
         return result;
     }
 
