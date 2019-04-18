@@ -6,26 +6,36 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="stylesheet" href="../shared/css/bootstrap.css">
+    <link rel="stylesheet" href="../../shared/css/water/dark.css">
+    <link rel="stylesheet" href="../../shared/css/demos.css">
     
     <title></title>
   </head>
   <body>
 
     <div id="app">
-        <script src="../shared/loading.js"></script>
+        <script src="../../shared/loading.js"></script>
     </div>
 
-    <!-- <script 
-      type="module" 
-      data-app-module="demos/github-user-template/app" 
-      src="../../src/ihjs/dev/ihjs.js">
-    </script> -->
+    <!-- <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script> -->
 
-    <script 
-      type="module" 
-      data-app-module="demos/github-user-template/app" 
-      src="../../src/ihjs/build/1.0.0/ihjs.js">
+    <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script>
+
+    <script type="module">
+      window.onload = () => require(["$/spa"], ({Router, Manager}) => new Router({
+          routes: {
+            "/": { 
+              view: "$template!demos/simple-spa/templates/github-user.html" 
+            },
+            "/github-user-info": {
+              view: "$template!demos/simple-spa/templates/github-user-info",
+              paramsMap: params => (params.length === 1 ? params[0] : false)
+            }
+          },
+          error: event => console.error(event)
+        })
+        .useViewManager(new Manager(document.getElementById("app").html("").show()))
+        .start());
     </script>
 
   </body>
