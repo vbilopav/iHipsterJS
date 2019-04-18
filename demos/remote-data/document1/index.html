@@ -24,7 +24,7 @@
                 `<div class="panel panel-default" name="${name}">
                     <div class="panel-heading">
                         <span>${name}</span>
-                        <a data-open-modal="1" style="float: right;" href='#' onclick="() => this.showDescriptionClick('${name}', '${item.Description}');">show description</a>
+                        <a data-open-modal="1" style="float: right;" href='#' onclick="e => this.showDescriptionClick(e, '${name}', '${item.Description}');">show description</a>
                     </div>
                     <ul>
                         ${this.template.forEach(item, (key, value) => (key != "Description" ? 
@@ -49,11 +49,11 @@
         <script>
         () => {
 
-            this.showDescriptionClick = (name, description)  => {
+            this.showDescriptionClick = (e, name, description)  => {
                 this.template.model.title.html(name);
                 this.template.model.description.html(description);
                 this.template.model.modalWin.show();
-                return false;
+                e.preventDefault();
             };
             window.on("click", e => {
                 if (e.target.data("openModal") != "1") {

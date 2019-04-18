@@ -59,12 +59,12 @@ define([], () => class {
         return result;
     }
 
-    showDescriptionClick(element) {
-        let name = element.data("name");
+    showDescriptionClick(e) {
+        let name = e.target.data("name");
         this.model.title.html(name);
         this.model.description.html(this._descriptionsDict[name]);
         this.model.modalWin.show();
-        return false;
+        e.preventDefault();
     }
 
 

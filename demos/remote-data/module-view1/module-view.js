@@ -23,7 +23,7 @@ define([], () => class {
                         <span>${name}</span>
                         <a 
                             data-open-modal="1" style="float: right;" href='#' 
-                            onclick="() => this.showDescriptionClick('${name}', '${item.Description}');">show description
+                            onclick="e => this.showDescriptionClick(e, '${name}', '${item.Description}');">show description
                         </a>
                     </div>
                     <ul class="list-group">
@@ -55,13 +55,12 @@ define([], () => class {
         return result;
     }
 
-    showDescriptionClick(name, description) {
+    showDescriptionClick(e, name, description) {
         this.model.title.html(name);
         this.model.description.html(description);
         this.model.modalWin.show();
-        return false;
+        e.preventDefault();
     }
-
 
     rendered({element}) {
         console.log("Template rendered into element:");
@@ -69,5 +68,4 @@ define([], () => class {
         console.log("I also have following model defined:");
         console.log(this.model);
     }
-
 })

@@ -180,16 +180,17 @@
             document.body.appendChild(script);
             script.onload = onload;
             script.onerror = onload;
-        };
+        },
+        mainFunc = ()=>{};
 
     if (loaderLoaded()) {
         require.config(config);
-        require(["$/main"], ()=>(window[appObjectName].onload && window[appObjectName].onload(appElementId)));
+        require(["$/main"], mainFunc);
     } else {
         loadLoader(loaderUrl, () => {
             if (loaderLoaded()) {
                 require.config(config);
-                require(["$/main"], ()=>(window[appObjectName].onload && window[appObjectName].onload(appElementId)));
+                require(["$/main"], mainFunc);
                 return;
             }
             console.warn("Failed to load module loader.")

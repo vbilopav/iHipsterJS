@@ -67,15 +67,10 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
                 this._assignEvent(element, attr, val);
                 continue;
             } else {
-                if (node.value.startsWith("javascript:")) {
+                if (node.value.startsWith("javascript:") || node.value.indexOf("=>") === -1) {
                     continue;
                 }
-                if (typeof node.value === "string") {
-                    if (!node.value.startsWith("()")) {
-                        continue;
-                    }
-                    this._assignEvent(element, attr, node.value);
-                }
+                this._assignEvent(element, attr, node.value);
             }
         }
     }
@@ -84,10 +79,12 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
         element.removeAttribute(attr);
         let inst = this._instance;
         if (typeof val === "function") {
-            element.on(attr.replace("on", "").toLowerCase(), () => val.apply(inst, arguments));
+            element.on(attr.replace("on", "").toLowerCase(), (...args) => val.apply(inst, args));
         } else {
-            element.on(attr.replace("on", "").toLowerCase(), () => {
-                return (function() { return eval(val).apply(this, arguments); }).apply(inst, arguments)
+            element.on(attr.replace("on", "").toLowerCase(), (...args) => {
+                return (function() { 
+                    return eval(val).apply(this, args); 
+                }).apply(inst);
             });
         }
     }

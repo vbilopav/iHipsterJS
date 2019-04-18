@@ -45,12 +45,12 @@ ${
 <script>
 () => {
 
-    this.showDescriptionClick = element  => {
-        let name = element.data("name");
+    this.showDescriptionClick = e  => {
+        let name = e.target.data("name");
         this.template.model.title.html(name);
         this.template.model.description.html(this._descriptionsDict[name]);
         this.template.model.modalWin.show();
-        return false;
+        e.preventDefault();
     };
     window.on("click", e => {
         if (e.target.data("openModal") != "1") {

@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <!-- <link rel="stylesheet" href="../../shared/css/bootstrap.css"> -->
     <link rel="stylesheet" href="../../shared/css/water/dark.css">
-    
     <title></title>
   </head>
   <body>
@@ -41,7 +38,7 @@
     <template id="github-user">
         <div>
           <h1>Github user data</h1>
-          <input style="display: inline;" type="text" name="username">
+          <input style="display: inline;" type="text" name="username" autofocus spellcheck="false">
           <button onclick="showClick">Show github user data</button>
         </div>
         ${
@@ -54,10 +51,10 @@
         }
     </template>
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>  -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
     <script type="module" src="../../../src/ihjs/build/1.0.0/ihjs.js"></script>
 
-    <script>
+    <script type="module">
       window.onload = () => require(["$/spa"], ({Router, Manager}) => new Router({
           routes: {
             "/": { view: "$template!github-user" },

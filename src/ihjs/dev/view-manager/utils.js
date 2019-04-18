@@ -28,7 +28,11 @@ define(["$/view-manager/components"], ({getTags})  => {
             if (params.template.context || params.template.model) {
                 params.template.model = new _app.Model(params.template.model).bind(element, params.template.context);
             }
-            !params.template.rendered || params.template.rendered(element);
+            if (params.template.rendered) {
+                params.template.rendered(element);
+            } else if (params.template.context.rendered) {
+                params.template.context.rendered(element);
+            }
         },
         moduleRendered = (instance, args, skipChange=true) => {
             if (instance._options.context === undefined) {
