@@ -7,7 +7,7 @@ define([], () => class {
         options.disableCaching = true;
     }
 
-    async render({params}) {
+    render({params}) {
         return [
             () => String.html`
                 <div>
