@@ -26,7 +26,7 @@ define(["$/view-manager/components"], ({getTags})  => {
                 params.template.context = params;
             }
             if (params.template.context || params.template.model) {
-                params.template.model = new _app.Model(params.template.model).bind(element, params.template.context);
+                params.template.model = new _app.Model(params.template.model).bind(element, params.template.context, params);
             }
             if (params.template.rendered) {
                 params.template.rendered(element);

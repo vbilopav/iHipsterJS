@@ -6,9 +6,9 @@ define([], () => class {
                 <h1>Github user data</h1>
                 <p> 
                     <label for="username">Enter valid github username: </label> 
-                    <input label type="text" id="username" autofocus spellcheck="false" value="${this.username}">
+                    <input label type="text" id="username" autofocus spellcheck="false" value="${this.username}" onkeypress="e => e.keyCode === 13 && this.model.btn.click()">
                     <br />
-                    <button onclick="showClick">Show github user data</button>
+                    <button name="btn" onclick="showClick">Show github user data</button>
                 </p>
             </div>`,
             {username: _app.queryString || "vbilopav"}

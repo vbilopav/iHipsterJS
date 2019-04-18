@@ -11,8 +11,9 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
         this._oncreate = oncreate;
     }
 
-    bind(element, instance) {
+    bind(element, instance, ctx) {
         this._instance = instance || Object.assign({}, this);
+        this._ctx = ctx;
         if (!this._model) {
             element.forEachChild(e => this._forEachDeclarative(e));
         } else {
@@ -77,7 +78,7 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
 
     _assignEvent(element, attr, val) {
         element.removeAttribute(attr);
-        let inst = this._instance;
+        let inst = this._ctx || this._instance;
         if (typeof val === "function") {
             element.on(attr.replace("on", "").toLowerCase(), (...args) => val.apply(inst, args));
         } else {
