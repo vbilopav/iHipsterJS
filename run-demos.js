@@ -7,7 +7,7 @@ exec.stdout.on('data', data => {
     if (started) {
         return;
     }
-    let i = data.lastIndexOf("http://");
+    let i = data.indexOf("http://");
     if (i === -1) {
         return;
     }
