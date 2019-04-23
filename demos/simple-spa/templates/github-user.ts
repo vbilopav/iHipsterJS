@@ -1,13 +1,9 @@
-///<reference path="../../../../src/ihjs/build/1.0.0/types/extensions.d.ts"/>
-
 export default class {
-    username: string
-    model: {
-        username: HTMLInputElement
-    };
+    username: string;
+    model: any;
 
     constructor() {
-        this.username = window._app.queryString as string || "vbilopav"; // default value for the model element username
+        this.username = _app.queryString || "vbilopav"; // default value for the model element username
     }
 
     render() {
@@ -20,7 +16,7 @@ export default class {
     }
 
     showClick() {
-        window.location.href = "#/github-user-info/" + this.model.username.value;
+        window.location = "#/github-user-info/" + this.model.username.value;
     }
 
 };

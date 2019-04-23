@@ -169,6 +169,12 @@ const build = function() {
         }
 
         if (path.extname(frameworkItem.full).toLowerCase() !== ".js") {
+            if (!this.copyNonJsFiles) {
+                continue;
+            }
+            log(">>> Copying file ", frameworkFile);
+            mkDirByPathSync(dirNameClean);
+            fs.copyFileSync(frameworkFile, fileNameClean);
             continue;
         }
 

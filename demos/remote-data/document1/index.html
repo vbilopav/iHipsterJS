@@ -39,7 +39,7 @@
 
         <div name="modalWin" class="modal" style="display: none;">
             <div class="modal-content">
-                <span class="close" onclick="()=>this.template.model.modalWin.hide();">&times;</span>
+                <span class="close" onclick="()=>this.template.model.modalWin.hideElement();">&times;</span>
                 <p name="title"></p>
                 <p name="description"></p>
             </div>
@@ -52,12 +52,12 @@
             this.showDescriptionClick = (e, name, description)  => {
                 this.template.model.title.html(name);
                 this.template.model.description.html(description);
-                this.template.model.modalWin.show();
+                this.template.model.modalWin.showElement();
                 e.preventDefault();
             };
             window.on("click", e => {
-                if (e.target.data("openModal") != "1") {
-                    this.template.model.modalWin.hide();
+                if (e.target.dataAttr("openModal") != "1") {
+                    this.template.model.modalWin.hideElement();
                 }
             });
             this.template.rendered = element => {

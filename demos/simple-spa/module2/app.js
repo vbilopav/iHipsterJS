@@ -11,6 +11,6 @@ define(
         },
         error: event => console.log(event)
     })
-    .useViewManager(new Manager(document.getElementById(appElementId).html("").show()))
+    .useViewManager(new Manager(document.getElementById(appElementId).html("").showElement()))
     .start()
 );

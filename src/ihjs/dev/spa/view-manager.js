@@ -46,13 +46,13 @@ define([
                 elementId = utils.getId(uriHash);
 
             if (this._current) {
-                this._current.hide();
+                this._current.hideElement();
             }
 
             if (found) {
 
                 if (found.type === utils.types.string) {
-                    this._current = found.element.show();
+                    this._current = found.element.showElement();
                     utils.showView(found, found.element);
                     return resolve(found.element.id);
                 }
@@ -93,7 +93,7 @@ define([
                             });
                         }
                     }
-                    this._current = element.show();
+                    this._current = element.showElement();
                     utils.showView(found, element);
                     return resolve(element.id);
                 }
@@ -111,7 +111,7 @@ define([
 
                 if (found.type === utils.types.class) {
                     let showFunc = () => {
-                        this._current = element.show();
+                        this._current = element.showElement();
                         utils.showView(found, element);
                         found.uriHash = uriHash;
                     }
@@ -129,18 +129,18 @@ define([
                                 c = app.parse(...c);
                                 c.then(s => {
                                     if (typeof s === "string") {
-                                        element.html(s).show();
+                                        element.html(s).showElement();
                                     } else {
                                         element.html("").appendChild(s)
-                                        element.show();
+                                        element.showElement();
                                     }
                                 })
                             } else if (typeof c === "string" || c instanceof HTMLElement) {
                                 if (typeof c === "string") {
-                                    element.html(c).show();
+                                    element.html(c).showElement();
                                 } else {
                                     element.html("").element(c); 
-                                    element.show();
+                                    element.showElement();
                                 }
                             }
 

@@ -38,5 +38,5 @@ define([
 
     app = new _app.Model().bind(page[appElementId]);
     router.useViewManager(new Manager(app.container)).start();
-    page[appElementId].show();
+    page[appElementId].showElement();
 });

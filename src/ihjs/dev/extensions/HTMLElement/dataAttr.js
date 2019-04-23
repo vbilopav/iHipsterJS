@@ -1,8 +1,8 @@
 define(["$/models/test-proto"], test => {
 
-    test(HTMLElement, ["data", "_data"]);
+    test(HTMLElement, ["dataAttr", "_data"]);
     
-    HTMLElement.prototype.data = function(key, value) {
+    HTMLElement.prototype.dataAttr = function(key, value) {
         if (!this._data) {
             this._data = Object.assign({}, this.dataset);
         }

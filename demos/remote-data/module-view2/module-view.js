@@ -3,8 +3,8 @@ define([], () => class {
     constructor() {
         this._descriptionsDict = {};
         window.on("click", e => {
-            if (e.target.data("openModal") != "1") {
-                this.model.modalWin.hide();
+            if (e.target.dataAttr("openModal") != "1") {
+                this.model.modalWin.hideElement();
             }
         });
     }
@@ -50,7 +50,7 @@ define([], () => class {
         result += String.html`
             <div name="modalWin" class="modal" style="display: none;">
                 <div class="modal-content">
-                    <span class="close" onclick="()=>this.model.modalWin.hide();">&times;</span>
+                    <span class="close" onclick="()=>this.model.modalWin.hideElement();">&times;</span>
                     <p name="title"></p>
                     <p name="description"></p>
                 </div>
@@ -60,10 +60,10 @@ define([], () => class {
     }
 
     showDescriptionClick(e) {
-        let name = e.target.data("name");
+        let name = e.target.dataAttr("name");
         this.model.title.html(name);
         this.model.description.html(this._descriptionsDict[name]);
-        this.model.modalWin.show();
+        this.model.modalWin.showElement();
         e.preventDefault();
     }
 

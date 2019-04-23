@@ -1,7 +1,6 @@
-export default class {
-    value: any;
-    template: any;
+///<reference path="../../../../src/ihjs/build/1.0.0/types/extensions.d.ts"/>
 
+export default class {
     constructor({options}) {
         //
         // when disableCaching option is set to true view will be rendered on every navigate
@@ -10,28 +9,36 @@ export default class {
     }
 
     async render({params}) {
-        return [
-            () => String.html`
-                <div class="container-fluid">
-                    <h3>Github user data</h3>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>${this.value}</div>
-                        <div class='panel-body'>
-                            <ul>
-                            ${async () => this.template.forEach(await _app.fetch("https://api.github.com/users/" + this.value), (key, value) => 
-                                String.html`
-                                <li class="list-group-item">
-                                    <strong>${key}: </strong>${value}
-                                </li>`
-                            )}
-                            </ul>
-                        </div>
-                    </div>
-                    <button onclick="window.history.back();">Go back</button>
+        let user = params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
+        let response = await fetch(`https://api.github.com/users/${user}`);
+        let result = String.html`
+            <div>
+                <h2>Github user data</h2>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan=2>${user}</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        for (let [key, value] of Object.entries(await response.json())) {
+            result += String.html`
+                            <tr>
+                                <td>${key}</td>
+                                <td>${value}</td>
+                            </tr>`
+        }
+
+        result += String.html`
+                        </tbody>
+                    </table>
                 </div>
-            `, 
-            params
-        ]
+                <button onclick="window.history.back();">Go back</button>
+            </div>`;
+
+        return result;
     }
 
 };

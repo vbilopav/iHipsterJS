@@ -1,11 +1,11 @@
 define(["$/models/test-proto", "$/extensions/HTMLElement/css"], test => {
         
-    test(HTMLElement, ["show"]);
+    test(HTMLElement, ["showElement"]);
 
-    HTMLElement.prototype.show = function(state) {
+    HTMLElement.prototype.showElement = function(state) {
         if (state !== undefined) {
             if (!state) {
-                return this.hide();
+                return this.hideElement();
             }
         }
         this.css("display", "");

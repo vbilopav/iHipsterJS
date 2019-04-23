@@ -16,6 +16,10 @@ node build ..\..\..\demos\remote-data\module-view3-custom-build\build-config.js
     //
     bundleFile: 'build-demo.js',
     //
+    // there is no need top copy d.ts files, since thise demo doesn't use typescript
+    //
+    copyNonJsFiles: false,
+    //
     // bundle comment
     //
     bundleComment: 'custom build: ${this.timestamp}, version: ${this.version}',

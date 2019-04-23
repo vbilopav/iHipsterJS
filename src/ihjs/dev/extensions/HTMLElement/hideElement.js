@@ -1,8 +1,8 @@
 define(["$/models/test-proto", "$/extensions/HTMLElement/css"], test => {
         
-    test(HTMLElement, ["hide"]);
+    test(HTMLElement, ["hideElement"]);
 
-    HTMLElement.prototype.hide = function() {
+    HTMLElement.prototype.hideElement = function() {
         this.css("display", "none");
         return this;
     }

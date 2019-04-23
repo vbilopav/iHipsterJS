@@ -30,6 +30,10 @@
     //
     packageFile: '../package.json',
     //
+    // Should non .js files be copied to output
+    //
+    copyNonJsFiles: true,
+    //
     // Default file operation - copy or minify and if minify how
     // false or null value will leave source file intact as is.
     // true value will use default uglifyEs options. 
