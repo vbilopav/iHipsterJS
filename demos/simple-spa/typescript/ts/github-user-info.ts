@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/build/1.0.0/types/extensions.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.0.0/types/core.d.ts"/>
 
 export default class {
     constructor({options}) {

@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/build/1.0.0/types/extensions.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.0.0/types/core.d.ts"/>
 ///<reference path="../../../../src/ihjs/build/1.0.0/types/spa.d.ts"/>
 
 import {Router, Manager} from "$/spa"; 
@@ -7,10 +7,10 @@ import {Router, Manager} from "$/spa";
 export default (appElementId: string) => new Router({
     routes: {
         "/": {
-            view: "demos/simple-spa/module1/github-user"
+            view: "demos/simple-spa/typescript/js/github-user"
         },
         "/github-user-info": {
-            view: "demos/simple-spa/module1/github-user-info",
+            view: "demos/simple-spa/typescript/js/github-user-info",
             paramsMap: params => (params.length === 1 ? params[0] : false)
         }
     },

@@ -1,16 +1,6 @@
 /**
  * 
  */
-declare type View = string | {
-    /**
-    * 
-    */
-    name: string,
-    inject: string[]
-}
-/**
- * 
- */
 interface ViewManagerRevealArgs {
     /**
     * 
@@ -96,19 +86,37 @@ interface RouterErrorEvent {
 /**
  * 
  */
-interface RouterConstructor {
+interface RouterConstructorArgs {
+    /**
+     * 
+     */
     navigate?: (e: RouterNavigateEvent) => any,
+    /**
+     * 
+     */
     leave?: (e: RouterLeaveEvent) => any,
+    /**
+     * 
+     */
     error?: (e: RouterErrorEvent) => any,
+    /**
+     * 
+     */
     hash?: "#" | "#!",
+    /**
+     * 
+     */
     test?: (route: string) => any,
+    /**
+     * 
+     */
     routes: {[key: string]: Route;}
 }
 /**
  * Router class to create instance of the router component.
  */
 declare class RouterClass {
-    constructor(args: RouterConstructor)
+    constructor(args: RouterConstructorArgs)
     /**
     * 
     */

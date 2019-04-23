@@ -1,11 +1,187 @@
 /**
  * 
  */
+declare type View = string | {
+    /**
+    * 
+    */
+    name: string,
+    /**
+    * 
+    */
+    inject: string[]
+}
+/**
+ * 
+ */
+interface ModelConstructorArgs {
+    /**
+    * 
+    */
+    model: {[key: string]: string} 
+    /**
+    * 
+    */
+    oncreate?: (element: HTMLElement) => void
+}
+/**
+ * 
+ */
+declare class ModelClass {
+    /**
+    * 
+    */
+    constructor(args: ModelConstructorArgs)
+    /**
+    * 
+    */
+    bind(element: HTMLElement, instance?: {[key: string]: string} , eventContext?: any): ModelClass
+    /**
+    * 
+    */
+    each(element: HTMLElement, name?: string): void
+}
+/**
+* 
+*/
+declare module "$/models/model" {
+    /**
+    * 
+    */
+    export default class Model extends ModelClass {}
+}
+/**
+ * 
+ */
+interface DefineComponentArg {
+    /**
+    * 
+    */
+    tag: string
+    /**
+    * 
+    */
+    src: string
+    /**
+    * 
+    */
+    wrap?: string
+}
+/**
+ * 
+ */
+interface ParseTemplateArg {
+    /**
+     * 
+     */
+    template: string,
+    /**
+     * 
+     */
+    data?: object, 
+    /**
+     * 
+     */
+    local?: {[key: string]: (...args: any)=>any}, 
+    /**
+     * 
+     */
+    name?: string
+}
+/**
+ * 
+ */
 interface AppObject {
     /**
      * 
      */
+    Model: ModelClass
+    /**
+     * 
+     */
+    appUrl: string
+    /**
+     * 
+     */
+    composite: Array<any>
+    /**
+     * 
+     */
+    config: {
+        /**
+         * 
+         */
+        module?: string, 
+        /**
+         * 
+         */
+        view?: string, 
+        /**
+         * 
+         */
+        elementId: string, 
+        /**
+         * 
+         */
+        name: string
+    }
+    /**
+     * 
+     */
+    customElements: {
+        /**
+         * 
+         */
+        define(...components: [DefineComponentArg]): void
+    }
+    /**
+     * 
+     */
+    dev: boolean
+    /**
+     * 
+     */
+    fetch(input: RequestInfo, init?: RequestInit): Promise<any>
+    /**
+     * 
+     */
+    import(module: string): Promise<any>
+    /**
+     * 
+     */
+    libsUrl: string
+    /**
+     * 
+     */
+    parse(template: string, data?: object, local?: {[key: string]: (...args: any)=>any}, name?: string): Promise<string>
+    /**
+     * 
+     */
     queryString: string | object
+    /**
+     * 
+     */
+    relative(from: string, to: string): string
+    /**
+     * 
+     */
+    render(view: View, elementOrId: HTMLElement | string, params?: object): Promise<{data: object, element: HTMLElement}>
+    /**
+     * 
+     */
+    settings: object
+    /**
+     * 
+     */
+    sysUrl: string
+    /**
+     * 
+     */
+    template: string | Promise<any>
+    /**
+     * 
+     */
+    version: string
 }
 /**
  * Set of JQuery-like extensions on HTMLElement prototype.

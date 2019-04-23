@@ -136,6 +136,9 @@ define([
             }
             
             require(modules, (view, ...injected) => {
+                if (view.default && view.__esModule) {
+                    view = view.default;
+                };
                 const 
                     uriHash = uri.hashCode(),
                     type = utils.getViewType(view, viewName),
