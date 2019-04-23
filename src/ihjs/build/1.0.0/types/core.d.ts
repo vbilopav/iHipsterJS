@@ -9,7 +9,7 @@ declare type View = string | {
     /**
     * 
     */
-    inject: string[]
+    inject: Array<string>
 }
 /**
  * 

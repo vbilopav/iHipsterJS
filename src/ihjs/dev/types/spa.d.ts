@@ -1,3 +1,5 @@
+///<reference path="./core.d.ts"/>
+
 /**
  * 
  */
@@ -65,22 +67,43 @@ interface Route {
  * 
  */
 interface RouterNavigateEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route, 
+    /**
+    * 
+    */
     params: any
 }
 /**
  * 
  */
 interface RouterLeaveEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route
 }
 /**
  * 
  */
 interface RouterErrorEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route
 }
 /**
