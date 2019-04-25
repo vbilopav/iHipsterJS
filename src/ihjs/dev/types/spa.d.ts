@@ -11,7 +11,7 @@ interface ViewManagerRevealArgs {
     /**
     * 
     */
-    view: View, 
+    view: ViewDefinition, 
     /**
     * 
     */
@@ -53,7 +53,7 @@ interface Route {
     /**
     * 
     */
-    view: View,
+    view: ViewDefinition,
     /**
     * 
     */

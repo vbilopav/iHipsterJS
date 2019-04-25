@@ -11,7 +11,7 @@ interface ViewManagerRevealArgs {
     /**
     * 
     */
-    view: View, 
+    view: ViewDefinition, 
     /**
     * 
     */
@@ -53,7 +53,7 @@ interface Route {
     /**
     * 
     */
-    view: View,
+    view: ViewDefinition,
     /**
     * 
     */
@@ -67,22 +67,43 @@ interface Route {
  * 
  */
 interface RouterNavigateEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route, 
+    /**
+    * 
+    */
     params: any
 }
 /**
  * 
  */
 interface RouterLeaveEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route
 }
 /**
  * 
  */
 interface RouterErrorEvent {
+    /**
+    * 
+    */
     router: RouterClass, 
+    /**
+    * 
+    */
     route: Route
 }
 /**

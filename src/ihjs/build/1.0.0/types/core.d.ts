@@ -1,7 +1,85 @@
 /**
  * 
  */
-declare type View = string | {
+interface ViewConstructorOptions {
+    /**
+    * 
+    */
+    disableCaching: boolean,
+    /**
+    * 
+    */
+    callRenderOnlyOnce: boolean,
+    /**
+    * 
+    */
+    css: Array<string>,
+    /**
+    * 
+    */
+    watch: (...components: Array<string>) => void
+}
+/**
+ * 
+ */
+interface ViewConstructorArgs {
+    /**
+    * 
+    */
+    id: string, 
+    /**
+    * 
+    */
+    element: HTMLElement, 
+    /**
+    * 
+    */
+    options: ViewConstructorOptions
+}
+/**
+ * 
+ */
+interface ViewMethodArgs {
+    params?: any
+    /**
+    * 
+    */
+    element?: HTMLElement
+}
+/**
+ * 
+ */
+interface View {
+    /**
+    * 
+    */
+    render(args?: ViewMethodArgs): string | Promise<string>
+    /**
+    * 
+    */
+    rendered?(args?: ViewMethodArgs): void
+    /**
+    * 
+    */
+    changed?(args?: ViewMethodArgs): void
+}
+/**
+ * 
+ */
+interface ViewConstructor {
+    /**
+    * 
+    */
+    new(args: ViewConstructorArgs): View
+}
+/**
+ * 
+ */
+declare var View: ViewConstructor;
+/**
+ * 
+ */
+declare type ViewDefinition = string | {
     /**
     * 
     */
@@ -165,7 +243,7 @@ interface AppObject {
     /**
      * 
      */
-    render(view: View, elementOrId: HTMLElement | string, params?: object): Promise<{data: object, element: HTMLElement}>
+    render(view: ViewDefinition, elementOrId: HTMLElement | string, params?: object): Promise<{data: object, element: HTMLElement}>
     /**
      * 
      */

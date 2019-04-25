@@ -2,8 +2,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
-        constructor({ options }) {
-            options.disableCaching = true;
+        constructor(args) {
+            args.options.disableCaching = true;
         }
         async render({ params }) {
             let user = params.value;

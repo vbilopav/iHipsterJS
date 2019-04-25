@@ -1,14 +1,12 @@
 ///<reference path="../../../../src/ihjs/build/1.0.0/types/core.d.ts"/>
 
-export default class {
-    constructor({options}) {
-        //
-        // when disableCaching option is set to true view will be rendered on every navigate
-        //
-        options.disableCaching = true;
+export default class implements View {
+    constructor(args: ViewConstructorArgs) {
+        args.options.disableCaching = true;
     }
 
     async render({params}) {
+
         let user = params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
         let response = await fetch(`https://api.github.com/users/${user}`);
         let result = String.html`
