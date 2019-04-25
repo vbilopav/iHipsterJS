@@ -87,7 +87,15 @@ declare type ViewDefinition = string | {
     /**
     * 
     */
-    inject: Array<string>
+    inject?: Array<string>,
+    /**
+    * 
+    */
+    paramsMap?: (params: Array<string>) => false | any
+    /**
+    * 
+    */
+    data?: object
 }
 /**
  * 
