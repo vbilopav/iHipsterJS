@@ -80,7 +80,8 @@
         appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
         sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
         viewModule = scr.getAttribute("data-view-module"),
-        appElementId = scr.getAttribute("data-app-container-id") === null ? defaults.appElementId : scr.getAttribute("data-app-container-id"),
+        containerId = scr.getAttribute("data-app-container-id"),
+        defaultElementId =  defaults.appElementId,
         appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
         settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
         cssFilesattrValue = scr.getAttribute("data-css-files"),
@@ -121,7 +122,8 @@
         config: {
             module: appModule,
             view: viewModule,
-            elementId: appElementId,
+            containerId: containerId,
+            defaultElementId: defaultElementId,
             name: appObjectName
         },
         relative: relative

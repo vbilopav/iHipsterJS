@@ -1,5 +1,5 @@
 define(
-    ["$/spa"], ({Router, Manager}) => appElementId => new Router({
+    ["$/spa"], ({Router, Manager}) => new Router({
         routes: {
             "/": {
                 view: "demos/simple-spa/module2/github-user"
@@ -11,6 +11,6 @@ define(
         },
         error: event => console.log(event)
     })
-    .useViewManager(new Manager(document.getElementById(appElementId).html("").showElement()))
+    .useViewManager(new Manager(document.getElementById("app").html("").showElement()))
     .start()
 );

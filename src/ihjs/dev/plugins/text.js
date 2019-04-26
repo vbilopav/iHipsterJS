@@ -9,7 +9,14 @@ define([], () => {
                     return;
                 }
             }
-            fetch(req.toUrl(name)).then(response => response.text()).then(response => onload(response));
+            fetch(req.toUrl(name))
+            .then(response => {
+                if (response.status !== 200) {
+                    console.error(`Couldn't load text module ${name} at location ${response.url}\nFailed with status ${response.status + " (" + response.statusText})`);
+                }
+                return response.text()
+            })
+            .then(response => onload(response));
         }
     };
 });

@@ -71,6 +71,11 @@ define([
     })(document.location.search);
 
     // require if current script tag is last
-    _app.config.module && require([_app.config.module], app => (app.default || app)(_app.config.elementId));
+    _app.config.module && require([_app.config.module], app => {
+        app = (app.default || app);
+        if (typeof app === "function") {
+            app();
+        }
+    });
 
 });
