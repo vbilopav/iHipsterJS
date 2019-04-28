@@ -4,7 +4,7 @@
 import {Router, Manager} from "$/spa"; 
 
 
-export default new Router({
+new Router({
     routes: {
         "/": {
             view: "demos/simple-spa/typescript/app/github-user"
@@ -16,6 +16,6 @@ export default new Router({
     },
     error: event => console.log(event)
 })
-.useViewManager(new Manager(document.getElementById("app").html("").showElement()))
+.useViewManager(new Manager(document.body.html("").showElement()))
 .start()
 

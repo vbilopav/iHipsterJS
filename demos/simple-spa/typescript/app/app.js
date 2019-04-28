@@ -1,7 +1,7 @@
 define(["require", "exports", "$/spa"], function (require, exports, spa_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = new spa_1.Router({
+    new spa_1.Router({
         routes: {
             "/": {
                 view: "demos/simple-spa/typescript/app/github-user"
@@ -13,6 +13,6 @@ define(["require", "exports", "$/spa"], function (require, exports, spa_1) {
         },
         error: event => console.log(event)
     })
-        .useViewManager(new spa_1.Manager(document.getElementById("app").html("").showElement()))
+        .useViewManager(new spa_1.Manager(document.body.html("").showElement()))
         .start();
 });
