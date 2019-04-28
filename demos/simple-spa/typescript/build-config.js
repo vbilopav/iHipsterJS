@@ -9,5 +9,5 @@
     bundleComment: 'typescript example, custom build: ${this.timestamp}, version: ${this.version}',
     appDir: "../../../demos/simple-spa/typescript/",
     moduleNamePrefix: "demos/simple-spa/typescript/",
-    appBundleDirs: ["js"]
+    appBundleDirs: ["app"]
 })

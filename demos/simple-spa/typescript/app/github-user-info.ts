@@ -5,9 +5,9 @@ export default class implements View {
         args.options.disableCaching = true;
     }
 
-    async render({params}) {
+    async render(args: ViewMethodArgs) {
 
-        let user = params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
+        let user = args.params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
         let response = await fetch(`https://api.github.com/users/${user}`);
         let result = String.html`
             <div>

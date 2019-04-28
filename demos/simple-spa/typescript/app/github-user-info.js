@@ -5,8 +5,8 @@ define(["require", "exports"], function (require, exports) {
         constructor(args) {
             args.options.disableCaching = true;
         }
-        async render({ params }) {
-            let user = params.value;
+        async render(args) {
+            let user = args.params.value;
             let response = await fetch(`https://api.github.com/users/${user}`);
             let result = String.html `
             <div>
