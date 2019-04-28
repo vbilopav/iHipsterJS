@@ -4,14 +4,35 @@
     }
     const
         defaults = {
-            version: "",
+            /*dev*/dev: true,/*dev*/
+            /*version*/version: "",/*version*/
+            urlArgs: undefined,
             appUrl: "/",
             libsUrl: null,
             appModule: "$/single-view-app",
             appElementId: "app",
             appObjectName: "_app",
             loaderUrl: path => `${path}loader/loader.js`
-        }
+        };
+
+    const
+        scr = document.currentScript || document.querySelector("script[type=module]");
+    if (!scr) {
+        throw new Error("Couldn't reference script tag. are you sure you've included script reference? ");
+    }
+    
+    const
+        dev = scr.getAttribute("data-dev") === null ? defaults.dev : eval(scr.getAttribute("data-dev")),
+        version = scr.getAttribute("data-version") === null ? defaults.version : scr.getAttribute("data-version"),
+        urlArgs = scr.getAttribute("data-url-args") === null ? defaults.urlArgs : scr.getAttribute("data-url-args"),
+        appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
+        sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
+        viewModule = scr.getAttribute("data-view-module"),
+        containerId = scr.getAttribute("data-app-container-id"),
+        defaultElementId =  defaults.appElementId,
+        appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
+        settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
+        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl);
 
     const 
         relative = (from, to) => {
@@ -69,27 +90,10 @@
             return outputParts.join('/');
         };
 
-    const
-        scr = document.currentScript || document.querySelector("script[type=module]");
-    if (!scr) {
-        throw new Error("Couldn't reference script tag. are you sure you've included script reference? ");
-    }
-    const
-        dev = scr.getAttribute("data-dev") === null ? true : eval(scr.getAttribute("data-dev")),
-        version = scr.getAttribute("data-version") === null ? defaults.version : scr.getAttribute("data-version"),
-        appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
-        sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
-        viewModule = scr.getAttribute("data-view-module"),
-        containerId = scr.getAttribute("data-app-container-id"),
-        defaultElementId =  defaults.appElementId,
-        appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
-        settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
-        cssFilesattrValue = scr.getAttribute("data-css-files"),
-        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl);
-
     let 
         appModule = null,
         appModuleAttr = scr.getAttribute("data-app-module");
+        
     if (appModuleAttr !== null) {
         appModule = appModuleAttr;
     } else {
@@ -136,30 +140,11 @@
 
     const 
         sysPath = relative(appUrl, sysUrl),
-        libsPath = relative(appUrl, libsUrl);
-
-    if (window[appObjectName].version) {
-        window.require.urlArgs = "v=" + window[appObjectName].version;
-    }
-
-    const
-        cssFiles = cssFilesattrValue !== null ? eval("[" + cssFilesattrValue + "]") : [];
-        
-    if (cssFiles.length) {
-        for (let i=0, l=cssFiles.length; i<l; i++) {
-            let script = document.createElement("link");
-            script.rel  = 'stylesheet';
-            script.type = 'text/css';
-            script.href = cssFiles[i] + (version ? "?" + require.urlArgs : "");
-            script.media = 'all';
-            document.head.appendChild(script);
-        }
-    }
-
-    const 
+        libsPath = relative(appUrl, libsUrl),
         loaderLoaded = () => window.require != undefined;
     
     const config = {
+        urlArgs: urlArgs,
         baseUrl: window[appObjectName].appUrl,
         __appObjName: appObjectName,
         paths: {
@@ -178,7 +163,7 @@
         loadLoader = (src, onload) => {
             let script = document.createElement("script");
             script.async = true;
-            script.src = src;
+            script.src = src + (urlArgs ? "?" + urlArgs : "");
             document.body.appendChild(script);
             script.onload = onload;
             script.onerror = onload;

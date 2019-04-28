@@ -104,12 +104,15 @@ const
 
 const build = function() {
     const 
-        getContentByOptions = (filename, options) => {
-            if (!options) {
-                return fs.readFileSync(filename).toString();
-            } else {
-                return minify(fs.readFileSync(filename).toString(), options);
+        getContentByOptions = (filename, options, isEntryPoint=false) => {
+            if (!isEntryPoint) {
+                return options ? minify(fs.readFileSync(filename).toString(), options) : fs.readFileSync(filename).toString();
+            } 
+            let content = fs.readFileSync(filename).toString().replace("/*dev*/dev: true,/*dev*/", "dev: false,");
+            if (this.version) {
+                content = content.replace(' /*version*/version: "",/*version*/', `version: "${this.version}",`);
             }
+            return options ? minify(content, options) : content;
         }
         getContent = (filename, moduleName, isText=false) => {
             let options;
@@ -122,7 +125,7 @@ const build = function() {
                     options = this.minifyDefault;
                 }
             }
-            return getContentByOptions(filename, options);
+            return getContentByOptions(filename, options, moduleName===this.entryPointFile);
         };
 
     log('>>> Recreating output directory', this.outputDir);
@@ -216,16 +219,21 @@ const build = function() {
             moduleNameClean,
             fileNameClean =  cleanPath(path.join(this.outputDir, appModule)),
             dirNameClean =  path.dirname(fileNameClean),
-            isText = false;
-
-        if (path.extname(moduleName).toLowerCase() === ".js") {
-            moduleNameClean = moduleName.replace(".js", "");
-        } else {
-            moduleNameClean = "$text!" + moduleName;
-            isText = true;
-        }
+            isText = false,
+            extname = path.extname(moduleName).toLowerCase();
 
         if (this.skipModules.includes(appModule)) {
+            log(">>> Skipping module (reason: skipModules configuration)", moduleName);
+            return;
+        }
+
+        if (extname === ".js") {
+            moduleNameClean = moduleName.replace(".js", "");
+        } else if (this.templateExtensions.includes(extname))  {
+            moduleNameClean = "$text!" + moduleName;
+            isText = true;
+        } else {
+            log(">>> Skipping module (reason: unknown extension)", moduleName);
             return;
         }
 

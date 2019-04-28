@@ -1,7 +1,6 @@
 button {
     border: #0096bf3b solid;
 }
-
 .panel {
     margin-bottom: 20px;
     border:  2px solid #9c9c9c6e;
@@ -31,7 +30,6 @@ button {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
 /* Modal Content */
 .modal-content {
     background-color: #fefefe;
@@ -41,7 +39,6 @@ button {
     width: 80%;
     color: black;
 }
-
 /* The Close Button */
 .close {
     color: #aaaaaa;
@@ -49,7 +46,6 @@ button {
     font-size: 28px;
     font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
     color: #000;

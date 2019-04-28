@@ -91,6 +91,10 @@
     */
     appBundleDirs: [],
     /**
+    * List of file extensions that will be considered to contain template and included into bundle
+    */
+    templateExtensions: [".html", ".htm", ".txt"],
+    /**
     * Output detailed log to console
     */
     verbose: true
