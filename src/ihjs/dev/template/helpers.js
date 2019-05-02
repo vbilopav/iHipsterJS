@@ -1,6 +1,7 @@
-define([], () => {
-
-    const cssImported = [];
+define(["$/template/css"], cssHelper => {
+    
+    const 
+        cssImported = cssHelper.getImported();
 
     return function() {
         return {
@@ -12,16 +13,28 @@ define([], () => {
     
             css: {
                 import: (...names) => {
+                    if (!cssHelper.shouldLoad()) {
+                        return;
+                    }
                     let items = names.filter(value => !cssImported.includes(value));
                     if (!items.length) {
                         return;
                     }
-                    document.head.appendChild(
-                        `<style type="text/css">
-                            ${items.map(item => require(item.startsWith("$text!") ? item : "$text!" + item)).join("")}
-                        </style>`.toHTML()
-                    )
+                    cssHelper.addContet(items.map(item => require(item.startsWith("$text!") ? item : "$text!" + item)));
                     items.map(item => cssImported.push(item));
+                },
+                link: (...names) => {
+                    if (!cssHelper.shouldLoad()) {
+                        return;
+                    }
+                    let items = names.filter(value => !cssImported.includes(value));
+                    if (!items.length) {
+                        return;
+                    }
+                    items.map(item => {
+                        cssHelper.addLink(item); 
+                        cssImported.push(item);
+                    });
                 }
             },
     

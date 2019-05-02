@@ -2,15 +2,17 @@ define([
     "$/view-manager/utils", 
     "$/app",
     "$/view-manager/components",
+    "$/template/css"
 ], (
     utils,
     app,
-    {getEntry, getTags}
+    {getEntry, getTags},
+    cssHelper
 
 ) => {
 
-    let
-        cssImported = [];
+    const 
+        _cssImported = cssHelper.getImported();
 
     const 
         parseComponentByElement = (e, components, owner) => {
@@ -272,24 +274,43 @@ define([
                         }
                         delete params.___extra;
                     }
+
+                    if (!cssHelper.shouldLoad()) {
+                        return resolveView();
+                    }
                     
                     if (options.css && typeof options.css === "string") {
                         options.css = [options.css];
                     }
                     if (options.css && options.css.length) {
-                        options.css = options.css.filter(value => !cssImported.includes(value));
+                        options.css = options.css.filter(value => !_cssImported.includes(value));
                     }
                     if (options.css && options.css.length) {
-                        require(options.css.map(item => item.startsWith("$text!") ? item : "$text!" + item), (...results) => {
-                            document.head.appendChild(
-                                `<style type="text/css">
-                                    ${results.join("")}
-                                </style>`.toHTML()
-                            );
-                            return resolveView();
+
+                        let links = [], texts = [];
+                        options.css.forEach(l => {
+                            if (!l.startsWith("$text!")) {
+                                links.push(cssHelper.addLink(l));
+                            } else {
+                                texts.push(l);
+                            }
+                        });
+                        Promise.all(links).then(() => {
+                            if (texts.length) {
+                                require(texts, (...results) => {
+                                    document.head.appendChild(
+                                        `<style type="text/css">
+                                            ${results.join("\n")}
+                                        </style>`.toHTML()
+                                    );
+                                    return resolveView();
+                                });
+                            } else {
+                                return resolveView();
+                            }
                         });
 
-                        cssImported = options.css.concat(cssImported);
+                        _cssImported.push(...options.css);
 
                     } else {
                         return resolveView();

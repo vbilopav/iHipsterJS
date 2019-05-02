@@ -32,7 +32,8 @@
         defaultElementId =  defaults.appElementId,
         appObjectName = scr.getAttribute("data-app-object-name") || defaults.appObjectName,
         settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
-        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl);
+        loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl),
+        loadCssAlways = scr.getAttribute("data-load-css-always") === null ? true : ["true", "1", "yes"].includes(scr.getAttribute("data-load-css-always").toLowerCase());
 
     const 
         relative = (from, to) => {
@@ -128,7 +129,8 @@
             view: viewModule,
             containerId: containerId,
             defaultElementId: defaultElementId,
-            name: appObjectName
+            name: appObjectName,
+            loadCssAlways: loadCssAlways
         },
         relative: relative
     }};
@@ -164,9 +166,9 @@
             let script = document.createElement("script");
             script.async = true;
             script.src = src + (urlArgs ? "?" + urlArgs : "");
-            document.body.appendChild(script);
             script.onload = onload;
             script.onerror = onload;
+            document.body.appendChild(script);
         },
         mainFunc = ()=>{};
 

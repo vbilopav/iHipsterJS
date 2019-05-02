@@ -1,11 +1,14 @@
 define([], () => {
 
-    _app.customElements.define({tag: "todo-item", src: "demos/todo-module-components/todo-item"});
+    // define custom component
+    _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/module-components/todo-item"});
 
     return class {
 
         constructor({options}) {
-            options.css = "demos/shared/css/todo.css";
+            // if css starts with $text! module css will be injected
+            // options.css = "$text!demos/todo-demo/css/todo.css";
+            options.css = "/demos/todo-demo/css/todo.css";
             this.value = "initial";
             this.count = 0;
         }
@@ -18,7 +21,7 @@ define([], () => {
                     <div class="ToDo-Container">
                         <div class="ToDo-Content" id="content">`;
             
-            for(let item of await _app.fetch("../shared/todo.json")) {
+            for(let item of await _app.fetch("/demos/todo-demo/data/todo.json")) {
                 result += String.html`
                     <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
                 `;
