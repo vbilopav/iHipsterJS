@@ -34,10 +34,8 @@ ${
     </div>
 </div>
 
-${
-<script>
+${<script>
     () => this.template.context = {
         createNewToDoItem: () => this.template.model.content.append(this.item(this.template.model.input.value).toHTML())
     }
-</script>
-}
+</script>}
