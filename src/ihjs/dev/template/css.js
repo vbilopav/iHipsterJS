@@ -16,7 +16,7 @@ define(["$/app"], _app => {
             };
             e.onerror = () => {
                 (onerror && onerror()) || (onload && onload());
-                reject();
+                reject(link);
             };
             document.head.appendChild(e);
         }),

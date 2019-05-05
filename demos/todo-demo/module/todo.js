@@ -8,7 +8,7 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
 
     render() {
         return [() => String.html`
-            ${this.template.css.link("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")}
+            ${this.template.css("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")}
             <div class="ToDo">
                 <h1 class="ToDo-Header">ihjs To Do demo</h1>
                 <div class="ToDo-Container">

@@ -14,8 +14,9 @@
 
     <template id="todo-item">
         ${<script>
-            this.template.css.link("/demos/todo-demo/css/todo-item.css")
-            //this.template.css.import("/demos/todo-demo/css/todo-item.css")
+            // to inject css content to header element as style tag use:
+            // this.template.css("$text!demos/todo-demo/css/todo-item.css")
+            this.template.css("/demos/todo-demo/css/todo-item.css")
         </script>}
         
         <div class="ToDoItem" id="item">
@@ -45,11 +46,9 @@
 
     <template>
         ${<script>
-            this.template.css.link("/demos/todo-demo/css/todo.css")
-            /* differnt ways to import or link css */
-            //this.template.css.import("/demos/todo-demo/css/todo.css")
-            //this.template.css.import("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")
-            //this.template.css.link("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")
+            // to inject css content to header element as style tag use:
+            // this.template.css("$text!demos/todo-demo/css/todo.css")
+            this.template.css("/demos/todo-demo/css/todo.css")
         </script>}
         ${
         <script>

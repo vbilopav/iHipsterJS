@@ -298,11 +298,7 @@ define([
                         Promise.all(links).then(() => {
                             if (texts.length) {
                                 require(texts, (...results) => {
-                                    document.head.appendChild(
-                                        `<style type="text/css">
-                                            ${results.join("\n")}
-                                        </style>`.toHTML()
-                                    );
+                                    cssHelper.addContet(results);
                                     return resolveView();
                                 });
                             } else {

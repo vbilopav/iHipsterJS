@@ -40,7 +40,7 @@ define([], () => {
             // Only rendered components that have name or id attribute will ba available in children property
             console.log("I haz following components: ");
             console.log(this.children);
-            console.log();
+            console.log("Change some attribute value on todo-item element...");
         }
 
         createNewToDoItem() {

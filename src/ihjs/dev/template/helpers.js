@@ -10,7 +10,32 @@ define(["$/template/css"], cssHelper => {
             ).join(""),
     
             import: name => require(name),
-    
+
+            css: async (...names) => {
+                if (!cssHelper.shouldLoad()) {
+                    return;
+                }
+                let links = [], texts = [];
+                names.forEach(l => {
+                    if (cssImported.includes(l)) {
+                        return;
+                    }
+                    if (!l.startsWith("$text!")) {
+                        links.push(cssHelper.addLink(l));
+                    } else {
+                        texts.push(l);
+                    }
+                    cssImported.push(l);
+                });
+                await Promise.all(links);
+                if (texts.length) {
+                    await new Promise(resolve => require(texts, (...results) => {
+                        cssHelper.addContet(results);
+                        return resolve();
+                    }));
+                }
+            },
+/*
             css: {
                 import: (...names) => {
                     if (!cssHelper.shouldLoad()) {
@@ -37,7 +62,7 @@ define(["$/template/css"], cssHelper => {
                     });
                 }
             },
-    
+*/
             if: (condition, templateTrue, templateFalse) => (condition ? templateTrue : templateFalse),
         }
     }
