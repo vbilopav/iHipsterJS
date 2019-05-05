@@ -1,7 +1,7 @@
 ${
 <script>
     // render css files
-    this.template.css.import("demos/shared/css/todo.css", "demos/shared/css/todo-item.css")
+    this.template.css("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")
 </script>
 }
 
@@ -9,7 +9,7 @@ ${
 <script>
     // constructor in self-execute func
     (() => {
-        [this.item] = this.template.import("$composite!demos/todo-template2/todo-item.html")();
+        this.itemTemplate = this.template.import("$template!demos/todo-demo/template3/todo-item.html");
         this.value = "initial value";
     })()
 </script>
@@ -19,15 +19,13 @@ ${
     <h1 class="ToDo-Header">ihjs To Do demo</h1>
     <div class="ToDo-Container">
         <div class="ToDo-Content" id="content">
-            ${
-            <script>
+            ${<script>
                 // render default values from remote endpoint
                 async () => this.template.forEach(
-                    await(await fetch("../shared/todo.json")).json(), item =>  // this could be also await _app.fetch(...)
-                    this.item(item)
+                    await(await fetch("/demos/todo-demo/data/todo.json")).json(), item =>  // this could be also await _app.fetch(...)
+                    this.itemTemplate({text: item})
                 )
-            </script>
-            }
+            </script>}
         </div>
         <input type="text" id="input" />
         <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
@@ -40,7 +38,7 @@ ${
     this.template.context = {
         input: this.value, // input initial value, binded via model context
         createNewToDoItem: () => this.template.model.content.append(
-            this.item(this.template.model.input.value).toHTML()
+            this.itemTemplate({text: this.template.model.input.value}).toHTML()
         )
     }
 </script>

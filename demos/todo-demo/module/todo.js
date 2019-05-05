@@ -3,7 +3,7 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
     constructor() {
         this.item = new Item();
         this.value = "initial";
-        this.model = new _app.Model();
+        //this.model = new _app.Model();
     }
 
     render() {
