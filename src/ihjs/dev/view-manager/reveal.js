@@ -127,10 +127,9 @@ define([
                 modules = [view]
             } else if (typeof view === "object") {
                 viewName = view.name;
+                modules = [viewName];
                 if (view.inject) {
-                    modules = [viewName].concat(view.inject)
-                } else {
-                    modules = [viewName];
+                    modules.push(...view.inject);
                 }
             }
             if (!viewName || !modules) {

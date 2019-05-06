@@ -17,7 +17,7 @@ define(["$/app"], app => {
                 index = index + searchImportLen
                 from = text.indexOf(")", index);
                 if (from !== -1) {
-                    found = found.concat(eval("[" + text.substring(index, from) + "]"))
+                    found.push(...eval("[" + text.substring(index, from) + "]"));
                     if (text.substring(index-11, index-8) === "css") {
                         found = found.map(item => item.startsWith("$text!") ? item : "$text!" + item);
                     }
