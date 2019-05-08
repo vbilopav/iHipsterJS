@@ -1,9 +1,0 @@
-
-<div class="dropdown" onmouseover="javascript: this.find('.dropdown-content').showElement();">
-    <button class="dropbtn">${this.title}&nbsp;&#11206;</button>
-    <div class="dropdown-content navbar-inverse" onclick="javascript: this.hideElement();">
-        ${this.template.forEach(this.data, item => 
-            `<a id="${item.id}" href="${item.url}">${item.title}</a>`
-        )}
-    </div>
-</div> 

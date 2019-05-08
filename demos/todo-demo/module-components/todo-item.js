@@ -2,8 +2,8 @@ define([], () => class {
 
     constructor({options}) {
         // if css starts with $text! module css will be injected
-        // options.css = "$text!demos/todo-demo/css/todo-item.css";
-        options.css = "/demos/todo-demo/css/todo-item.css";
+        // options.css = "$text!demos/shared/css/todo-item.css";
+        options.css = "/demos/shared/css/todo-item.css";
     }
 
     render({params}) {

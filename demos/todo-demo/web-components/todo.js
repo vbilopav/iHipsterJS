@@ -2,7 +2,7 @@ define(["demos/todo-demo/web-components/count"], ({setCount, increase}) => class
 
     constructor({options}) {
         _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/web-components/todo-item"});
-        options.css = ["/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css"];
+        options.css = ["/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css"];
         
         /*
         * Use declarative approach to model -> Instead of instantiating all elements that have id or name, create just this one with this id or name.
@@ -23,7 +23,7 @@ define(["demos/todo-demo/web-components/count"], ({setCount, increase}) => class
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">`;
         
-        for(let item of await _app.fetch("/demos/todo-demo/data/todo.json")) {
+        for(let item of await _app.fetch("/demos/shared/todo.json")) {
             result += String.html`
                 <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
             `;

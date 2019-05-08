@@ -7,13 +7,13 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
 
     render() {
         return [() => String.html`
-            ${this.template.css("/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css")}
+            ${this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css")}
             <div class="ToDo">
                 <h1 class="ToDo-Header">ihjs To Do demo</h1>
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">
                         ${async () => this.template.forEach(
-                            await _app.fetch("/demos/todo-demo/data/todo.json"), 
+                            await _app.fetch("/demos/shared/todo.json"), 
                             item => this.item.render({params: item})
                         )}
                     </div>
