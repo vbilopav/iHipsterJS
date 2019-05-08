@@ -30,7 +30,7 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
 
     _forEachDeclarative(element) {
         // name first, id second
-        if (!this._assignProps(element.getAttribute("name") || element.id, element)) {
+        if (!this._assignProps(element.id || element.getAttribute("name"), element)) {
             return;
         }
     }
@@ -41,14 +41,21 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
             if (!model.hasOwnProperty(name)) {
                 continue;
             }
-            const m = model[name];
+            const 
+                m = model[name];
             if (typeof m === "string") {
-                if (m === element.name || m === element.id) {
+                if (m === element.id || m === element.getAttribute("name")) {
                     this._assignProps(name, element);
                 }
             } else {
                 if (m(element)) {
                     this._assignProps(name, element);
+                }
+            }
+            for (let attr of element.getAttributeNames()) {
+                if (attr.startsWith("on")) {
+                    this._assignEvents(element);
+                    //break;
                 }
             }
         }

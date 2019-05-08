@@ -15,12 +15,33 @@ define(["$/app"], app => {
                 wrap: wrap
             }
         },
-        define: (...args) => {
+        define: (...args) => new Promise((resolve, reject) => {
+            let items = {};
             for(let arg of args) {
-                app.customElements._define(arg);
+                items[arg.src] = arg;
             }
+            require(Object.keys(items), (...results) => {
+                const resolved = [];
+                for(let i = 0, l = results.length; i < l; i++) {
+                    let item = args[i];
+                    if (results[i].name && results[i].name === "HTMLElement") {
+                        if (!window.customElements) {
+                            reject("customElements not supported")
+                        }
+                        window.customElements.define(item.tag, results[i], item.options);
+                        resolved.push(item);
+                    } else {
+                        app.customElements._define(item);
+                        resolved.push(item);
+                    }
+                }
+                if (resolved.length) {
+                    return resolve(resolved);
+                }
+                return reject(resolved);
+            });
             return app.customElements;
-        }
+        })
     }
     
     return {

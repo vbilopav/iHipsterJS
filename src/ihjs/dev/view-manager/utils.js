@@ -25,8 +25,8 @@ define(["$/view-manager/components"], ({getTags})  => {
             if (params.template.context === undefined) {
                 params.template.context = params;
             }
-            if (params.template.context || params.template.model) {
-                params.template.model = new _app.Model(params.template.model).bind(element, params.template.context, params);
+            if (params.template.model !== null && (params.template.context || params.template.model)) {
+                params.template.model = new _app.Model({model: params.template.model}).bind(element, params.template.context, params);
             }
             if (params.template.rendered) {
                 params.template.rendered(element);
@@ -38,8 +38,8 @@ define(["$/view-manager/components"], ({getTags})  => {
             if (instance._options.context === undefined) {
                 instance._options.context = instance;
             }
-            if (instance._options.model instanceof _app.Model === false && (instance._options.context || instance._options.model)) {
-                instance.model = new _app.Model(instance._options.model).bind(args.element, instance._options.context);
+            if (instance._options.model !== null && instance._options.model instanceof _app.Model === false && (instance._options.context || instance._options.model)) {
+                instance.model = new _app.Model({model: instance._options.model}).bind(args.element, instance._options.context);
             }
             if (skipChange)  {
                 !instance.rendered || instance.rendered({params: args.params, element: args.element});

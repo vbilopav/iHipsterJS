@@ -9,7 +9,7 @@ define([], () => {
             // if css starts with $text! module css will be injected
             // options.css = "$text!demos/todo-demo/css/todo.css";
             options.css = "/demos/todo-demo/css/todo.css";
-            this.value = "initial";
+            this.input = "initial value";
             this.count = 0;
         }
 
@@ -28,7 +28,7 @@ define([], () => {
             }
             result += String.html`
                         </div>
-                        <input type="text" id="input" value="${this.value}" />
+                        <input type="text" id="input" />
                         <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
                     </div>
                 </div>`;

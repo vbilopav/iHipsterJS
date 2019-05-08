@@ -1,54 +1,56 @@
-define([], () => {
+define(["demos/todo-demo/web-components/count"], ({setCount, increase}) => class {
 
-    // define custom component
-    _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/module-components/todo-item"});
+    constructor({options}) {
+        _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/web-components/todo-item"});
+        options.css = ["/demos/todo-demo/css/todo.css", "/demos/todo-demo/css/todo-item.css"];
+        
+        /*
+        * Use declarative approach to model -> Instead of instantiating all elements that have id or name, create just this one with this id or name.
+        * Reason is becase web component is created first and contains multiple <div class="ToDoItem" id="item"> that would cause to initiate in thios model multiple times
+        */
+        options.model = {
+            content: "content", 
+            input: "input"
+        };
+        this.input = "initial value";
+    }
 
-    return class {
-
-        constructor({options}) {
-            // if css starts with $text! module css will be injected
-            // options.css = "$text!demos/todo-demo/css/todo.css";
-            options.css = "/demos/todo-demo/css/todo.css";
-            this.value = "initial";
-            this.count = 0;
-        }
-
-        async render() {
-            let index = 0;
-            let result = String.html`
-                <div class="ToDo">
-                    <h1 class="ToDo-Header">ihjs To Do demo</h1>
-                    <div class="ToDo-Container">
-                        <div class="ToDo-Content" id="content">`;
-            
-            for(let item of await _app.fetch("/demos/todo-demo/data/todo.json")) {
-                result += String.html`
-                    <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
-                `;
-            }
+    async render() {
+        let index = 0;
+        let result = String.html`
+            <div class="ToDo">
+                <h1 class="ToDo-Header">ihjs To Do demo</h1>
+                <div class="ToDo-Container">
+                    <div class="ToDo-Content" id="content">`;
+        
+        for(let item of await _app.fetch("/demos/todo-demo/data/todo.json")) {
             result += String.html`
-                        </div>
-                        <input type="text" id="input" value="${this.value}" />
-                        <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
+                <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
+            `;
+        }
+        result += String.html`
                     </div>
-                </div>`;
-            this.count = index;
-            return result;
-        }
+                    <input type="text" id="input" />
+                    <div id="add" class="ToDo-Add" onclick="createNewToDoItem">+</div>
+                </div>
+            </div>`;
+        setCount(index + 1);
+        return result;
+    }
 
-        rendered() {
-            // Only rendered components that have name or id attribute will ba available in children property
-            console.log("I haz following components: ");
-            console.log(this.children);
-            console.log("Change some attribute value on todo-item element...");
-        }
 
-        createNewToDoItem() {
-            this.model.content.insertAdjacentHTML(
-                "beforeend",
-                `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`
-            )
-        }
+    rendered({element}) {
+        console.log("I haz following components: ");
+        let components = element.findAll("todo-item");
+        console.log(components);
+        console.log("Change some attribute value on todo-item element...");
+    }
+
+    createNewToDoItem() {
+        this.model.content.insertAdjacentHTML(
+            "beforeend",
+            `<todo-item data-index="${increase()}">${this.model.input.value}</todo-item>`
+        )
     }
 
 });

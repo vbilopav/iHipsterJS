@@ -1,30 +1,31 @@
-define([], () => class {
+define(["demos/todo-demo/web-components/count"], ({decrease}) => class extends HTMLElement {
 
-    constructor({options}) {
-        // if css starts with $text! module css will be injected
-        // options.css = "$text!demos/todo-demo/css/todo-item.css";
-        options.css = "/demos/todo-demo/css/todo-item.css";
-    }
+    constructor() {
+        super();
 
-    render({params}) {
-        let {dataIndex, html}=params;
-        return String.html`
-            <div class="ToDoItem" id="item">
-                <p class="ToDoItem-Text">${dataIndex + ". " + html}</p>
-                <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
-            </div>`
+        let dataIndex = this.getAttribute("data-index");
+        let html = this.innerHTML;
+
+        this.innerHTML = String.html`
+        <div class="ToDoItem" id="item">
+            <p class="ToDoItem-Text">${dataIndex + ". " + html}</p>
+            <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
+        </div>`;
+
+        this.model = new _app.Model().bind(this, this);
     }
 
     deleteClick() {
-        this.parent.count--;
+        decrease();
         this.model.item.remove();
     }
 
-    set id(value) {
-        console.log("id attribute set to " + value);
-    } 
+    // The browser calls the attributeChangedCallback() for any attributes whitelisted in the observedAttributes array 
+    static get observedAttributes() {
+        return ['id', 'data-index'];
+    }
 
-    set dataIndex(value) {
-        console.log("data-index attribute set to " + value);
-    } 
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        console.log(attrName + " attribute set to " + newVal);
+    }
 })
