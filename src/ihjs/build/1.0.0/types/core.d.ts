@@ -17,7 +17,11 @@ interface ViewConstructorOptions {
     /**
     * 
     */
-    watch: (...components: Array<string>) => void
+    watch: (...components: Array<string>) => void,
+    /**
+    * 
+    */
+    model: {[key: string]: string | (() => boolean)} 
 }
 /**
  * 
@@ -113,20 +117,40 @@ interface ModelConstructorArgs {
 /**
  * 
  */
-declare class ModelClass {
+interface ModelInterface {
     /**
     * 
     */
-    constructor(args: ModelConstructorArgs)
+    new (args?: ModelConstructorArgs): any
     /**
     * 
     */
-    bind(element: HTMLElement, instance?: {[key: string]: string} , eventContext?: any): ModelClass
+    bind(element: HTMLElement, instance?: any, eventContext?: any): any
     /**
     * 
     */
     each(element: HTMLElement, name?: string): void
 }
+/**
+ * 
+ */
+declare class ModelClass {
+    /**
+    * 
+    */
+    constructor(args?: ModelConstructorArgs)
+    /**
+    * 
+    */
+    bind(element: HTMLElement, instance?: any, eventContext?: any): ModelInterface
+    /**
+    * 
+    */
+    each(element: HTMLElement, name?: string): void
+}
+
+
+
 /**
 * 
 */
@@ -181,7 +205,7 @@ interface AppObject {
     /**
      * 
      */
-    Model: ModelClass
+    Model: ModelInterface
     /**
      * 
      */

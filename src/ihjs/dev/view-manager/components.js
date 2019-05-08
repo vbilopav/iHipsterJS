@@ -23,12 +23,12 @@ define(["$/app"], app => {
             require(Object.keys(items), (...results) => {
                 const resolved = [];
                 for(let i = 0, l = results.length; i < l; i++) {
-                    let item = args[i];
-                    if (results[i].name && results[i].name === "HTMLElement") {
+                    let item = args[i], res = results[i];
+                    if (res.prototype instanceof HTMLElement || (res.default && res.default.prototype instanceof HTMLElement)) {
                         if (!window.customElements) {
                             reject("customElements not supported")
                         }
-                        window.customElements.define(item.tag, results[i], item.options);
+                        window.customElements.define(item.tag, res.default || res, item.options);
                         resolved.push(item);
                     } else {
                         app.customElements._define(item);
