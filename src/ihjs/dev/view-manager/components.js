@@ -40,7 +40,6 @@ define(["$/app"], app => {
                 }
                 return reject(resolved);
             });
-            return app.customElements;
         })
     }
     
