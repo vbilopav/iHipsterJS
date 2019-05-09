@@ -1,7 +1,7 @@
 /**
  * Following values will replace any missing value in configuration file.
  * This file is read only. 
- * Values can be overriden in configuration files.
+ * Values can be overridden in configuration files.
  */
 ({
     /**
@@ -43,7 +43,7 @@
     minifyDefault: true,
     /**
      * Individual module minify options to override default.
-     * Keys are individual modules relative to source dir, value is minifiy option described under minifyJs
+     * Keys are individual modules relative to source dir, value is minify option described under minifyJs
      * Example: `minifyModules: {'spa/router.js': false, 'spa/view-manager.js': false} // do not minify following modules`
      */
     minifyModules: {},

@@ -6,7 +6,7 @@ define(["demos/todo-demo/web-components/count"], ({setCount, increase}) => class
         
         /*
         * Use declarative approach to model -> Instead of instantiating all elements that have id or name, create just this one with this id or name.
-        * Reason is becase web component is created first and contains multiple <div class="ToDoItem" id="item"> that would cause to initiate in thios model multiple times
+        * Reason is because web component is created first and contains multiple <div class="ToDoItem" id="item"> that would cause to initiate in this model multiple times
         */
         options.model = {
             content: "content", 
