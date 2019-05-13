@@ -58,26 +58,38 @@ Started initially as frontend codebase for some other project that had very spec
 This framework is a side-project that resulted from initial work on vanilla ES5 JavaScript code base of that project.
 
 Side note:
+
 It is possible that there was/is such system or framework that would support such requirements, but, nevertheless, working on this project is invaluable learning experience and great fun. I hope someone will like it and find it useful.
 
 ## Quick start
 
-Simply include script tag for `ihjs.js` library in your document like in example above:
+Include script tag for this library build `ihjs.js` in your document like in example above:
 ```html
-    <script src="ihjs.js"></script>
+<script src="ihjs.js"></script>
 ```
 
-Build for current version is hosted in this repository at following location: [/src/ihjs/build/1.0.0/](https://github.com/vbilopav/iHipsterJS/tree/master/src/ihjs/build/1.0.0)
+Build for current version is here: [/src/ihjs/build/1.0.0/](https://github.com/vbilopav/iHipsterJS/tree/master/src/ihjs/build/1.0.0)
 
-You can get it by simply downloading `ihjs.js` file or by cloning this repository or by installing NPM package (coming soon).
+You can create you own custom build using build tools.
+
+You can get it by simply downloading `ihjs.js` file - or - by cloning this repository or by installing NPM package (coming soon).
 
 Additionally, you can also include `ihjs.js` file script from [dev](https://github.com/vbilopav/iHipsterJS/tree/master/src/ihjs/dev) dir, which would include unbundled and uncompressed source (for debugging purposes).
 
-That's all. 
-
-Check out getting started in documentation section or browse demo samples.
+After that, you can dive into demos and samples. That's all. 
 
 ## Running demos
+
+To run demos:
+- Clone this demo
+- Install npm 
+- type node run-demos
+
+```
+$ git clone https://github.com/vbilopav/iHipsterJS.git
+$ npm install
+$ node run-demos
+```
 
 ## Documentation
 
