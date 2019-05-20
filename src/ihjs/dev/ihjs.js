@@ -98,16 +98,22 @@
     if (appModuleAttr !== null) {
         appModule = appModuleAttr;
     } else {
-        let i = 0,
-            scripts = document.getElementsByTagName("script");
-        for (let currentScript of scripts) {
-            i++;
-            if (currentScript === scr) {
-                if (scripts.length === i){
+        const 
+            scripts = document.getElementsByTagName("script"),
+            scriptsLength = scripts.length;
+        if (scripts[scriptsLength - 1] === scr) {
+            appModule = defaults.appModule;
+        } else {
+            for(let i = scriptsLength - 1; i >= 0; i--) {
+                let currentScript = scripts[i];
+                if (currentScript === scr) {
                     appModule = defaults.appModule;
+                    break;
                 }
-                break;
-            }
+                if (currentScript.src === "" && currentScript.innerHTML !== "" && currentScript.type === "module") {
+                    break;
+                }
+            } 
         }
     }
 
