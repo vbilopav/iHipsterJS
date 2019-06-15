@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "http-server": "^0.11.1",
-    "open": "^6.1.0"
+    "open": "^6.3.0"
   },
   "scripts": {
     "start": "node run-demos"

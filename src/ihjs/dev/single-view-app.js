@@ -31,7 +31,7 @@ define(["$/app"], app => {
             throw new Error(error);
         } else {
 
-            // find last (closest to the bottom of document) template wihtout id, otherwise raise error
+            // find last (closest to the bottom of document) template without id, otherwise raise error
             let template;
             for (let i = templates.length-1; i >=0; i--) {
                 template = templates[i];
