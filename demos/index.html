@@ -45,25 +45,37 @@
 
     <h2><a href="/demos/simple-spa.html" target="_blank">Simple SPA (Single Page Application) demos</a></h2>
     <p>
-        Simple SPA application is small SPA (with client router) application consisting of two screens:
-        <br /><br />
-        - Input screen with input field (with default value <code>vbilopav</code>, that can be changed in query string) and button <code>Show github user data</code>
-        <br />
-        Button will navigate to another screen and display GitHub user info data by username provided in the input and passed as view parameter.
-        <br /><br />
-        - Screen that displays GitHub user info data by username provided in the input and passed as view parameter in HTML table with Back button at the bottom that uses browser navigation to get back to previous screen.
+        Small and simple SPA application, with built-in client view router consisting of only two simple screens:
+
+        <h4>1. Input screen with default route path <code>/</code></h4>
+        
+        Consists of input field with default value <code>vbilopav</code>  (can be changed in query string) and just button <code>Show github user data</code>
+        that navigates browser to next screen.
+        
+        <h4>2. Screen that displays user data details from GitHub with route path<code>/github-user-info/</code></h4>
+
+        Username is passed as route parameter in URL and browser history is preserver. View fetches data from GitHub service asynchronously and displays inside HTML table.
+        There is <code>Back</code> button on bottom of table that navigates browser to previous screen
 
         <br /><br />
-        Demos will demonstrate different approaches with templates and modules. There is also TypeScript example included.
+        Demos will demonstrate different approaches with templates and modules. For example, how to write SPA application in single HTML document. There is also TypeScript example included.
         <p>
             Click here to see full list: <a href="/demos/simple-spa.html" target="_blank">&nbsp;&#x2197;</a> 
         </p>
     </p>
 
-    <h2><a href="/demos/todo-app.html" target="_blank">TODO application demos&nbsp;&#x2197;</a></h2>
+    <h2><a href="/demos/todo-demo.html" target="_blank">TODO demo</a></h2>
     <p>
+        Standard TODO demo that demonstrates interactivity between modules and templates. 
+    </p>
+    <p>
+        Includes demonstration of simple but powerful component system implemented in this framework, and as well as web standard components - by current standard (see docs here<a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements" target="_blank">&nbsp;&#x2197;</a>) - for comparison.
+    </p>
+    <p>
+        Click here to see full list: <a href="/demos//todo-demo.html" target="_blank">&nbsp;&#x2197;</a> 
     </p>
 
+    <br /><br />
     <script src="/demos/shared/prism/prism.js"></script>
 </body>
 </html>
