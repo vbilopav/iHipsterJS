@@ -1,13 +1,13 @@
 {
   "name": "ihjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript framework built for simplicity and speed that utilizes heavily new ES6+ features",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vbilopav/ihjs.git"
+    "url": "git+https://github.com/vbilopav/iHipsterJS.git"
   },
   "keywords": [
     "JavaScript",
@@ -27,7 +27,7 @@
   "author": "Vedran Bilopavlović <vbilopav@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vbilopav/ihjs/issues"
+    "url": "https://github.com/vbilopav/iHipsterJS/issues"
   },
-  "homepage": "https://github.com/vbilopav/ihjs#readme"
+  "homepage": "https://github.com/vbilopav/iHipsterJS"
 }
