@@ -16,7 +16,7 @@
         };
 
     const
-        scr = document.currentScript || document.querySelector("script[type=module]");
+        scr = document.currentScript || document.querySelector("script[src*=ihjs]");
     if (!scr) {
         throw new Error("Couldn't reference script tag. are you sure you've included script reference? ");
     }
@@ -37,6 +37,9 @@
 
     const 
         relative = (from, to) => {
+            if (!to.startsWith("/")) {
+                to = "/" + to;
+            }
             const 
                 normalizeArray = (parts, allowAboveRoot) => {
                     let res = [];
