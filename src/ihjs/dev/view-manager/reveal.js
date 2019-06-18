@@ -137,180 +137,197 @@ define([
             }
             
             require(modules, (view, ...injected) => {
-                if (view.default && view.__esModule) {
-                    view = view.default;
-                };
-                const 
-                    uriHash = uri.hashCode(),
-                    type = utils.getViewType(view, viewName),
-                    element = (typeof elementOrId === "string" ? "span".createElement(elementOrId) : elementOrId),
-                    data = {type: type, uriHash: uriHash, x: 0, y: 0, id: id};
+                let 
+                    type = utils.getViewType(view, viewName);
 
-                if (id) {
-                    element.dataset.id = id;
-                }
+                const renderView = () => {
 
-                const
-                    resolveView = () => {
-                        const 
-                            contentFunc = c => {
-                                if (typeof c === "function" || c instanceof Array) {
-                                    c = app.parse(...c);
-                                    c.then(s => {
-                                        if (typeof s === "string") {
-                                            element.html(s);
+                    if (view.default && view.__esModule) {
+                        view = view.default;
+                    };
+                    const 
+                        uriHash = uri.hashCode(),
+                        element = (typeof elementOrId === "string" ? "span".createElement(elementOrId) : elementOrId),
+                        data = {type: type, uriHash: uriHash, x: 0, y: 0, id: id};
+    
+    
+                    if (id) {
+                        element.dataset.id = id;
+                    }
+    
+                    const
+                        resolveView = () => {
+                            const 
+                                contentFunc = c => {
+                                    if (typeof c === "function" || c instanceof Array) {
+                                        c = app.parse(...c);
+                                        c.then(s => {
+                                            if (typeof s === "string") {
+                                                element.html(s);
+                                            } else {
+                                                element.html("").appendChild(s);
+                                            }
+                
+                                        })
+                                    } else if (typeof c === "string" || c instanceof HTMLElement) {
+                                        if (typeof c === "string") {
+                                            element.html(c);
                                         } else {
-                                            element.html("").appendChild(s);
+                                            element.html("").appendChild(c);
                                         }
-            
-                                    })
-                                } else if (typeof c === "string" || c instanceof HTMLElement) {
-                                    if (typeof c === "string") {
-                                        element.html(c);
+                                    }
+    
+                                    revealComponents(element, data.instance._options, data.instance);
+                                    utils.moduleRendered(data.instance, {params: params, element: element});
+                                };
+    
+                            if (type === utils.types.class) {
+                                let content = data.instance.render({params: params, element: element});
+                                if (typeof content === "function" || content instanceof Array) {
+                                    if (typeof content === "function") {
+                                        content = app.parse(content);
                                     } else {
-                                        element.html("").appendChild(c);
+                                        content = app.parse(...content);
                                     }
                                 }
-
-                                revealComponents(element, data.instance._options, data.instance);
-                                utils.moduleRendered(data.instance, {params: params, element: element});
-                            };
-
-                        if (type === utils.types.class) {
-                            let content = data.instance.render({params: params, element: element});
-                            if (typeof content === "function" || content instanceof Array) {
-                                if (typeof content === "function") {
-                                    content = app.parse(content);
+                                if (content instanceof Promise) {
+                                    return content.then(s => {
+                                        contentFunc(s);
+                                        return resolve({data, element});
+                                    });
                                 } else {
-                                    content = app.parse(...content);
-                                }
-                            }
-                            if (content instanceof Promise) {
-                                return content.then(s => {
-                                    contentFunc(s);
+                                    contentFunc(content);
                                     return resolve({data, element});
-                                });
+                                }
                             } else {
-                                contentFunc(content);
                                 return resolve({data, element});
                             }
-                        } else {
-                            return resolve({data, element});
                         }
+
+                    if (type === utils.types.string) {
+                        data.element = element.html(view);
+                        return resolveView();
                     }
-
-                
-                if (type === utils.types.string) {
-                    data.element = element.html(view);
-                    return resolveView();
-                }
-                
-                if (type === utils.types.template) {
-                    data.instance = view;
-                    params.___extra = Object.assign(params.___extra || {}, {
-                        components: null,
-                        watch: (...components) =>  {
-                            if (!components || !components.length) {
-                                components = getTags();
-                            }
-                            params.template.components = components.map(i => i.toUpperCase());
-                        }
-                    });
-                    const result = view(params, {injected: injected});
-
-                    if (typeof result === "string") {
-
-                        element.html(result);
-                        revealComponents(element, params.template, params);
-                        utils.templateRendered(params, element);
-        
-                    } else if (result instanceof HTMLElement) {
-        
-                        element.html("").appendChild(result);
-                        revealComponents(element, params.template, params);
-                        utils.templateRendered(params, element);
-
-                    } else if (result instanceof Promise) {
-        
-                        result.then(r => {
-                            
-                            if (typeof r === "string") {
-                                element.html(r);
-                            } else {
-                                element.html("").appendChild(r);
-                            }
-                            
-                            revealComponents(element, params.template, params);
-                            utils.templateRendered(params, element);
-        
-                        });
-                    }
-
-                    return resolveView();
-                }
-                
-                if (type === utils.types.class) {
-                    const
-                        options = {
-                            disableCaching: false,
-                            callRenderOnlyOnce: false,
-                            css: [],
+                    
+                    if (type === utils.types.template) {
+                        data.instance = view;
+                        params.___extra = Object.assign(params.___extra || {}, {
                             components: null,
                             watch: (...components) =>  {
                                 if (!components || !components.length) {
                                     components = getTags();
                                 }
-                                options.components = components.map(i => i.toUpperCase());
+                                params.template.components = components.map(i => i.toUpperCase());
                             }
-                        };
-                    data.instance = new view({id: id, element: element, options: options}, ...injected);
-                    data.instance._options = options;
-                    params.__parent = data.instance;
-
-                    if (params.___extra) {
-                        for(let [key, value] of Object.entries(params.___extra)) {
-                            data.instance[key] = value;
+                        });
+                        const result = view(params, {injected: injected});
+    
+                        if (typeof result === "string") {
+    
+                            element.html(result);
+                            revealComponents(element, params.template, params);
+                            utils.templateRendered(params, element);
+            
+                        } else if (result instanceof HTMLElement) {
+            
+                            element.html("").appendChild(result);
+                            revealComponents(element, params.template, params);
+                            utils.templateRendered(params, element);
+    
+                        } else if (result instanceof Promise) {
+            
+                            result.then(r => {
+                                
+                                if (typeof r === "string") {
+                                    element.html(r);
+                                } else {
+                                    element.html("").appendChild(r);
+                                }
+                                
+                                revealComponents(element, params.template, params);
+                                utils.templateRendered(params, element);
+            
+                            });
                         }
-                        delete params.___extra;
-                    }
 
-                    if (!cssHelper.shouldLoad()) {
                         return resolveView();
                     }
                     
-                    if (options.css && typeof options.css === "string") {
-                        options.css = [options.css];
-                    }
-                    if (options.css && options.css.length) {
-                        options.css = options.css.filter(value => !_cssImported.includes(value));
-                    }
-                    if (options.css && options.css.length) {
-
-                        let links = [], texts = [];
-                        options.css.forEach(l => {
-                            if (!l.startsWith("$text!")) {
-                                links.push(cssHelper.addLink(l));
-                            } else {
-                                texts.push(l);
+                    if (type === utils.types.class) {
+                        const
+                            options = {
+                                disableCaching: false,
+                                callRenderOnlyOnce: false,
+                                css: [],
+                                components: null,
+                                watch: (...components) =>  {
+                                    if (!components || !components.length) {
+                                        components = getTags();
+                                    }
+                                    options.components = components.map(i => i.toUpperCase());
+                                }
+                            };
+                        data.instance = new view({id: id, element: element, options: options}, ...injected);
+                        data.instance._options = options;
+                        params.__parent = data.instance;
+    
+                        if (params.___extra) {
+                            for(let [key, value] of Object.entries(params.___extra)) {
+                                data.instance[key] = value;
                             }
-                        });
-                        Promise.all(links).then(() => {
-                            if (texts.length) {
-                                require(texts, (...results) => {
-                                    cssHelper.addContet(results);
+                            delete params.___extra;
+                        }
+    
+                        if (!cssHelper.shouldLoad()) {
+                            return resolveView();
+                        }
+                        
+                        if (options.css && typeof options.css === "string") {
+                            options.css = [options.css];
+                        }
+                        if (options.css && options.css.length) {
+                            options.css = options.css.filter(value => !_cssImported.includes(value));
+                        }
+                        if (options.css && options.css.length) {
+    
+                            let links = [], texts = [];
+                            options.css.forEach(l => {
+                                if (!l.startsWith("$text!")) {
+                                    links.push(cssHelper.addLink(l));
+                                } else {
+                                    texts.push(l);
+                                }
+                            });
+                            Promise.all(links).then(() => {
+                                if (texts.length) {
+                                    require(texts, (...results) => {
+                                        cssHelper.addContet(results);
+                                        return resolveView();
+                                    });
+                                } else {
                                     return resolveView();
-                                });
-                            } else {
-                                return resolveView();
-                            }
-                        });
-
-                        _cssImported.push(...options.css);
-
-                    } else {
-                        return resolveView();
+                                }
+                            });
+    
+                            _cssImported.push(...options.css);
+    
+                        } else {
+                            return resolveView();
+                        }
                     }
                 }
+
+                if (type === utils.types.promise) {
+                    view.then(viewResult => {
+                        view = viewResult;
+                        type = utils.getViewType(view, viewName);
+                        renderView();
+                    });
+                } else {
+                    renderView();
+                }
+
+
 
             });
         

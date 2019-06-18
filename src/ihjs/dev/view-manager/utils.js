@@ -4,8 +4,11 @@ define(["$/view-manager/components"], ({getTags})  => {
         isTemplate = name => name.indexOf("$template!") !== -1,
         prefix = "_view",
         getId = uriHash => prefix + "-" + uriHash,
-        types = {template: 1, class: 2, string: 3},
+        types = {template: 1, class: 2, string: 3, promise: 4},
         getViewType = (view, name) => {
+            if (view instanceof Promise) {
+                return types.promise;
+            }
             let t = typeof view;
             if (t === "function") {
                 if (isTemplate(name)) {

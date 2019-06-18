@@ -1,7 +1,7 @@
-define([], () => {
+define([], async () => {
 
     // define custom component
-    _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/module-components/todo-item"});
+    await _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/module-components/todo-item"});
 
     return class {
 
