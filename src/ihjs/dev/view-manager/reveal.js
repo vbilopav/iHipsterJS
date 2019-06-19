@@ -43,7 +43,7 @@ define([
                 if (name) {
                     owner = owner.template || owner;
                     owner.children = owner.children || {};
-                    owner.children[name.toCamelCase()] = instance;
+                    owner.children[name.toCamelCase()] = params;
                 }
             }
             const 
@@ -79,7 +79,7 @@ define([
             const
                 revealAll = [];
             element.forEachChild(e => {
-                let parsed = parseComponentByElement(e, components, owner, instance);
+                let parsed = parseComponentByElement(e, components, owner);
                 if (parsed) {
                     revealAll.push(parsed);
                 }
@@ -92,7 +92,7 @@ define([
                         }
                         for (let e of mutation.addedNodes) {
                             let 
-                                parsed = parseComponentByElement(e, components, owner, instance);
+                                parsed = parseComponentByElement(e, components, owner);
                             observer.takeRecords();
                             if (parsed) { 
                                 reveal(parsed);
