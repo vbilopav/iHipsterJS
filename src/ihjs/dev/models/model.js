@@ -62,9 +62,21 @@ define(["$/extensions/HTMLElement/forEachChild"], () => class {
     }
 
     _assignEvents(element) {
-        const attrs = element.attributes;
-        for(let i = 0, l = attrs.length; i < l; i++) {
-            const
+        let attrs = [];
+        
+        for(let i = 0, l = element.attributes.length; i < l; i++) {
+            let node = element.attributes[i];
+            if (!node.name.startsWith("on")) {
+                continue;
+            };
+            attrs.push(node);
+        }
+        let l = attrs.length;
+        if (!l) {
+            return;
+        }
+        for(let i = 0; i < l; i++) {
+            let
                 node = attrs[i],
                 attr = node.name;
             if (!attr.startsWith("on")) {
