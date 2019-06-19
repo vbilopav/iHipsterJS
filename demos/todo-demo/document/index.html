@@ -87,10 +87,10 @@
         </div>
         ${<script>
             /*
-            * if we don't return function first `() => `, anything the is evalated at this event assigment will be rendered and in this vase it is `undefinied`
+            * if we don't return function first `() => `, anything the is evaluated at this event assignment will be rendered and in this vase it is `undefined`
             */
             () => this.template.rendered = () => {
-                console.log("Main template have follwoing components: ");
+                console.log("Main template have following components: ");
                 console.log(this.template.children);
                 console.log("Change some attribute value on todo-item element...");
             }
@@ -98,7 +98,7 @@
     </template>
 
     <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
-    <script type="module" src="../../../src/ihjs/build/1.0.4/ihjs.js"></script>
+    <script type="module" src="../../../src/ihjs/build/1.0.5/ihjs.js"></script>
 
 </body>
 </html>

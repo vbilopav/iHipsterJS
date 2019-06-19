@@ -1,6 +1,6 @@
 {
   "name": "ihjs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "JavaScript framework built for simplicity and speed that utilizes heavily new ES6+ features",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

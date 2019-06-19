@@ -15,7 +15,7 @@ define([
         _cssImported = cssHelper.getImported();
 
     const 
-        parseComponentByElement = (e, components, owner) => {
+        parseComponentByElement = (e, components, owner, instance) => {
             if (!components.includes(e.nodeName)) {
                 return;
             }
@@ -43,7 +43,7 @@ define([
                 if (name) {
                     owner = owner.template || owner;
                     owner.children = owner.children || {};
-                    owner.children[name.toCamelCase()] = params;
+                    owner.children[name.toCamelCase()] = instance;
                 }
             }
             const 
@@ -79,7 +79,7 @@ define([
             const
                 revealAll = [];
             element.forEachChild(e => {
-                let parsed = parseComponentByElement(e, components, owner);
+                let parsed = parseComponentByElement(e, components, owner, instance);
                 if (parsed) {
                     revealAll.push(parsed);
                 }
@@ -92,7 +92,7 @@ define([
                         }
                         for (let e of mutation.addedNodes) {
                             let 
-                                parsed = parseComponentByElement(e, components, owner);
+                                parsed = parseComponentByElement(e, components, owner, instance);
                             observer.takeRecords();
                             if (parsed) { 
                                 reveal(parsed);
