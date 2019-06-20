@@ -1,4 +1,4 @@
-define(["require", "exports", "demos/todo-demo/components-ts/app/count"], function (require, exports, count_1) {
+define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], function (require, exports, count_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {

@@ -1,6 +1,6 @@
 ///<reference path="../../../../src/ihjs/build/1.1.0/types/core.d.ts"/>
 
-import {setCount, increase} from "demos/todo-demo/components-ts/app/count";
+import {setCount, increase} from "demos/todo-demo/web-components-ts/app/count";
 
 export default class {
     input: string
