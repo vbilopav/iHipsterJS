@@ -25,16 +25,11 @@ define(["$/view-manager/components"], ({getTags})  => {
             window.scrollTo(item.x, item.y);
         },
         templateRendered = (params, element) => {
-            if (params.template.context === undefined) {
-                params.template.context = params;
-            }
-            if (params.template.model !== null && (params.template.context || params.template.model)) {
-                params.template.model = new _app.Model({model: params.template.model}).bind(element, params.template.context, params);
+            if (!params.template.model || (params.template.model && !(params.template.model instanceof _app.Model))) {
+                params.template.model = new _app.Model({model: params.template.model}).bind(element, params.template.modelContext || params.template, params);
             }
             if (params.template.rendered) {
                 params.template.rendered(element);
-            } else if (params.template.context.rendered) {
-                params.template.context.rendered(element);
             }
         },
         moduleRendered = (instance, args, skipChange=true) => {

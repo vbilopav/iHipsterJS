@@ -1,0 +1,25 @@
+${<script>this.template.css("/demos/shared/css/todo-item.css")</script>}
+
+<div class="ToDoItem" id="item">
+    <p class="ToDoItem-Text">${this.dataIndex + ". " + this.innerHTML}</p>
+    <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
+</div>
+${
+<script>
+    (
+        () => {
+            this.template.deleteClick = () => {
+                this.template.context.count--;
+                this.template.model.item.remove();
+            };
+            this.template.setId = (value, old) => {
+                console.log(`id attribute set from ${old} to ${value}`);
+            };
+            this.template.setDataIndex = (value, old) => {
+                console.log(`dataIndex attribute set from ${old} to ${value}`);
+            };
+        }
+    )()
+</script>
+}
+

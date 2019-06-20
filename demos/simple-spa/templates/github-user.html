@@ -15,9 +15,9 @@
 </div>
 ${
 <script>
-    this.template.context = {
-        username: _app.queryString || "vbilopav", // default value
-        showClick: () => window.location = "#/github-user-info/" + this.template.model.username.value
+    () => {
+        this.template.username = _app.queryString || "vbilopav"; // default value
+        this.template.showClick = () => window.location = "#/github-user-info/" + this.template.model.username.value;
     }
 </script>
 }

@@ -45,7 +45,7 @@ ${
 <script>
 () => {
 
-    this.showDescriptionClick = e  => {
+    this.template.showDescriptionClick = e  => {
         let name = e.target.dataAttr("name");
         this.template.model.title.html(name);
         this.template.model.description.html(this._descriptionsDict[name]);

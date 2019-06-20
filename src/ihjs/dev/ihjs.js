@@ -16,7 +16,7 @@
         };
 
     const
-        scr = document.currentScript || document.querySelector("script[src*=ihjs]");
+        scr = document.currentScript || document.querySelector("script[src*=ihjs]") || document.querySelector("script:last-of-type");
     if (!scr) {
         throw new Error("Couldn't reference script tag. are you sure you've included script reference? ");
     }

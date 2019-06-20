@@ -6,7 +6,7 @@ define([
 
 ], (
     utils, 
-    {reveal, revealComponents}, 
+    {reveal},
     app
 ) => class {
 
@@ -31,7 +31,10 @@ define([
         return this;
     }
 
-    async reveal({id="", view=(()=>{throw view})(), params={}, uri=""}) {
+    async reveal({id="", view=null, params={}, uri=""}) {
+        if (view == null) {
+            throw "undefined view"
+        }
         if (params instanceof Promise) {
             params = await params
         }
@@ -69,13 +72,11 @@ define([
                         if (typeof result === "string") {
                             
                             element.html(result);
-                            revealComponents(element, params.template, params);
                             utils.templateRendered(params, element);
 
                         } else if (result instanceof HTMLElement) {
                             
                             element.html("").appendChild(result);
-                            revealComponents(element, params.template, params);
                             utils.templateRendered(params, element);
                             
 
@@ -87,7 +88,6 @@ define([
                                     element.html("").appendChild(r);
                                 }
 
-                                revealComponents(element, params.template, params);
                                 utils.templateRendered(params, element);
 
                             });
@@ -143,8 +143,6 @@ define([
                                     element.showElement();
                                 }
                             }
-
-                            revealComponents(element, found.instance._options, found.instance);
                             utils.moduleRendered(found.instance, {params: params, element: element}, false);
                             showFunc();
                         }
@@ -183,5 +181,4 @@ define([
 
         });
     }
- });
- 
+});

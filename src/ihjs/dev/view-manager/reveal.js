@@ -1,117 +1,16 @@
 define([
     "$/view-manager/utils", 
     "$/app",
-    "$/view-manager/components",
     "$/template/css"
 ], (
     utils,
     app,
-    {getEntry, getTags},
     cssHelper
 
 ) => {
 
     const 
-        _cssImported = cssHelper.getImported();
-
-    const 
-        parseComponentByElement = (e, components, owner, instance) => {
-            if (!components.includes(e.nodeName)) {
-                return;
-            }
-            const 
-                entry = getEntry(e.nodeName);
-            if (!entry) {
-                return;
-            }
-            const 
-                params = {},
-                wrapper = entry.wrap.createElement();
-            for(let i = 0, l = e.attributes.length; i<l; i++) {
-                let attr = e.attributes[i];
-                params[attr.name.toCamelCase()] = attr.value;
-                wrapper.setAttribute(attr.name, attr.value);
-            }
-            params["html"] = e.html();
-            e.parentElement.insertBefore(wrapper, e);
-            e.remove();
-            if (owner) {
-                params.___extra = Object.assign(params.___extra || {}, {
-                    parent: owner
-                });
-                let name = params.name || params.id;
-                if (name) {
-                    owner = owner.template || owner;
-                    owner.children = owner.children || {};
-                    owner.children[name.toCamelCase()] = params;
-                }
-            }
-            const 
-                observer = new MutationObserver(mutations => {
-                    for (let mutation of mutations) { 
-                        if (!mutation.attributeName) {
-                            continue;
-                        }
-                        const 
-                            name = mutation.attributeName.toCamelCase(),
-                            value = mutation.target.getAttribute(mutation.attributeName);
-                        if (params.template) {
-                            !params.template[name] || params.template[name](value);
-                        }
-                        if (params.__parent) {
-                            params.__parent[name] = value;
-                        }
-                    }
-                });
-            observer.observe(wrapper, {attributes: true, childList: false, subtree: false});
-            return {view: entry.src, elementOrId: wrapper, params: params}
-        },
-
-        revealComponents = (element, instance, owner) => {
-            let 
-                components = instance.components;
-            if (components === null) {
-                components = getTags();
-            }
-            if (!components || !components.length) {
-                return;
-            }
-            const
-                revealAll = [];
-            element.forEachChild(e => {
-                let parsed = parseComponentByElement(e, components, owner);
-                if (parsed) {
-                    revealAll.push(parsed);
-                }
-            });
-            const 
-                observer = new MutationObserver(mutations => {
-                    for (let mutation of mutations) { 
-                        if (!mutation.addedNodes || !mutation.addedNodes.length) {
-                            continue;
-                        }
-                        for (let e of mutation.addedNodes) {
-                            let 
-                                parsed = parseComponentByElement(e, components, owner);
-                            observer.takeRecords();
-                            if (parsed) { 
-                                reveal(parsed);
-                            }
-                        }
-                    }
-                });
-            const 
-                config = {attributes: false, childList: true, subtree: true};
-            if (revealAll.length) {
-                Promise.all(revealAll.map(arg => reveal(arg))).then(r => {
-                    observer.observe(element, config);
-                });
-            } else  {
-                observer.observe(element, config);
-            }
-            return observer;
-        },
-        
+        _cssImported = cssHelper.getImported(),
         reveal = ({
             id="", 
             view=(()=>{throw view})(), 
@@ -137,24 +36,21 @@ define([
             }
             
             require(modules, (view, ...injected) => {
+                if (view.default && view.__esModule) {
+                    view = view.default;
+                };
+                
                 let 
                     type = utils.getViewType(view, viewName);
 
                 const renderView = () => {
-
-                    if (view.default && view.__esModule) {
-                        view = view.default;
-                    };
                     const 
                         uriHash = uri.hashCode(),
                         element = (typeof elementOrId === "string" ? "span".createElement(elementOrId) : elementOrId),
                         data = {type: type, uriHash: uriHash, x: 0, y: 0, id: id};
-    
-    
                     if (id) {
                         element.dataset.id = id;
                     }
-    
                     const
                         resolveView = () => {
                             const 
@@ -176,8 +72,7 @@ define([
                                             element.html("").appendChild(c);
                                         }
                                     }
-    
-                                    revealComponents(element, data.instance._options, data.instance);
+
                                     utils.moduleRendered(data.instance, {params: params, element: element});
                                 };
     
@@ -211,27 +106,18 @@ define([
                     
                     if (type === utils.types.template) {
                         data.instance = view;
-                        params.___extra = Object.assign(params.___extra || {}, {
-                            components: null,
-                            watch: (...components) =>  {
-                                if (!components || !components.length) {
-                                    components = getTags();
-                                }
-                                params.template.components = components.map(i => i.toUpperCase());
-                            }
-                        });
-                        const result = view(params, {injected: injected});
-    
+
+                        const 
+                            result = view(params, {injected: injected});
+
                         if (typeof result === "string") {
     
                             element.html(result);
-                            revealComponents(element, params.template, params);
                             utils.templateRendered(params, element);
             
                         } else if (result instanceof HTMLElement) {
             
                             element.html("").appendChild(result);
-                            revealComponents(element, params.template, params);
                             utils.templateRendered(params, element);
     
                         } else if (result instanceof Promise) {
@@ -243,8 +129,6 @@ define([
                                 } else {
                                     element.html("").appendChild(r);
                                 }
-                                
-                                revealComponents(element, params.template, params);
                                 utils.templateRendered(params, element);
             
                             });
@@ -258,14 +142,7 @@ define([
                             options = {
                                 disableCaching: false,
                                 callRenderOnlyOnce: false,
-                                css: [],
-                                components: null,
-                                watch: (...components) =>  {
-                                    if (!components || !components.length) {
-                                        components = getTags();
-                                    }
-                                    options.components = components.map(i => i.toUpperCase());
-                                }
+                                css: []
                             };
                         data.instance = new view({id: id, element: element, options: options}, ...injected);
                         data.instance._options = options;
@@ -316,7 +193,6 @@ define([
                         }
                     }
                 }
-
                 if (type === utils.types.promise) {
                     view.then(viewResult => {
                         view = viewResult;
@@ -326,15 +202,11 @@ define([
                 } else {
                     renderView();
                 }
-
-
-
             });
         
         });
 
     return {
-        reveal: reveal,
-        revealComponents: revealComponents
+        reveal: reveal
     }
 });

@@ -34,10 +34,9 @@ ${
 
 ${
 <script>
-    // set template context, model is always created automatically
-    this.template.context = {
-        input: this.value, // input initial value, binded via model context
-        createNewToDoItem: () => this.template.model.content.append(
+    () => {
+        this.template.input = this.value; // input initial value, binded via model context
+        this.template.createNewToDoItem = () => this.template.model.content.append(
             this.item(this.template.model.input.value).toHTML()
         )
     }

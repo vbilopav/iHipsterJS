@@ -1,20 +1,6 @@
 define(["$/app"], app => {
 
     app.customElements = {
-        _components: [],
-        _define: ({tag, src, wrap}) => {
-            if (!wrap) {
-                wrap = tag;
-            }
-            let idx = tag.indexOf("-");
-            if (idx === -1 || idx === 0 || idx === tag.length-1) {
-                throw new Error("Invalid tag name. Tags names should include at least one dash, not on start or end of tag name.") 
-            }
-            app.customElements._components[tag.toUpperCase()] = {
-                src: src,
-                wrap: wrap
-            }
-        },
         define: (...args) => new Promise((resolve, reject) => {
             let items = {};
             for(let arg of args) {
@@ -28,10 +14,59 @@ define(["$/app"], app => {
                         if (!window.customElements) {
                             reject("customElements not supported")
                         }
-                        window.customElements.define(item.tag, res.default || res, item.options);
+                        let inst = res.default || res;
+                        if (item.context) {
+                            inst.prototype.context = item.context;
+                        }
+                        if (item.observedAttributes && item.observedAttributes.length) {
+                            Object.defineProperty(inst, "observedAttributes", {
+                                get: () => {
+                                    inst.prototype._rendered = true;
+                                    return item.observedAttributes
+                                }
+                            });
+                            inst.prototype.attributeChangedCallback = (attrName, oldVal, newVal) => {
+                                if (!inst.prototype._rendered) {
+                                    return;
+                                }
+                                let name = ("set-" + attrName).toCamelCase();
+                                inst.prototype[name] && typeof inst.prototype[name] === "function" && inst.prototype[name](newVal, oldVal);
+                            }
+                        }
+                        window.customElements.define(item.tag, inst, item.options);
+
                         resolved.push(item);
-                    } else {
-                        app.customElements._define(item);
+                    } else if (typeof res === "function" && res.toString().indexOf("parseTemplate") !== -1) {
+                        let component = class extends HTMLElement {
+                            constructor() {
+                                super();
+                                this.rendered = false;
+                                for (let attr of this.getAttributeNames()) {
+                                    this[attr.toCamelCase()] = this.attributes[attr].value;
+                                }
+                                res(this).then(content => {
+                                    this.innerHTML = content;
+                                    this.template.model = new _app.Model({model: this.template.model}).bind(this,  this.template.modelContext || this.template, this);
+                                    this.rendered = true;
+                                });
+                                if (item.context) {
+                                    this.template.context = item.context;
+                                }
+                            }
+                            attributeChangedCallback(attrName, oldVal, newVal) {
+                                if (!this.rendered) {
+                                    return;
+                                }
+                                let name = ("set-" + attrName).toCamelCase();
+                                this.template && this.template[name] && typeof this.template[name] === "function" && this.template[name](newVal, oldVal);
+                            }
+                        }
+                        if (item.observedAttributes && item.observedAttributes.length) {
+                            Object.defineProperty(component, "observedAttributes", {
+                                get: () => item.observedAttributes
+                            });
+                        }
+                        window.customElements.define(item.tag, component, item.options)
                         resolved.push(item);
                     }
                 }
@@ -42,10 +77,4 @@ define(["$/app"], app => {
             });
         })
     }
-    
-    return {
-        getTags: () => Object.keys(app.customElements._components),
-        getEntry: name => app.customElements._components[name.toUpperCase()]
-    }
-
 });
