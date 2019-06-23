@@ -20,7 +20,7 @@ define(["$/app"], _app => {
             };
             document.head.appendChild(e);
         }),
-        addContet: content => {
+        addContent: content => {
             if (content instanceof Array) {
                 content = content.join("\n");
             }

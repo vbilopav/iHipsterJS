@@ -63,7 +63,7 @@ define([
                                             } else {
                                                 element.html("").appendChild(s);
                                             }
-                
+                                            utils.moduleRendered(data.instance, {params: params, element: element});
                                         })
                                     } else if (typeof c === "string" || c instanceof HTMLElement) {
                                         if (typeof c === "string") {
@@ -71,9 +71,8 @@ define([
                                         } else {
                                             element.html("").appendChild(c);
                                         }
+                                        utils.moduleRendered(data.instance, {params: params, element: element});
                                     }
-
-                                    utils.moduleRendered(data.instance, {params: params, element: element});
                                 };
     
                             if (type === utils.types.class) {
@@ -178,7 +177,7 @@ define([
                             Promise.all(links).then(() => {
                                 if (texts.length) {
                                     require(texts, (...results) => {
-                                        cssHelper.addContet(results);
+                                        cssHelper.addContent(results);
                                         return resolveView();
                                     });
                                 } else {

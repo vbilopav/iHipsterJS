@@ -6,11 +6,15 @@ define(["$/app"], app => {
             for(let arg of args) {
                 items[arg.src] = arg;
             }
+            // ***
+            // https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements
+            // ***
             require(Object.keys(items), (...results) => {
                 const resolved = [];
                 for(let i = 0, l = results.length; i < l; i++) {
                     let item = args[i], res = results[i];
                     if (res.prototype instanceof HTMLElement || (res.default && res.default.prototype instanceof HTMLElement)) {
+                        
                         if (!window.customElements) {
                             reject("customElements not supported")
                         }
@@ -34,9 +38,10 @@ define(["$/app"], app => {
                             }
                         }
                         window.customElements.define(item.tag, inst, item.options);
-
                         resolved.push(item);
+
                     } else if (typeof res === "function" && res.toString().indexOf("parseTemplate") !== -1) {
+
                         let component = class extends HTMLElement {
                             constructor() {
                                 super();
@@ -69,6 +74,9 @@ define(["$/app"], app => {
                         window.customElements.define(item.tag, component, item.options)
                         resolved.push(item);
                     }
+
+
+                    
                 }
                 if (resolved.length) {
                     return resolve(resolved);
