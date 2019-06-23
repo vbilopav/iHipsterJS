@@ -8,8 +8,8 @@ define(["$/template/css"], cssHelper => {
             forEach: (obj, template) => {
                 if (obj.next) {
                     let result = "";
-                    for (item of obj) {
-                        result = result.concat(template(...item));
+                    for (let i of obj) {
+                        result = result.concat(template(...i));
                     }
                     return result;
                 } else {
