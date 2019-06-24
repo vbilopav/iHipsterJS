@@ -260,7 +260,7 @@ const build = function() {
         }
     };
 
-    if (this.appDir && this.appBundleModules) {
+    if (this.appDir) {
 
         for (let appModule of this.appBundleModules) {
             buildAppModule(appModule);
@@ -273,7 +273,15 @@ const build = function() {
             for (let appFile of walkSync(dirClean)) {
                 buildAppModule(appFile.full.replace(this.appDir, ""));
             }
-            
+        }
+
+        if (!this.appBundleDirs.length && !this.appBundleModules.length) {
+            let 
+                dirClean = cleanPath(this.appDir);
+
+            for (let appFile of walkSync(dirClean)) {
+                buildAppModule(appFile.full.replace(this.appDir, ""));
+            }
         }
     }
 
