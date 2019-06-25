@@ -30,12 +30,12 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
     }
 
     rendered() {
-        this.model.content.findAll("span").forEach(span => _app.render(new Item(this), span, span.dataset));
+        this.model.content.findAll("span").forEach(span => _app.render(new Item(this), span));
     }
 
     createNewToDoItem() {
         let element = String.html`<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.toHTML();
-        _app.render(new Item(this), element, element.dataset)
+        _app.render(new Item(this), element);
         this.model.content.append(element);
     }
 

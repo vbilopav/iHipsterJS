@@ -33,7 +33,10 @@ define([
             } else {
                 modules = [];
             }
-
+            
+            if (elementOrId.dataset) {
+                params = Object.assign(params, elementOrId.dataset)
+            }
 
             const resolveModules = (view, ...injected) => {
                 if (view.default && view.__esModule) {
