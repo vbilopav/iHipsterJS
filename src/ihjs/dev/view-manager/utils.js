@@ -1,7 +1,7 @@
 define([], ()  => {
 
     const 
-        isTemplate = name => name && name.indexOf("$template!") !== -1,
+        isTemplate = (name, view) => ((name && name.indexOf("$template!") !== -1) || (view && view.toString().indexOf("parseTemplate") !== -1)),
         prefix = "_view",
         getId = uriHash => prefix + "-" + uriHash,
         types = {template: 1, class: 2, string: 3, promise: 4, object: 5},
@@ -11,7 +11,7 @@ define([], ()  => {
             }
             let t = typeof view;
             if (t === "function") {
-                if (isTemplate(name)) {
+                if (isTemplate(name, view)) {
                     return types.template;
                 }
                 return types.class;
@@ -55,12 +55,13 @@ define([], ()  => {
 
     return {
 
-        getId: getId,
-        types: types,
-        getViewType: getViewType,
-        showView: showView,
-        templateRendered: templateRendered,
-        moduleRendered: moduleRendered
+        getId,
+        types,
+        getViewType,
+        showView,
+        templateRendered,
+        moduleRendered,
+        isTemplate
 
     }
 

@@ -1,32 +1,11 @@
-${
-<script>
-    // render css files
-    this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css")
-</script>
-}
-
-${
-<script>
-    // constructor in self-execute func
-    (() => {
-        debugger;
-        this.itemTemplate = this.template.import("$template!demos/todo-demo/template/todo-item.html");
-        this.value = "initial value";
-    })()
-</script>
-}
-
 <div class="ToDo">
     <h1 class="ToDo-Header">ihjs To Do demo</h1>
     <div class="ToDo-Container">
         <div class="ToDo-Content" id="content">
-            ${<script>
-                // render default values from remote endpoint
-                async () => this.template.forEach(
-                    await(await fetch("/demos/shared/todo.json")).json(), item =>  // this could be also await _app.fetch(...)
-                    this.itemTemplate({text: item})
-                )
-            </script>}
+            ${
+            async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), item => 
+            `<span data-index=${++this.count} data-item="${item}"></span>`)
+            }
         </div>
         <input type="text" id="input" />
         <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
@@ -36,10 +15,16 @@ ${
 ${
 <script>
     () => {
-        this.template.input = this.value; // input initial value, binded via model context
-        this.template.createNewToDoItem = () => this.template.model.content.append(
-            this.itemTemplate({text: this.template.model.input.value}).toHTML()
-        )
+        this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css");
+        this.itemTemplate = this.template.import("$template!demos/todo-demo/template/todo-item.html");
+        this.template.input = "initial value"; 
+        this.count = 0;
+        this.template.rendered = () => this.template.model.content.findAll("span").forEach(span => _app.render(this.itemTemplate, span, {parent: this}));
+        this.template.createNewToDoItem = () => {
+            let element = `<span data-index=${++this.count} data-item="${this.template.model.input.value}"></span>`.toHTML();
+            this.template.model.content.append(element);
+            _app.render(this.itemTemplate, element, {parent: this});
+        };
     }
 </script>
 }

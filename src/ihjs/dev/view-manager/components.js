@@ -1,4 +1,4 @@
-define(["$/app"], app => {
+define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
 
     app.customElements = {
         define: (...args) => new Promise((resolve, reject) => {
@@ -40,7 +40,7 @@ define(["$/app"], app => {
                         window.customElements.define(item.tag, inst, item.options);
                         resolved.push(item);
 
-                    } else if (typeof res === "function" && res.toString().indexOf("parseTemplate") !== -1) {
+                    } else if (typeof res === "function" && isTemplate(undefined, res)) {
 
                         let component = class extends HTMLElement {
                             constructor() {
