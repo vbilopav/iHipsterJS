@@ -24,18 +24,18 @@ define([
             if (typeof view === "string") {
                 viewName = view;
                 modules = [view]
-            } else if (typeof view === "object") {
+            } else if (typeof view === "object" && view.name) {
                 viewName = view.name;
                 modules = [viewName];
                 if (view.inject) {
                     modules.push(...view.inject);
                 }
+            } else {
+                modules = [];
             }
-            if (!viewName || !modules) {
-                throw new Error("View definition incorrect!");
-            }
-            
-            require(modules, (view, ...injected) => {
+
+
+            const resolveModules = (view, ...injected) => {
                 if (view.default && view.__esModule) {
                     view = view.default;
                 };
@@ -75,7 +75,7 @@ define([
                                     }
                                 };
     
-                            if (type === utils.types.class) {
+                            if (type === utils.types.class || type === utils.types.object) {
                                 let content = data.instance.render({params: params, element: element});
                                 if (typeof content === "function" || content instanceof Array) {
                                     if (typeof content === "function") {
@@ -136,14 +136,19 @@ define([
                         return resolveView();
                     }
                     
-                    if (type === utils.types.class) {
+                    if (type === utils.types.class || type === utils.types.object) {
                         const
                             options = {
                                 disableCaching: false,
                                 callRenderOnlyOnce: false,
                                 css: []
                             };
-                        data.instance = new view({id: id, element: element, options: options}, ...injected);
+                        if (type === utils.types.class) {
+                            data.instance = new view({id: id, element: element, options: options}, ...injected);
+                        } else {
+                            data.instance = view;
+                        }
+                        
                         data.instance._options = options;
                         params.__parent = data.instance;
     
@@ -201,8 +206,13 @@ define([
                 } else {
                     renderView();
                 }
-            });
-        
+            };
+            if (view && !modules.length) {
+                resolveModules(view);
+            } else {
+                require(modules, resolveModules);
+            }
+
         });
 
     return {

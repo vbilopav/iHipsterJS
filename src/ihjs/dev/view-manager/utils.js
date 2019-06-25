@@ -1,10 +1,10 @@
-define(["$/view-manager/components"], ({getTags})  => {
+define([], ()  => {
 
     const 
-        isTemplate = name => name.indexOf("$template!") !== -1,
+        isTemplate = name => name && name.indexOf("$template!") !== -1,
         prefix = "_view",
         getId = uriHash => prefix + "-" + uriHash,
-        types = {template: 1, class: 2, string: 3, promise: 4},
+        types = {template: 1, class: 2, string: 3, promise: 4, object: 5},
         getViewType = (view, name) => {
             if (view instanceof Promise) {
                 return types.promise;
@@ -18,6 +18,9 @@ define(["$/view-manager/components"], ({getTags})  => {
             }
             if (t === "string") {
                 return types.string;
+            }
+            if (t === "object" && view.render) {
+                return types.object;
             }
             throw new Error("unknown view type " + view);
         },

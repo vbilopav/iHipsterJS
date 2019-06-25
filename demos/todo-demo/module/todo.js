@@ -1,34 +1,42 @@
 define(["demos/todo-demo/module/todo-item"], Item => class {
 
-    constructor() {
-        this.item = new Item();
+    constructor({options}) {
+        options.css = ["/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css"];
         this.value = "initial";
+        this.count = 0;
     }
 
-    render() {
-        return [() => String.html`
-            ${this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css")}
+    async render() {
+        let html = String.html`
             <div class="ToDo">
                 <h1 class="ToDo-Header">ihjs To Do demo</h1>
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">
-                        ${async () => this.template.forEach(
-                            await _app.fetch("/demos/shared/todo.json"), 
-                            item => this.item.render({params: item})
-                        )}
+        `;
+
+        for (let [index, item] of Object.entries(await _app.fetch("/demos/shared/todo.json"))) {
+            html += String.html`<span data-index=${this.count = ++index} data-item="${item}"></span>`;
+        }
+
+        html += String.html`
                     </div>
-                    <input type="text" id="input" value="${this.value}" />
-                    <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
-                </div>
-            </div>`, 
-            this // pass this reference to template
-        ];
+                <input type="text" id="input" value="${this.value}" />
+                <div class="ToDo-Add" onclick="createNewToDoItem">+</div>
+            </div>
+        </div>
+        `;
+
+        return html;
+    }
+
+    rendered() {
+        this.model.content.findAll("span").forEach(span => _app.render(new Item(this), span, span.dataset));
     }
 
     createNewToDoItem() {
-        this.model.content.append(
-            this.item.render({params: this.model.input.value}).toHTML()
-        )
+        let element = String.html`<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.toHTML();
+        _app.render(new Item(this), element, element.dataset)
+        this.model.content.append(element);
     }
 
 });

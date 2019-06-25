@@ -13,8 +13,8 @@ define(["$/app"], app => {
                 const resolved = [];
                 for(let i = 0, l = results.length; i < l; i++) {
                     let item = args[i], res = results[i];
+
                     if (res.prototype instanceof HTMLElement || (res.default && res.default.prototype instanceof HTMLElement)) {
-                        
                         if (!window.customElements) {
                             reject("customElements not supported")
                         }
