@@ -24,7 +24,7 @@ export default class extends HTMLElement {
 
     deleteClick() {
         decrease();
-        this.model.item.remove();
+        this.model.item.parentElement.remove();
     }
 
     // The browser calls the attributeChangedCallback() for any attributes whitelisted in the observedAttributes array 

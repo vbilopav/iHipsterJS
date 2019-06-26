@@ -52,10 +52,7 @@ define([], () => class {
     }
 
     createNewToDoItem() {
-        this.model.content.insertAdjacentHTML(
-            "beforeend",
-            `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`
-        )
+        this.model.content.append(String.html`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements())
     }
 
 });

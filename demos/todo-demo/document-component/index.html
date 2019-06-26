@@ -28,7 +28,7 @@
             () => {
                 this.template.deleteClick = () => {
                     this.template.context.count--;
-                    this.template.model.item.remove();
+                    this.template.model.item.parentElement.remove();
                 };
                 this.template.setId = (value, old) => {
                     console.log(`id attribute set from ${old} to ${value}`);
@@ -59,9 +59,8 @@
                     });
                     this.count = 0;
                     this.template.input = "initial value";
-                    this.template.createNewToDoItem = () => this.template.model.content.insertAdjacentHTML(
-                        "beforeend",
-                        `<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`
+                    this.template.createNewToDoItem = () => this.template.model.content.append(
+                        `<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`.toElements()
                     );
                 }
             )()
@@ -85,9 +84,6 @@
             </div>
         </div>
         ${<script>
-            /*
-            * if we don't return function first `() => `, anything the is evaluated at this event assignment will be rendered and in this vase it is `undefined`
-            */
             () => this.template.rendered = element => {
                 console.log("Main template have following components: ");
                 console.log(element.findAll("todo-item"));

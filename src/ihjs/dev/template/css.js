@@ -27,7 +27,7 @@ define(["$/app"], _app => {
             document.head.appendChild(
                 `<style type="text/css">
                     ${content}
-                </style>`.toHTML()
+                </style>`.toElements()
             )
         },
         shouldLoad() {

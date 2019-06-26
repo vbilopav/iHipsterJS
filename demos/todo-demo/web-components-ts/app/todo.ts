@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/build/1.1.1/types/core.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.1.2/types/core.d.ts"/>
 
 import {setCount, increase} from "demos/todo-demo/web-components-ts/app/count";
 
@@ -55,9 +55,6 @@ export default class {
     }
 
     createNewToDoItem() {
-        this.model.content.insertAdjacentHTML(
-            "beforeend",
-            `<todo-item data-index="${increase()}">${this.model.input.value}</todo-item>`
-        )
+        this.model.content.append(String.html`<todo-item data-index="${increase()}">${this.model.input.value}</todo-item>`.toElements())
     }
 };

@@ -1,8 +1,8 @@
 define(["$/template/html", "$/models/test-proto"], (html, test) => {
 
-    test(String, ["toHTML"]);
+    test(String, ["toElements"]);
 
-    String.prototype.toHTML = function() {
+    String.prototype.toElements = function() {
         return html.strToElement(this);
     }
 });

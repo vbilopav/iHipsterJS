@@ -45,10 +45,7 @@ ${
 <script>
     () => {
         this.template.input = "initial value";
-        this.template.createNewToDoItem = () => this.template.model.content.insertAdjacentHTML(
-            "beforeend",
-            `<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`
-        )
+        this.template.createNewToDoItem = () => this.template.model.content.append(`<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`.toElements())
     }
 </script>
 }

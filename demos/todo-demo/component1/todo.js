@@ -1,7 +1,12 @@
-define(["demos/todo-demo/component1/count"], ({setCount, increase}) => class {
+define([], () => class {
 
     constructor({options}) {
-        _app.customElements.define({tag: "todo-item", src: "demos/todo-demo/component1/todo-item"});
+        _app.customElements.define({
+            tag: "todo-item", 
+            src: "demos/todo-demo/component1/todo-item",
+            observedAttributes: ['id', 'data-index'],
+            context: this
+        });
         options.css = ["/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css"];
         
         /*
@@ -13,6 +18,7 @@ define(["demos/todo-demo/component1/count"], ({setCount, increase}) => class {
             input: "input"
         };
         this.input = "initial value";
+        this.count = 0;
     }
 
     async render() {
@@ -25,7 +31,7 @@ define(["demos/todo-demo/component1/count"], ({setCount, increase}) => class {
         
         for(let item of await _app.fetch("/demos/shared/todo.json")) {
             result += String.html`
-                <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
+                <todo-item id="${'todo-item-' + index}" data-index="${++this.count}">${item}</todo-item>
             `;
         }
         result += String.html`
@@ -34,7 +40,6 @@ define(["demos/todo-demo/component1/count"], ({setCount, increase}) => class {
                     <div id="add" class="ToDo-Add" onclick="createNewToDoItem">+</div>
                 </div>
             </div>`;
-        setCount(index + 1);
         return result;
     }
 
@@ -47,10 +52,7 @@ define(["demos/todo-demo/component1/count"], ({setCount, increase}) => class {
     }
 
     createNewToDoItem() {
-        this.model.content.insertAdjacentHTML(
-            "beforeend",
-            `<todo-item data-index="${increase()}">${this.model.input.value}</todo-item>`
-        )
+        this.model.content.append(String.html`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements())
     }
 
 });

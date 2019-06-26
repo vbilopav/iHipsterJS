@@ -49,9 +49,7 @@ define([
     const
         prepareTemplate = (data, name, locale) => {
             data = data || {};
-            if (!data.template) {
-                data.template = helpers();
-            }
+            data.template = Object.assign(data.template || {}, helpers());
             if (locale) {
                 data.template = Object.assign(data.template, locale);
             }

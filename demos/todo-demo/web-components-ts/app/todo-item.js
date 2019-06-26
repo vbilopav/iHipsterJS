@@ -15,7 +15,7 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], fu
         }
         deleteClick() {
             count_1.decrease();
-            this.model.item.remove();
+            this.model.item.parentElement.remove();
         }
         static get observedAttributes() {
             return ['id', 'data-index'];

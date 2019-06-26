@@ -46,7 +46,7 @@ define([
 
     "$/extensions/String/hashCode",
     "$/extensions/String/html",
-    "$/extensions/String/toHTML",
+    "$/extensions/String/toElements",
     "$/extensions/String/toCamelCase",
     "$/extensions/String/createElement",
 

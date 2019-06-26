@@ -1,8 +1,8 @@
 define([], () => class extends HTMLElement {
 
-    constructor() {
+    constructor({context}) {
         super();
-
+        this.context = context;
         let dataIndex = this.getAttribute("data-index");
         let html = this.innerHTML;
 
@@ -11,12 +11,11 @@ define([], () => class extends HTMLElement {
             <p class="ToDoItem-Text">${dataIndex + ". " + html}</p>
             <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
         </div>`;
-        this.model = new _app.Model().bind(this, this);
     }
 
     deleteClick() {
         this.context.count--;
-        this.model.item.remove();
+        this.model.item.parentElement.remove();
     }
 
     setId(value, old) {
@@ -25,5 +24,13 @@ define([], () => class extends HTMLElement {
     
     setDataIndex(value, old){
         console.log(`dataIndex attribute set from ${old} to ${value}`);
+    }
+
+    connectedCallback() {
+        console.log("connected", this)
+    }
+
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal);
     }
 })

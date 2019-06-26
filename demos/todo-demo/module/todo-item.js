@@ -13,7 +13,7 @@ define([], () => class {
     }
 
     deleteClick() {
-        this.model.item.remove();
+        this.model.item.parentElement.remove();
         this.parent.count--;
     }
 

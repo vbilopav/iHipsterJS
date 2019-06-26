@@ -1,8 +1,8 @@
-define(["demos/todo-demo/component1/count"], ({decrease}) => class extends HTMLElement {
+define([], () => class extends HTMLElement {
 
-    constructor() {
+    constructor({context}) {
         super();
-
+        this.context = context;
         let dataIndex = this.getAttribute("data-index");
         let html = this.innerHTML;
 
@@ -11,21 +11,26 @@ define(["demos/todo-demo/component1/count"], ({decrease}) => class extends HTMLE
             <p class="ToDoItem-Text">${dataIndex + ". " + html}</p>
             <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
         </div>`;
-
-        this.model = new _app.Model().bind(this, this);
     }
 
     deleteClick() {
-        decrease();
-        this.model.item.remove();
+        this.context.count--;
+        this.model.item.parentElement.remove();
     }
 
-    // The browser calls the attributeChangedCallback() for any attributes whitelisted in the observedAttributes array 
-    static get observedAttributes() {
-        return ['id', 'data-index'];
+    setId(value, old) {
+        console.log(`id attribute set from ${old} to ${value}`);
+    }
+    
+    setDataIndex(value, old){
+        console.log(`dataIndex attribute set from ${old} to ${value}`);
+    }
+
+    connectedCallback() {
+        console.log("connected", this)
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
-        console.log(attrName + " attribute set to " + newVal);
+        console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal);
     }
 })

@@ -34,7 +34,7 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
     }
 
     createNewToDoItem() {
-        let element = String.html`<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.toHTML();
+        let element = String.html`<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.toElements();
         _app.render(new Item(this), element);
         this.model.content.append(element);
     }

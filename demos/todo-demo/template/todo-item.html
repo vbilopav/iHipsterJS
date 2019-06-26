@@ -3,8 +3,8 @@
     <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
 </div>
 ${<script>
-() => this.template.deleteClick = () => {
-    this.template.model.item.remove();
-    this.parent.count--;
-}
+    () => this.template.deleteClick = () => {
+        this.template.model.item.parentElement.remove();
+        this.parent.count--;
+    }
 </script>}

@@ -39,7 +39,7 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], fu
             console.log("Change some attribute value on todo-item element...");
         }
         createNewToDoItem() {
-            this.model.content.insertAdjacentHTML("beforeend", `<todo-item data-index="${count_1.increase()}">${this.model.input.value}</todo-item>`);
+            this.model.content.append(String.html`<todo-item data-index="${count_1.increase()}">${this.model.input.value}</todo-item>`.toElements());
         }
     }
     exports.default = default_1;

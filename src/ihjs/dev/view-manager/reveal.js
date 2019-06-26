@@ -218,7 +218,5 @@ define([
 
         });
 
-    return {
-        reveal: reveal
-    }
+    return { reveal }
 });
