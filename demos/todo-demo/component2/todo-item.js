@@ -1,3 +1,24 @@
+define([], () => class {
+
+    constructor(context) {
+        this.context = context;
+    }
+
+    render({params}) {
+        return String.html`
+            <div class="ToDoItem" id="item">
+                <p class="ToDoItem-Text">${params.index + ". " + params.item}</p>
+                <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
+            </div>`
+    }
+
+    deleteClick() {
+        this.model.item.parentElement.remove();
+        this.parent.count--;
+    }
+
+})
+/*
 define([], () => class extends HTMLElement {
 
     constructor({context}) {
@@ -34,3 +55,4 @@ define([], () => class extends HTMLElement {
         console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal);
     }
 })
+*/

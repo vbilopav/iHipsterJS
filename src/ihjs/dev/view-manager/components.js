@@ -33,7 +33,7 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
         window.customElements.define(item.tag, component, item.options);
     };
 
-    const resolveTemplate = (item, result) => {
+    const resolveTemplate = (item, result) => new Promise(resolve => {
         let component = class extends HTMLElement {
             constructor() {
                 super();
@@ -41,13 +41,11 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
                 for (let attr of this.getAttributeNames()) {
                     this[attr.toCamelCase()] = this.attributes[attr].value;
                 }
-                if (item.context) {
-                    if (!this.template) {
-                        this.template = {};
-                    }
-                    this.template.context = item.context;
-                }
-                app.render(result, this, this).then(() => this._rendered = true);
+                this.template = Object.assign(this.template || {}, item);
+                app.render(result, this, this).then(() => {
+                    this._rendered = true
+                    resolve();
+                });
             }
             attributeChangedCallback(attrName, oldVal, newVal) {
                 if (component.prototype.attributeChangedCallback !== this.attributeChangedCallback) {
@@ -79,7 +77,7 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
             Object.defineProperty(component, "observedAttributes", { get: () => item.observedAttributes });
         }
         window.customElements.define(item.tag, component, item.options);
-    }
+    });
 
     app.customElements = {
         define: (...args) => new Promise((resolve, reject) => {
@@ -88,23 +86,26 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
                 items[arg.src] = arg;
             }
             require(Object.keys(items), (...results) => {
-                const resolved = [];
+                const resolved = [], promises = [];
                 for(let i = 0, l = results.length; i < l; i++) {
                     let item = args[i], result = results[i];
 
                     if (result.prototype instanceof HTMLElement || (result.default && result.default.prototype instanceof HTMLElement)) {
-                        resolveElement(item, result)
+                        resolveElement(item, result);
                         resolved.push(item);
                     } else if (typeof result === "function" && isTemplate(undefined, result)) {
-                        resolveTemplate(item, result);
+                        promises.push(resolveTemplate(item, result));
                         resolved.push(item);
                     }
 
                 }
                 if (resolved.length) {
+                    if (promises.length) {
+                        return Promise.all(promises).then(() => resolve(resolved));
+                    }
                     return resolve(resolved);
                 }
-                return reject(resolved);
+                return reject("Couldn't find components to register.");
             });
         })
     };
