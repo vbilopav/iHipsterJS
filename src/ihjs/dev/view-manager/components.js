@@ -1,4 +1,14 @@
-define(["$/app", "$/view-manager/utils"], (app, {types, getViewType}) => {
+define([
+    "$/app", 
+    "$/view-manager/utils", 
+    "$/template/load-text",
+    "$/template/parser"
+], (
+    app, 
+    {types, getViewType}, 
+    {getTemplate},
+    {parseTemplate}
+) => {
 
     if (!window.customElements) {
         throw new Error("customElements are not supported! Please update your browser...");
@@ -63,8 +73,8 @@ define(["$/app", "$/view-manager/utils"], (app, {types, getViewType}) => {
                 }
             }
             attributeChangedCallback(attrName, oldVal, newVal) {
-                let inst = (this._instance || this);
-                if (component.prototype.attributeChangedCallback !== inst.attributeChangedCallback) {
+                let inst = (this._instance || this.template);
+                if (inst.attributeChangedCallback && component.prototype.attributeChangedCallback !== inst.attributeChangedCallback) {
                     inst.attributeChangedCallback(...arguments);
                 }
                 if (!this._rendered) {
@@ -132,5 +142,14 @@ define(["$/app", "$/view-manager/utils"], (app, {types, getViewType}) => {
             });
         })
     };
+
+    for(let element of document.findAll("template[data-tag]")) {
+        let t = getTemplate(undefined, element);
+        resolveModule(
+            {tag: t.data.tag, observedAttributes: t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null}, 
+            (data, locale) => parseTemplate(t.html, data, locale), 
+            types.template
+        );
+    }
 
 });

@@ -1,8 +1,8 @@
-define(["$/template/load-text", "$/template/import", "$/template/parser"], (load, importParser, parser) => {
+define(["$/template/load-text", "$/template/import", "$/template/parser"], ({loadText}, importParser, parser) => {
     
     return {
         load(name, req, onload) {
-            load(name, req).then(text => {
+            loadText(name, req).then(text => {
                 importParser.parseImportsAsync(text).then(() => {
                     onload(() => (data, locale) => parser.parseTemplate(text, data, locale, name));
                 });

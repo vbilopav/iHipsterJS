@@ -11,7 +11,12 @@ define(["$/app"], app => {
             if (!element) {
                 // remember templates because rendering into body removes everything
                 if (templates) {
-                    _app.config.__templates = new Map(Array.from(templates).map(e => [e.id, e.html()]));
+                    _app.config.__templates = new Map(Array.from(templates).map(e => { 
+                        return [e.id, {
+                            html: e.html(),
+                            data: e.dataset
+                        }] 
+                    }));
                 }
                 // render into body if container not defined and default not found
                 element = document.body;

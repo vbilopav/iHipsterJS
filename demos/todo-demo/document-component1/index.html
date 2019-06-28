@@ -41,15 +41,15 @@
     </template>
 
     <template>
-        ${<script>
-            // to inject css content to header element as style tag use:
-            // this.template.css("$text!demos/shared/css/todo.css")
-            this.template.css("/demos/shared/css/todo.css")
-        </script>}
         ${
         <script>
             (
+                // constructor
                 () => {
+                    // to inject css content to header element as style tag use:
+                    // this.template.css("$text!demos/shared/css/todo.css")
+                    this.template.css("/demos/shared/css/todo.css");
+
                     // define custom component
                     _app.customElements.define({
                         tag: "todo-item", 

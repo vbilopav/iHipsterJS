@@ -1,23 +1,39 @@
 
-define(["$/template/tags"], tagsParser => (name, req) => new Promise((resolve, reject) => {
+define(["$/template/tags"], tagsParser => {
 
-    const t = _app.config.__templates && _app.config.__templates.get(name);
-    if (t) {
+    const getTemplate = (name, element) => {
+        const t = _app.config.__templates && _app.config.__templates.get(name);
+        if (t) {
+            setTimeout(()=> _app.config.__templates.delete("todo-item"), 0);
+            const textarea = "textarea".createElement();
+            return {
+                html: tagsParser.parse(textarea.html(t.html).innerText),
+                data: t.data
+            }
+        }
+        const e = element || document.getElementById(name) || document.getElementsByName(name);
+        if (!e || (e.length !== undefined && e.length === 0)) {
+            return;
+        }
+        setTimeout(()=> e.remove(), 0);
         const textarea = "textarea".createElement();
-        textarea.html(t);
-        const text = textarea.innerText;
-        resolve(tagsParser.parse(text));
-        return;
-    }
-    const e = document.getElementById(name) || document.getElementsByName(name) || _app.config.__templates.namedItem(name);
-    if (!e || (e.length !== undefined && e.length === 0)) {
-        req(["$text!" + name], text => resolve(tagsParser.parse(text)));
-        return;
-    }
-    const textarea = "textarea".createElement();
-    textarea.html(e.html());
-    const text = textarea.innerText;
-    e.remove();
-    resolve(tagsParser.parse(text));
+        return {
+            html: tagsParser.parse(textarea.html(e.html()).innerText),
+            data: e.dataset
+        }
+    };
 
-}));
+    return {
+        getTemplate,
+        loadText(name, req) {
+            return new Promise(resolve => {
+                const t = getTemplate(name);
+                if (!t) {
+                    req(["$text!" + name], text => resolve(tagsParser.parse(text)));
+                    return;
+                }
+                resolve(t.html);
+            });
+        } 
+    }
+});
