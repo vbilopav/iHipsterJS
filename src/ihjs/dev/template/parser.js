@@ -54,12 +54,6 @@ define([
                 data.template = Object.assign(data.template, locale);
             }
             data.template.name = name;
-            if (data.___extra) {
-                for(let [key, value] of Object.entries(data.___extra)) {
-                    data.template[key] = value;
-                }
-                delete data.___extra;
-            }
             return data;
         },
         parseTemplate = (text, data, locale, name) => 

@@ -10,7 +10,7 @@ export default class {
     }
 
     constructor(args: ViewConstructorArgs) {
-        window._app.customElements.define({tag: "todo-item", src: "demos/todo-demo/components-ts/app/todo-item"});
+        window._app.customElements.define({tag: "todo-item", src: "demos/todo-demo/web-components-ts/app/todo-item"});
         args.options.css = ["/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css"];
         
         /*

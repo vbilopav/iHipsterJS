@@ -33,9 +33,10 @@ define([
             } else {
                 modules = [];
             }
-            
-            if (elementOrId.dataset) {
-                params = Object.assign(params, elementOrId.dataset)
+
+            if (elementOrId.dataset && !params.__noDataset) {
+                params = Object.assign(params, elementOrId.dataset);
+                delete params.__noDataset;
             }
 
             const resolveModules = (view, ...injected) => {
@@ -153,15 +154,6 @@ define([
                         }
                         
                         data.instance._options = options;
-                        params.__parent = data.instance;
-    
-                        if (params.___extra) {
-                            for(let [key, value] of Object.entries(params.___extra)) {
-                                data.instance[key] = value;
-                            }
-                            delete params.___extra;
-                        }
-    
                         if (!cssHelper.shouldLoad()) {
                             return resolveView();
                         }

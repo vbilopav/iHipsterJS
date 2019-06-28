@@ -1,20 +1,45 @@
 define([], () => class {
 
-    constructor(context) {
+    constructor({context}) {
         this.context = context;
     }
 
     render({params}) {
         return String.html`
             <div class="ToDoItem" id="item">
-                <p class="ToDoItem-Text">${params.index + ". " + params.item}</p>
+                <p class="ToDoItem-Text">${params.dataIndex + ". " + params.innerText}</p>
                 <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
             </div>`
     }
 
     deleteClick() {
         this.model.item.parentElement.remove();
-        this.parent.count--;
+        this.context.count--;
+    }
+
+    deleteClick() {
+        this.context.count--;
+        this.model.item.parentElement.remove();
+    }
+
+    rendered() {
+        console.log("rendered", this.element);
+    }
+
+    setId(value, old) {
+        console.log(`id attribute set from ${old} to ${value}`);
+    }
+    
+    setDataIndex(value, old){
+        console.log(`dataIndex attribute set from ${old} to ${value}`);
+    }
+
+    connectedCallback() {
+        console.log("connected", this.element);
+    }
+
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal);
     }
 
 })

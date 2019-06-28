@@ -1,4 +1,4 @@
-define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
+define(["$/app", "$/view-manager/utils"], (app, {types, getViewType}) => {
 
     if (!window.customElements) {
         throw new Error("customElements are not supported! Please update your browser...");
@@ -33,43 +33,62 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
         window.customElements.define(item.tag, component, item.options);
     };
 
-    const resolveTemplate = (item, result) => new Promise(resolve => {
+    const resolveModule = (item, result, type) => new Promise((resolve, reject) => {
         let component = class extends HTMLElement {
             constructor() {
                 super();
                 this._rendered = false;
-                for (let attr of this.getAttributeNames()) {
-                    this[attr.toCamelCase()] = this.attributes[attr].value;
+                if (type === types.template) {
+                    for (let attr of this.getAttributeNames()) {
+                        this[attr.toCamelCase()] = this.attributes[attr].value;
+                    }
+                    this.template = Object.assign(this.template || {}, item);
+                    app.render(result, this, this).then(() => {
+                        this._rendered = true
+                        resolve();
+                    }).catch(e => reject(e));
+                } else if (type === types.class) {
+                    let params = {innerHTML: this.innerHTML, innerText: this.innerText};
+                    for (let attr of this.getAttributeNames()) {
+                        params[attr.toCamelCase()] = this.attributes[attr].value;
+                    }
+                    let view = new result(item);
+                    view.element = this;
+                    this._instance = view;
+                    params.__noDataset = true;
+                    app.render(view, this, params).then(() => {
+                        this._rendered = true;
+                        resolve();
+                    }).catch(e => reject(e));
                 }
-                this.template = Object.assign(this.template || {}, item);
-                app.render(result, this, this).then(() => {
-                    this._rendered = true
-                    resolve();
-                });
             }
             attributeChangedCallback(attrName, oldVal, newVal) {
-                if (component.prototype.attributeChangedCallback !== this.attributeChangedCallback) {
-                    this.attributeChangedCallback(...arguments);
+                let inst = (this._instance || this);
+                if (component.prototype.attributeChangedCallback !== inst.attributeChangedCallback) {
+                    inst.attributeChangedCallback(...arguments);
                 }
                 if (!this._rendered) {
                     return;
                 }
                 let name = ("set-" + attrName).toCamelCase();
-                this.template && this.template[name] && typeof this.template[name] === "function" && this.template[name](newVal, oldVal);
+                inst[name] && typeof inst[name] === "function" && inst[name](newVal, oldVal);
             }
             connectedCallback() {
-                if (component.prototype.connectedCallback !== this.connectedCallback) {
-                    this.connectedCallback(...arguments);
+                let inst = (this._instance || this);
+                if (inst.connectedCallback && component.prototype.connectedCallback !== inst.connectedCallback) {
+                    inst.connectedCallback(...arguments);
                 }
             }
             disconnectedCallback() {
-                if (component.prototype.disconnectedCallback !== this.disconnectedCallback) {
-                    this.disconnectedCallback(...arguments);
+                let inst = (this._instance || this);
+                if (inst.disconnectedCallback && component.prototype.disconnectedCallback !== inst.disconnectedCallback) {
+                    inst.disconnectedCallback(...arguments);
                 }
             }
             adoptedCallback() {
-                if (component.prototype.adoptedCallback !== this.adoptedCallback) {
-                    this.disconnectedCallback(...arguments);
+                let inst = (this._instance || this);
+                if (inst.adoptedCallback && component.prototype.adoptedCallback !== inst.adoptedCallback) {
+                    inst.disconnectedCallback(...arguments);
                 }
             }
         }
@@ -93,15 +112,19 @@ define(["$/app", "$/view-manager/utils"], (app, {isTemplate}) => {
                     if (result.prototype instanceof HTMLElement || (result.default && result.default.prototype instanceof HTMLElement)) {
                         resolveElement(item, result);
                         resolved.push(item);
-                    } else if (typeof result === "function" && isTemplate(undefined, result)) {
-                        promises.push(resolveTemplate(item, result));
-                        resolved.push(item);
+                        continue;
                     }
 
+                    let type = getViewType(result, item.src);
+                    if (type === types.template || type === types.class) {
+                        promises.push(resolveModule(item, result, type));
+                        resolved.push(item);
+                    }
                 }
+
                 if (resolved.length) {
                     if (promises.length) {
-                        return Promise.all(promises).then(() => resolve(resolved));
+                        return Promise.all(promises).then(() => resolve(resolved)).catch((e => reject(e)));
                     }
                     return resolve(resolved);
                 }
