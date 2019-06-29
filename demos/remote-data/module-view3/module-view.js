@@ -1,4 +1,4 @@
-define(["$composite!demos/remote-data/module-view3/templates.html"], templates => class {
+define(["composite!demos/remote-data/module-view3/templates.html"], templates => class {
 
     async render() {
         let [headerTemplate, itemTemplate] = templates();

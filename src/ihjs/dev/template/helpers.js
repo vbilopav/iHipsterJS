@@ -1,4 +1,4 @@
-define(["$/template/css"], cssHelper => {
+define(["ihjs/template/css"], cssHelper => {
     
     const 
         cssImported = cssHelper.getImported();
@@ -28,7 +28,7 @@ define(["$/template/css"], cssHelper => {
                     if (cssImported.includes(l)) {
                         return;
                     }
-                    if (!l.startsWith("$text!")) {
+                    if (!l.startsWith("text!")) {
                         links.push(cssHelper.addLink(l));
                     } else {
                         texts.push(l);

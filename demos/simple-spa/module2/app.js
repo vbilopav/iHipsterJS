@@ -1,5 +1,5 @@
 define(
-    ["$/spa"], ({Router, Manager}) => new Router({
+    ["ihjs/spa"], ({Router, Manager}) => new Router({
         routes: {
             "/": {
                 view: "demos/simple-spa/module2/github-user"

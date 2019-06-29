@@ -15,7 +15,7 @@
     <template id="todo-item">
         ${<script>
             // to inject css content to header element as style tag use:
-            // this.template.css("$text!demos/shared/css/todo-item.css")
+            // this.template.css("text!demos/shared/css/todo-item.css")
             this.template.css("/demos/shared/css/todo-item.css")
         </script>}
         
@@ -54,13 +54,13 @@
                 // constructor
                 () => {
                     // to inject css content to header element as style tag use:
-                    // this.template.css("$text!demos/shared/css/todo.css")
+                    // this.template.css("text!demos/shared/css/todo.css")
                     this.template.css("/demos/shared/css/todo.css");
 
                     // define custom component
                     _app.customElements.define({
                         tag: "todo-item", 
-                        src: "$template!todo-item",
+                        src: "template!todo-item",
                         observedAttributes: ['id', 'data-index'],
                         context: this
                     });

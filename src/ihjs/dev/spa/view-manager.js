@@ -1,8 +1,8 @@
 define([
 
-    "$/view-manager/utils", 
-    "$/view-manager/reveal",
-    "$/app"
+    "ihjs/view-manager/utils", 
+    "ihjs/view-manager/reveal",
+    "ihjs/app"
 
 ], (
     utils, 

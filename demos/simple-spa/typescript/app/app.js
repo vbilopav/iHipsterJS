@@ -1,4 +1,4 @@
-define(["require", "exports", "$/spa"], function (require, exports, spa_1) {
+define(["require", "exports", "ihjs/spa"], function (require, exports, spa_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     new spa_1.Router({

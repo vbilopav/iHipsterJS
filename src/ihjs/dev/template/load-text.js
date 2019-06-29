@@ -1,5 +1,5 @@
 
-define(["$/template/tags"], tagsParser => {
+define(["ihjs/template/tags"], tagsParser => {
 
     const getTemplate = (name, element) => {
         const t = _app.config.__templates && _app.config.__templates.get(name);
@@ -29,7 +29,7 @@ define(["$/template/tags"], tagsParser => {
             return new Promise(resolve => {
                 const t = getTemplate(name);
                 if (!t) {
-                    req(["$text!" + name], text => resolve(tagsParser.parse(text)));
+                    req(["text!" + name], text => resolve(tagsParser.parse(text)));
                     return;
                 }
                 resolve(t.html);

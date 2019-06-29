@@ -16,7 +16,7 @@ ${
 <script>
     () => {
         this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css");
-        this.itemTemplate = this.template.import("$template!demos/todo-demo/template/todo-item.html");
+        this.itemTemplate = this.template.import("template!demos/todo-demo/template/todo-item.html");
         this.template.input = "initial value"; 
         this.count = 0;
         this.template.rendered = () => this.template.model.content.findAll("span").forEach(span => _app.render(this.itemTemplate, span, {parent: this}));

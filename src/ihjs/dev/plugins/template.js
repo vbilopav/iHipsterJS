@@ -1,4 +1,4 @@
-define(["$/template/load-text", "$/template/import", "$/template/parser"], ({loadText}, importParser, parser) => {
+define(["ihjs/template/load-text", "ihjs/template/import", "ihjs/template/parser"], ({loadText}, importParser, parser) => {
     
     return {
         load(name, req, onload) {

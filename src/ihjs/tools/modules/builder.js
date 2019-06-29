@@ -199,9 +199,9 @@ const build = function() {
             let 
                 moduleName = moduleNameClean.replace(new RegExp("\\"+path.sep, 'g'), "/").replace(".js", "");
             if (moduleName.startsWith(this.plugins)) {
-                moduleName = moduleName.replace(this.plugins, "$");
+                moduleName = moduleName.replace(this.plugins, "");
             } else {
-                moduleName = "$/" + moduleName;
+                moduleName = "ihjs/" + moduleName;
             }
             log('>>> Bundling module ...', moduleName);
             bundleContent = bundleContent + `'${moduleName}': [`;
@@ -230,7 +230,7 @@ const build = function() {
         if (extname === ".js") {
             moduleNameClean = moduleName.replace(".js", "");
         } else if (this.templateExtensions.includes(extname))  {
-            moduleNameClean = "$text!" + moduleName;
+            moduleNameClean = "text!" + moduleName;
             isText = true;
         } else {
             log(">>> Skipping module (reason: unknown extension)", moduleName);

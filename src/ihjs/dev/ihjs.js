@@ -9,7 +9,7 @@
             urlArgs: undefined,
             appUrl: "/",
             libsUrl: null,
-            appModule: "$/single-view-app",
+            appModule: "ihjs/single-view-app",
             appElementId: "app",
             appObjectName: "_app",
             loaderUrl: path => `${path}loader/loader.js`
@@ -160,14 +160,13 @@
         __appObjName: appObjectName,
         paths: {
             libs: libsPath,
-            "$": sysPath,
             "ihjs": sysPath,
-            "$text": sysPath + "/plugins/text",
-            "$template": sysPath + "/plugins/template",
-            "$composite": sysPath + "/plugins/composite",
-            "$cors-text": sysPath + "/plugins/cors-text",
-            "$cors-template": sysPath + "/plugins/cors-template",
-            "$extension": sysPath + "/plugins/extension"
+            "text": sysPath + "/plugins/text",
+            "template": sysPath + "/plugins/template",
+            "composite": sysPath + "/plugins/composite",
+            "cors-text": sysPath + "/plugins/cors-text",
+            "cors-template": sysPath + "/plugins/cors-template",
+            "extension": sysPath + "/plugins/extension"
         }
     }
 
@@ -184,12 +183,12 @@
 
     if (loaderLoaded()) {
         require.config(config);
-        require(["$/main"], mainFunc);
+        require(["ihjs/main"], mainFunc);
     } else {
         loadLoader(loaderUrl, () => {
             if (loaderLoaded()) {
                 require.config(config);
-                require(["$/main"], mainFunc);
+                require(["ihjs/main"], mainFunc);
                 return;
             }
             console.warn("Failed to load module loader.")

@@ -1,4 +1,4 @@
-define(["$/models/test-proto", "$/extensions/String/toCamelCase"], test => {
+define(["ihjs/models/test-proto", "ihjs/extensions/String/toCamelCase"], test => {
         
     test(HTMLElement, ["css", "_styles"]);
 

@@ -21,7 +21,7 @@
 
         ${<script>
             () => {
-                let {publish} = this.template.import("$/pubsub");
+                let {publish} = this.template.import("ihjs/pubsub");
                 this.template.deleteClick = () => {
                     publish("item/removed");
                     this.template.model.item.parentElement.remove();
@@ -54,7 +54,7 @@
                     this.template.createNewToDoItem = () => this.template.model.content.append(
                         `<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`.toElements()
                     );
-                    let {subscribe} = this.template.import("$/pubsub");
+                    let {subscribe} = this.template.import("ihjs/pubsub");
                     subscribe("item/removed", () => this.count--);
                 }
             )()

@@ -1,7 +1,7 @@
 define([
-    "$/template/parser", 
-    "$/template/import",
-    "$/template/tags",
+    "ihjs/template/parser", 
+    "ihjs/template/import",
+    "ihjs/template/tags",
 ], (
     parser, 
     importParser,

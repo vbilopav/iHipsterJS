@@ -1,4 +1,4 @@
-define(["$/app"], app => {
+define(["ihjs/app"], app => {
 
     const stripScriptTagsInTemplates = true;
     

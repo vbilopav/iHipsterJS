@@ -150,7 +150,7 @@ declare class ModelClass {
 /**
 * 
 */
-declare module "$/models/model" {
+declare module "ihjs/models/model" {
     /**
     * 
     */

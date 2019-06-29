@@ -1,4 +1,4 @@
-define(["$/models/test-proto"], test => {
+define(["ihjs/models/test-proto"], test => {
     
     const 
         applyExtension = (element, extension) => {
@@ -21,10 +21,10 @@ define(["$/models/test-proto"], test => {
             const 
                 [elementName, extensionName] = name.split("/");
             if (!["NodeList", "Document", "Window"].includes(elementName)) {
-                throw new Error(`"${name}" is not valid element for $extension!`);
+                throw new Error(`"${name}" is not valid element for "extension!" plugin`);
             }
             if (!window[elementName].prototype[extensionName]) {
-                req(["$/extensions/HTMLElement/" + extensionName], () => {
+                req(["ihjs/extensions/HTMLElement/" + extensionName], () => {
                     if (!window[elementName].prototype[extensionName]) {
                         applyExtension(elementName, extensionName);
                     }

@@ -1,4 +1,4 @@
-define(["$/extensions/HTMLElement/forEachChild"], () => class {
+define(["ihjs/extensions/HTMLElement/forEachChild"], () => class {
 
     constructor({
         model, 

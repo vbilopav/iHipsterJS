@@ -1,8 +1,8 @@
 define([
-    "$/app", 
-    "$/view-manager/utils", 
-    "$/template/load-text",
-    "$/template/parser"
+    "ihjs/app", 
+    "ihjs/view-manager/utils", 
+    "ihjs/template/load-text",
+    "ihjs/template/parser"
 ], (
     app, 
     {types, getViewType}, 

@@ -1,4 +1,4 @@
-define(["$/template/html", "$/models/test-proto"], (html, test) => {
+define(["ihjs/template/html", "ihjs/models/test-proto"], (html, test) => {
 
     test(String, ["toElements"]);
 

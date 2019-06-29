@@ -165,7 +165,7 @@ declare class RouterClass {
 /**
 * 
 */
-declare module "$/spa" {
+declare module "ihjs/spa" {
     /**
     * 
     */
@@ -179,7 +179,7 @@ declare module "$/spa" {
 /**
 * 
 */
-declare module "$/spa/router" {
+declare module "ihjs/spa/router" {
     /**
     * 
     */
@@ -189,7 +189,7 @@ declare module "$/spa/router" {
 /**
 * 
 */
-declare module "$/spa/view-manager" {
+declare module "ihjs/spa/view-manager" {
     /**
     * 
     */

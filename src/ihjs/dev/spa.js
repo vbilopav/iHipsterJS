@@ -1,1 +1,1 @@
-define(["$/spa/router", "$/spa/view-manager"], (Router, Manager) => ({Router, Manager}));
+define(["ihjs/spa/router", "ihjs/spa/view-manager"], (Router, Manager) => ({Router, Manager}));

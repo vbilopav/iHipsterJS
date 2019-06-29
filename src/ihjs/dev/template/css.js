@@ -1,4 +1,4 @@
-define(["$/app"], _app => {
+define(["ihjs/app"], _app => {
 
     const 
         _cssImported = [];

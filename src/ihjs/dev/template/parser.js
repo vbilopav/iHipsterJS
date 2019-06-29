@@ -1,7 +1,7 @@
 define([
-    "$/template/helpers", 
-    "$/template/import",
-    "$/app"
+    "ihjs/template/helpers", 
+    "ihjs/template/import",
+    "ihjs/app"
 ], (
     helpers, 
     importParser,

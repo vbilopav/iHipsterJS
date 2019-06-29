@@ -3,7 +3,7 @@ define([], () => {
         load(name, req, onload) {
             let config = require.getConfig();
             if (config._modules) {
-                let result = config._modules["$text!" + name];
+                let result = config._modules["text!" + name];
                 if (result !== undefined) {
                     onload(result);
                     return;

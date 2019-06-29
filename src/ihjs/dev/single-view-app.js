@@ -1,4 +1,4 @@
-define(["$/app"], app => {
+define(["ihjs/app"], app => {
 
     const 
         error = "Couldn't find any suitable template to initialize application. There are no template tags without id and attribute data-view-module is not set!",
@@ -44,7 +44,7 @@ define(["$/app"], app => {
                 // template found
                 if (!template.id) {
                     template.id = _app.config.name;
-                    app.config.view = "$template!" + _app.config.name;
+                    app.config.view = "template!" + _app.config.name;
                     break;
                 }
             }

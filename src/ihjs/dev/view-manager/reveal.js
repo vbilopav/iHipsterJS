@@ -1,7 +1,7 @@
 define([
-    "$/view-manager/utils", 
-    "$/app",
-    "$/template/css"
+    "ihjs/view-manager/utils", 
+    "ihjs/app",
+    "ihjs/template/css"
 ], (
     utils,
     app,
@@ -168,7 +168,7 @@ define([
     
                             let links = [], texts = [];
                             options.css.forEach(l => {
-                                if (!l.startsWith("$text!")) {
+                                if (!l.startsWith("text!")) {
                                     links.push(cssHelper.addLink(l));
                                 } else {
                                     texts.push(l);

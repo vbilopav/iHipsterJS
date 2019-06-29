@@ -21,13 +21,13 @@
     <script type="module" src="../../../src/ihjs/build/1.1.2/ihjs.js"></script>
 
     <script type="module">
-      window.onload = () => require(["$/spa"], ({Router, Manager}) => new Router({
+      window.onload = () => require(["ihjs/spa"], ({Router, Manager}) => new Router({
           routes: {
             "/": { 
-              view: "$template!demos/simple-spa/templates/github-user.html" 
+              view: "template!demos/simple-spa/templates/github-user.html" 
             },
             "/github-user-info": {
-              view: "$template!demos/simple-spa/templates/github-user-info",
+              view: "template!demos/simple-spa/templates/github-user-info",
               paramsMap: params => (params.length === 1 ? params[0] : false)
             }
           },

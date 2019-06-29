@@ -1,4 +1,4 @@
-define(["$/models/test-proto", "$/extensions/HTMLElement/css"], test => {
+define(["ihjs/models/test-proto", "ihjs/extensions/HTMLElement/css"], test => {
 
     test(HTMLElement, ["visible",]);
 
