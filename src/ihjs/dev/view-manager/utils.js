@@ -1,4 +1,4 @@
-define([], ()  => {
+define(["ihjs/models/model"], Model  => {
 
     const 
         isTemplate = (name, view) => ((name && name.indexOf("template!") !== -1) || (view && view.toString().indexOf("parseTemplate") !== -1)),
@@ -28,8 +28,8 @@ define([], ()  => {
             window.scrollTo(item.x, item.y);
         },
         templateRendered = (params, element) => {
-            if (params.template.model != undefined || (params.template.model && !(params.template.model instanceof _app.Model))) {
-                params.template.model = new _app.Model({model: params.template.model}).bind(element, params.template.modelContext || params.template, params);
+            if (params.template.model === undefined || (params.template.model && !(params.template.model instanceof Model))) {
+                params.template.model = new Model({model: params.template.model}).bind(element, params.template.modelContext || params.template, params);
             }
             if (params.template.rendered) {
                 params.template.rendered(element);
@@ -39,8 +39,8 @@ define([], ()  => {
             if (instance._options.context === undefined) {
                 instance._options.context = instance;
             }
-            if (instance._options.model !== null && instance._options.model instanceof _app.Model === false && (instance._options.context || instance._options.model)) {
-                instance.model = new _app.Model({model: instance._options.model}).bind(args.element, instance._options.context);
+            if (instance._options.model !== null && instance._options.model instanceof Model === false && (instance._options.context || instance._options.model)) {
+                instance.model = new Model({model: instance._options.model}).bind(args.element, instance._options.context);
             }
             if (skipChange)  {
                 !instance.rendered || instance.rendered({params: args.params, element: args.element});

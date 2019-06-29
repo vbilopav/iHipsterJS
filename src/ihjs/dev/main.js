@@ -1,6 +1,5 @@
 define([
     "ihjs/app",
-    "ihjs/models/model",
     "ihjs/view-manager/reveal",
 
     "ihjs/extensions/HTMLElement/addClass",
@@ -53,14 +52,11 @@ define([
     "ihjs/template/parser",
     "ihjs/view-manager/components"
 
-], (_app, Model, {reveal}) => {
+], (_app, {reveal}) => {
 
-    _app.Model = Model;
     _app.import = m => new Promise(resolve => require([m], r => resolve(r)));
     _app.fetch = async (url, opts) => await(await fetch(url, opts)).json();
-    _app.render = async (view, elementOrId, params) => 
-        await reveal({view: view, elementOrId: elementOrId, params: params});
-    
+    _app.render = async (view, elementOrId, params) => await reveal({view: view, elementOrId: elementOrId, params: params});
     _app.queryString = (input => {
         let i = input.slice(input.indexOf('?') + 1),
             v = i.match(/[\w\d%\-!.~'()\*]+=[\w\d%\-!.~'()\*]+/g);

@@ -2,12 +2,14 @@ define([
     "ihjs/app", 
     "ihjs/view-manager/utils", 
     "ihjs/template/load-text",
-    "ihjs/template/parser"
+    "ihjs/template/parser",
+    "ihjs/models/model"
 ], (
     app, 
     {types, getViewType}, 
     {getTemplate},
-    {parseTemplate}
+    {parseTemplate},
+    Model
 ) => {
 
     if (!window.customElements) {
@@ -18,8 +20,8 @@ define([
         let component = class extends (result.default || result) {
             constructor() { 
                 super(item); 
-                if (!this.model || (this.model && !(this.model instanceof app.Model))) {
-                    this.model = new app.Model({model: this.model}).bind(this, this);
+                if (!this.model || (this.model && !(this.model instanceof Model))) {
+                    this.model = new Model({model: this.model}).bind(this, this);
                 } 
             }
         }
