@@ -28,7 +28,7 @@ define([], ()  => {
             window.scrollTo(item.x, item.y);
         },
         templateRendered = (params, element) => {
-            if (!params.template.model || (params.template.model && !(params.template.model instanceof _app.Model))) {
+            if (params.template.model != undefined || (params.template.model && !(params.template.model instanceof _app.Model))) {
                 params.template.model = new _app.Model({model: params.template.model}).bind(element, params.template.modelContext || params.template, params);
             }
             if (params.template.rendered) {

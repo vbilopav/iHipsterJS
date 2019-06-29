@@ -171,7 +171,11 @@ interface DefineComponentArg {
     /**
     * 
     */
-    wrap?: string
+    observedAttributes?: Array<any>
+    /**
+    * 
+    */
+    context?: any
 }
 /**
  * 

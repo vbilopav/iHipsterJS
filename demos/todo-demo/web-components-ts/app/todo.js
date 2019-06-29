@@ -3,7 +3,11 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], fu
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
         constructor(args) {
-            window._app.customElements.define({ tag: "todo-item", src: "demos/todo-demo/web-components-ts/app/todo-item" });
+            window._app.customElements.define({
+                tag: "todo-item",
+                src: "demos/todo-demo/web-components-ts/app/todo-item",
+                observedAttributes: ['id', 'data-index']
+            });
             args.options.css = ["/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css"];
             args.options.model = {
                 content: "content",
