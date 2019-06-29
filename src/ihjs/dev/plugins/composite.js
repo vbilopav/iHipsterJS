@@ -1,8 +1,8 @@
-define(["ihjs/template/load-text", "ihjs/template/import", "ihjs/template/parser"], (load, importParser, parser) => {
+define(["ihjs/template/load-text", "ihjs/template/import", "ihjs/template/parser"], ({loadText}, importParser, parser) => {
     
     return {
         load(name, req, onload) {
-            load(name, req).then(text => importParser.parseImportsAsync(text).then(() => 
+            loadText(name, req).then(text => importParser.parseImportsAsync(text).then(() => 
                 onload(() => (data, locale) => parser.parseComposite(text, data, locale, name))));
             
         }
