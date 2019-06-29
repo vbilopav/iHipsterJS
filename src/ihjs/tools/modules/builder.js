@@ -105,14 +105,19 @@ const
 const build = function() {
     const 
         getContentByOptions = (filename, options, isEntryPoint=false) => {
-            if (!isEntryPoint) {
-                return options ? minify(fs.readFileSync(filename).toString(), options) : fs.readFileSync(filename).toString();
-            } 
-            let content = fs.readFileSync(filename).toString().replace("/*dev*/dev: true,/*dev*/", "dev: false,");
-            if (this.version) {
-                content = content.replace(' /*version*/version: "",/*version*/', `version: "${this.version}",`);
+            try {
+                if (!isEntryPoint) {
+                    return options ? minify(fs.readFileSync(filename).toString(), options) : fs.readFileSync(filename).toString();
+                } 
+                let content = fs.readFileSync(filename).toString().replace("/*dev*/dev: true,/*dev*/", "dev: false,");
+                if (this.version) {
+                    content = content.replace(' /*version*/version: "",/*version*/', `version: "${this.version}",`);
+                }
+                return options ? minify(content, options) : content;
+            } catch (error) {
+                console.error(`Error calling minify on ${filename} -> ${error}`);
+                throw error
             }
-            return options ? minify(content, options) : content;
         }
         getContent = (filename, moduleName, isText=false) => {
             let options;

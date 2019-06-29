@@ -56,7 +56,8 @@ define([
                     for (let attr of this.getAttributeNames()) {
                         this[attr.toCamelCase()] = this.attributes[attr].value;
                     }
-                    this.template = Object.assign(this.template || {}, item);
+                    this.template = Object.assign(this || {}, item);
+                    this.__noDataset = true;
                     app.render(result, this, this).then(() => {
                         this._rendered = true
                         resolve();
@@ -77,7 +78,7 @@ define([
                 }
             }
             attributeChangedCallback(attrName, oldVal, newVal) {
-                let inst = (this._instance || this.template);
+                let inst = (this._instance || this);
                 if (inst.attributeChangedCallback && component.prototype.attributeChangedCallback !== inst.attributeChangedCallback) {
                     inst.attributeChangedCallback(...arguments);
                 }
@@ -88,19 +89,19 @@ define([
                 inst[name] && typeof inst[name] === "function" && inst[name](newVal, oldVal);
             }
             connectedCallback() {
-                let inst = (this._instance || this.template);
+                let inst = (this._instance || this);
                 if (inst.connectedCallback && component.prototype.connectedCallback !== inst.connectedCallback) {
                     inst.connectedCallback(...arguments);
                 }
             }
             disconnectedCallback() {
-                let inst = (this._instance || this.template);
+                let inst = (this._instance || this);
                 if (inst.disconnectedCallback && component.prototype.disconnectedCallback !== inst.disconnectedCallback) {
                     inst.disconnectedCallback(...arguments);
                 }
             }
             adoptedCallback() {
-                let inst = (this._instance || this.template);
+                let inst = (this._instance || this);
                 if (inst.adoptedCallback && component.prototype.adoptedCallback !== inst.adoptedCallback) {
                     inst.disconnectedCallback(...arguments);
                 }

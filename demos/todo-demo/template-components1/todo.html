@@ -44,8 +44,8 @@ ${
 ${
 <script>
     () => {
-        this.template.input = "initial value";
-        this.template.createNewToDoItem = () => this.template.model.content.append(`<todo-item data-index="${++this.count}">${this.template.model.input.value}</todo-item>`.toElements())
+        this.input = "initial value";
+        this.createNewToDoItem = () => this.model.content.append(`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements())
     }
 </script>
 }

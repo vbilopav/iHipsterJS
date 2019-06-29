@@ -7,7 +7,7 @@ define([], () => class {
     render({params}) {
         return String.html`
             <div class="ToDoItem" id="item">
-                <p class="ToDoItem-Text">${params.index + ". " + params.item}</p>
+                <p class="ToDoItem-Text">${params.dataIndex + ". " + params.dataItem}</p>
                 <div class="ToDoItem-Delete" onclick="deleteClick">-</div>
             </div>`
     }

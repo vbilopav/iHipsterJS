@@ -28,12 +28,10 @@ define(["ihjs/models/model"], Model  => {
             window.scrollTo(item.x, item.y);
         },
         templateRendered = (params, element) => {
-            if (params.template.model === undefined || (params.template.model && !(params.template.model instanceof Model))) {
-                params.template.model = new Model({model: params.template.model}).bind(element, params.template.modelContext || params.template, params);
+            if (params.model === undefined || (params.model && !(params.model instanceof Model))) {
+                params.model = new Model({model: params.model}).bind(element, params, params);
             }
-            if (params.template.rendered) {
-                params.template.rendered(element);
-            }
+            params.template.rendered && params.template.rendered(element);
         },
         moduleRendered = (instance, args, skipChange=true) => {
             if (instance._options.context === undefined) {

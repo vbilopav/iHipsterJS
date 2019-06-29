@@ -35,7 +35,7 @@ ${
 
 <div name="modalWin" class="modal" style="display: none;">
     <div class="modal-content">
-        <span class="close" onclick="()=>this.template.model.modalWin.hideElement();">&times;</span>
+        <span class="close" onclick="()=>this.model.modalWin.hideElement();">&times;</span>
         <p name="title"></p>
         <p name="description"></p>
     </div>
@@ -45,23 +45,23 @@ ${
 <script>
 () => {
 
-    this.template.showDescriptionClick = e  => {
+    this.showDescriptionClick = e  => {
         let name = e.target.dataAttr("name");
-        this.template.model.title.html(name);
-        this.template.model.description.html(this._descriptionsDict[name]);
-        this.template.model.modalWin.showElement();
+        this.model.title.html(name);
+        this.model.description.html(this._descriptionsDict[name]);
+        this.model.modalWin.showElement();
         e.preventDefault();
     };
     window.on("click", e => {
         if (e.target.dataAttr("openModal") != "1") {
-            this.template.model.modalWin.hideElement();
+            this.model.modalWin.hideElement();
         }
     });
     this.template.rendered = element => {
         console.log("Template rendered into element:");
         console.log(element);
         console.log("I also have following model defined:");
-        console.log(this.template.model);
+        console.log(this.model);
     }
 
 }

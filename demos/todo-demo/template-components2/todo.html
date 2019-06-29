@@ -16,11 +16,6 @@ ${
             this.setCount = setCount;
             this.increase = increase;
 
-            // To optimize template parsing - inform template to watch it-self for only specific custom tags:
-            // this.template.watch("todo-item");
-            // this.template.watch("tag-a", "tag-b");
-            // etc...
-
             this.template.rendered = element => {
                 // Only rendered components that have name or id attribute will ba available in children property
                 console.log("I haz following components: ");
@@ -52,9 +47,9 @@ ${
 ${
 <script>
     () => {
-        this.template.input = "initial value";
-        this.template.createNewToDoItem = () => 
-            this.template.model.content.append(`<todo-item data-index="${this.increase()+1}">${this.template.model.input.value}</todo-item>`.toElements())
+        this.input = "initial value";
+        this.createNewToDoItem = () => 
+            this.model.content.append(`<todo-item data-index="${this.increase()+1}">${this.model.input.value}</todo-item>`.toElements())
     }
 </script>
 }

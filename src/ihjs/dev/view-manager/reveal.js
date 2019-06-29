@@ -35,7 +35,13 @@ define([
             }
 
             if (elementOrId.dataset && !params.__noDataset) {
-                params = Object.assign(params, elementOrId.dataset);
+                for(let [name, value] of Object.entries(elementOrId.dataset)) {
+                    name = ("data-" + name).toCamelCase();
+                    if (params[name]) {
+                        throw "ambiguous parameter " + name;
+                    }
+                    params[name] = value;
+                }
                 delete params.__noDataset;
             }
 
