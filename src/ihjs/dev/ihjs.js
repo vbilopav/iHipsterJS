@@ -161,6 +161,7 @@
         paths: {
             libs: libsPath,
             "$": sysPath,
+            "ihjs": sysPath,
             "$text": sysPath + "/plugins/text",
             "$template": sysPath + "/plugins/template",
             "$composite": sysPath + "/plugins/composite",

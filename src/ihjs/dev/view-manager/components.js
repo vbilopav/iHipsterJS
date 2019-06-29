@@ -23,8 +23,10 @@ define([
                 } 
             }
         }
-        if (item.observedAttributes && item.observedAttributes.length) {
-            Object.defineProperty(component, "observedAttributes", { get: () => item.observedAttributes });
+        if ((item.observedAttributes && item.observedAttributes.length) || (component.observedAttributes && component.observedAttributes.length)) {
+            if (!component.observedAttributes) {
+                Object.defineProperty(component, "observedAttributes", { get: () => item.observedAttributes });
+            }
             component.prototype._connectedCallback = component.prototype.connectedCallback;
             component.prototype.connectedCallback = function(...args) {
                 component.prototype._connectedCallback && component.prototype._connectedCallback.call(this, ...args);
@@ -84,26 +86,27 @@ define([
                 inst[name] && typeof inst[name] === "function" && inst[name](newVal, oldVal);
             }
             connectedCallback() {
-                let inst = (this._instance || this);
+                let inst = (this._instance || this.template);
                 if (inst.connectedCallback && component.prototype.connectedCallback !== inst.connectedCallback) {
                     inst.connectedCallback(...arguments);
                 }
             }
             disconnectedCallback() {
-                let inst = (this._instance || this);
+                let inst = (this._instance || this.template);
                 if (inst.disconnectedCallback && component.prototype.disconnectedCallback !== inst.disconnectedCallback) {
                     inst.disconnectedCallback(...arguments);
                 }
             }
             adoptedCallback() {
-                let inst = (this._instance || this);
+                let inst = (this._instance || this.template);
                 if (inst.adoptedCallback && component.prototype.adoptedCallback !== inst.adoptedCallback) {
                     inst.disconnectedCallback(...arguments);
                 }
             }
         }
-        if (item.observedAttributes && item.observedAttributes.length) {
-            Object.defineProperty(component, "observedAttributes", { get: () => item.observedAttributes });
+        let getter = result.observedAttributes || item.observedAttributes;
+        if (getter && getter.length) {
+            Object.defineProperty(component, "observedAttributes", { get: () => getter });
         }
         window.customElements.define(item.tag, component, item.options);
     });

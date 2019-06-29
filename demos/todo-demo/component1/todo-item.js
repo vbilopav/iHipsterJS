@@ -13,6 +13,12 @@ define([], () => class extends HTMLElement {
         </div>`;
     }
 
+    /* 
+    * observedAttributes list is defined in call  _app.customElements.define (see todo.js)
+    * is can also be defined here (as proscribed by current standard)
+    */
+    // static get observedAttributes() { return ['id', 'data-index'] }
+
     deleteClick() {
         this.context.count--;
         this.model.item.parentElement.remove();
@@ -31,6 +37,6 @@ define([], () => class extends HTMLElement {
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
-        console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal);
+        console.log("attributeChangedCallback: " + attrName + " attribute set to " + newVal, this);
     }
 })
