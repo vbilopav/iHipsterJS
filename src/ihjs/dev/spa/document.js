@@ -30,14 +30,18 @@ define([
             continue;
         }
         let 
+            route = {},
             t = getTemplate(undefined, template),
-            view = (data, locale) => parseTemplate(t.html, data, locale);
+            view = (data, locale) => {
+                data.template = {route: route};
+                return parseTemplate(t.html, data, locale);
+            }
             view._isTemplate = true;
         if (path === "error" || path === "404" || path === "unknown") {
             routes["/error"] = {view: view};
             continue;
         }
-        let route = {view: view};
+        route["view"] = view;
         let that = {};
         Function("return " + app.config.name + ".__temp`" + t.html + "`;").call(that);
         if (that.paramsMap) {

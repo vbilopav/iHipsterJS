@@ -115,7 +115,9 @@ define([
                     
                     if (type === utils.types.template) {
                         data.instance = view;
-
+                        //if (view.template) {
+                        //    params.template = view.template;
+                        //}
                         const 
                             result = view(params, {injected: injected});
 

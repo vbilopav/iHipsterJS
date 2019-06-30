@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="/demos/shared/themes-switcher.js"></script>
+    <style>
+      button {
+          border: #0096bf3b solid;
+      }
+      .panel {
+          margin-bottom: 20px;
+          border:  2px solid #9c9c9c6e;
+          border-radius: 4px;
+          -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+          box-shadow: 0 1px 1px rgba(0,0,0,.05);
+      }
+      .info-text {
+          font-size: 0.9em;
+          color: gray;
+      }
+      #query {
+        width: calc(100% - 18px);
+      }
+      .example:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      code > img {
+        width: 15px;
+        top: 3px;
+        position: relative;
+      }
+    </style>
+    <title></title>
+  </head>
+  <body>
+
+    <template data-tag="github-result">
+      <div class="panel">
+          <img src="https://avatars2.githubusercontent.com/u/2060047?v=4" />
+          <div>
+            ${this.innerHTML}
+          </div>
+      </div>
+    </template>
+
+    <template data-route="/">
+      ${<script>
+        /*
+        * resolve url parameters for this route:
+        * * more then one parameter is forbidden for this route, return false
+        * * return `{query: param}` object which is merged with template instance (`this` object on template) and automatically bind to `query` input element
+        */
+        () => this.paramsMap = params => {
+          if (params.length > 1) {
+            return false;
+          }
+          return {query: (params.length === 1 ? params[0] : "")}
+        }
+    </script>}
+
+    <p>
+      <label for="query">Enter valid <code>GitHub <img src="favicon.ico" /></code> query into search box and hit key <code>enter</code> or <code>search</code> button.
+        <div class="info-text ">
+          <span>Example of search query 
+            <code class="example" onclick="e => {this.model.query.value = e.target.innerText.trim(); this.model.query.focus();}">
+              tom repos:>42 followers:>1000
+            </code> - 
+            username or email starts with "tom" and with more than 42 repositories, and only if they have over 1,000 followers. See
+            <a href="https://developer.github.com/v3/search/#constructing-a-search-query" target="_blank">docs &nbsp;&#x2197;</a> for more info.
+          </span>
+        </div>
+      </label>
+      <p>
+        <input 
+          type="text" id="query" 
+          placeholder="search box" autofocus 
+          spellcheck="false" 
+          autocomplete="off"
+          onkeypress="e => e.keyCode === 13 && this.model.search.click()"
+          onfocus="this.select()"
+        />
+        <button id="search" onclick="searchClick">search</button>
+      </p>
+    </p>
+
+    <div id="results">
+    </div>
+
+      ${<script>
+      () => this.searchClick = () => {
+          let search = this.model.query.value.replace(new RegExp("/", 'g'), "");
+          this.model.query.value = search;
+          this.template.route.params(search);
+          if (!search) {
+            this.model.results.html("");
+          } else {
+            this.model.results.html("<github-result>" + search + "</github-result>");
+          }
+          
+        }
+      </script>}
+
+      ${<script>
+        /*
+        * call search on rendered event which to ensure that model is constructed
+        */
+        () => this.template.rendered = () => this.searchClick()
+      </script>}
+
+    </template>
+
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
+
+  </body>
+</html>

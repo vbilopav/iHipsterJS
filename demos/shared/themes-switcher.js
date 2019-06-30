@@ -35,8 +35,9 @@
         var btn = document.createElement("BUTTON");
         btn.style.padding = "5px";
         btn.style.fontSize = "0.7em"; 
-        btn.style.margin = "10px";
-        btn.innerHTML = "switch to " + opposite(current) + " theme";
+        btn.style.margin = "8px";
+        btn.style.padding = "4px";
+        btn.innerHTML = opposite(current) + " theme";
     
         wrap.appendChild(btn);
         document.body.appendChild(wrap);
@@ -44,7 +45,7 @@
         btn.addEventListener("click", function() {
             css1.href = css1.href.replace(/dark|light/, function(replaced) { 
                 var theme = opposite(replaced);
-                btn.innerHTML = "switch to " + opposite(theme) + " theme";
+                btn.innerHTML = opposite(theme) + " theme";
                 localStorage.setItem(key, theme);
                 return theme; 
             });

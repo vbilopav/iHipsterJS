@@ -31,6 +31,12 @@ define([
         return this;
     }
 
+    // updateUriHash(id, uri) {
+    //     if (this._views && this._views[id]) {
+    //         this._views[id]["uriHash"] = uri.hashCode();
+    //     }
+    // }
+
     async reveal({id="", view=null, params={}, uri=""}) {
         if (view == null) {
             throw "undefined view"
@@ -67,7 +73,7 @@ define([
                         element = "span".createElement(elementId);
                         this._container.appendChild(element);
                     }
-                    if (found.uriHash !== uriHash) {
+                    if (found.uriHash !== uriHash /*|| found.instance._options.disableCaching*/) {
                         let result = found.instance(params);
                         if (typeof result === "string") {
                             

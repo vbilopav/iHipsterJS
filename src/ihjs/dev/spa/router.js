@@ -24,13 +24,26 @@ define([], () => class {
         this._routes = {};
         for(let route in routes) {
             let data = routes[route];
+            data.id = data.id || route.replace(/\//g, "-").replace("-", "").toCamelCase();
             this._test(route) || (() => {throw route})();
             this._routes[route] = {
-                id: data.id || route.replace(/\//g, "-").replace("-", "").toCamelCase(),
+                id: data.id,
                 name: route,
                 view: data.view,
                 paramsMap: data.paramsMap || (args => (args.length === 0 ? {} : false)),
                 data: data.data
+            }
+            data.router = this;
+            data.path = route;
+            data.params = (value, silent=true) => {
+                if (this.currentHash === value) {
+                    return
+                }
+                if (silent) {
+                    this._skipChange = true;
+                }
+                document.location.replace(this._hash + route + (route.endsWith("/") ? "" : "/") + value)
+                setTimeout(() => this._skipChange = false, 0);
             }
         }
         this._current = undefined; 
@@ -51,6 +64,10 @@ define([], () => class {
         this._onChangeEvent(undefined, true);
         var that = this;
         window.on('hashchange', event => {
+            if (this._skipChange) {
+                this._skipChange = false;
+                return;
+            }
             that._onChangeEvent.call(that, event)
         });
         return this;
@@ -81,6 +98,7 @@ define([], () => class {
         if (!event.newHash && event.newURL) {
             event.newHash = event.newURL.replace(document.location.origin + document.location.pathname, "");
         }
+        this.currentHash = event.newHash;
         let
             uri = event.newHash.replace(this._hash, ""),
             uriPieces = uri.split("/").map(item => decodeURIComponent(item)),
