@@ -21,7 +21,7 @@ ${
         this.count = 0;
         this.template.rendered = () => this.model.content.findAll("span").forEach(span => _app.render(this.itemTemplate, span, {parent: this}));
         this.createNewToDoItem = () => {
-            let element = `<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.toElements();
+            let element = `<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.dom();
             this.model.content.append(element);
             _app.render(this.itemTemplate, element, {parent: this});
         };

@@ -52,7 +52,7 @@ define([], () => class {
     }
 
     createNewToDoItem() {
-        this.model.content.append(String.html`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements())
+        this.model.content.append(String.html`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom())
     }
 
 });

@@ -150,10 +150,12 @@ define([
     };
 
     for(let element of document.findAll("template[data-tag]")) {
-        let t = getTemplate(undefined, element);
+        let t = getTemplate(undefined, element),
+            view = (data, locale) => parseTemplate(t.html, data, locale);
+        view._isTemplate = true;
         resolveModule(
             {tag: t.data.tag, observedAttributes: t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null}, 
-            (data, locale) => parseTemplate(t.html, data, locale), 
+            view, 
             types.template
         );
     }

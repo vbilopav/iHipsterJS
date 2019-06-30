@@ -45,7 +45,7 @@ define([
 
     "ihjs/extensions/String/hashCode",
     "ihjs/extensions/String/html",
-    "ihjs/extensions/String/toElements",
+    "ihjs/extensions/String/dom",
     "ihjs/extensions/String/toCamelCase",
     "ihjs/extensions/String/createElement",
 

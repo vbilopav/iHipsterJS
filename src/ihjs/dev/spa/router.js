@@ -6,8 +6,9 @@ define([], () => class {
         error=(()=>{}),
         hash="#",
         test=(route => /^[ A-Za-z0-9_@()/.-]*$/.test(route)),
-        routes=(()=>{throw routes})()
+        routes
     }) {
+        routes = routes || (()=>{throw routes})();
         this._navigate = navigate;
         this._leave = leave;
         this._error = error;
@@ -18,7 +19,7 @@ define([], () => class {
             routes = routes.reduce(function(result, item, index) {
                 result[item] = {};
                 return result;
-              }, {});
+            }, {});
         }
         this._routes = {};
         for(let route in routes) {
@@ -80,7 +81,7 @@ define([], () => class {
         if (!event.newHash && event.newURL) {
             event.newHash = event.newURL.replace(document.location.origin + document.location.pathname, "");
         }
-        let name,
+        let
             uri = event.newHash.replace(this._hash, ""),
             uriPieces = uri.split("/").map(item => decodeURIComponent(item)),
             route,
@@ -109,7 +110,7 @@ define([], () => class {
             this._error({router: this, uri: uri});
             return;
         } 
- 
+
         let viewId, elementId;
         if (this._current) {
             viewId = this._current.id;
@@ -127,5 +128,4 @@ define([], () => class {
         });
     }
 
- });
- 
+});

@@ -11,11 +11,11 @@
   </head>
   <body>
 
-    <div id="app">
-      <script src="../../shared/loading.js"></script>
-    </div>
-
-    <template id="github-user-info">
+    <template data-route="/github-user-info">
+      ${<script>() => { 
+        this.paramsMap = params => (params.length === 1 ? params[0] : false) 
+      }
+      </script>}
         <div>
             <h2>Github user data</h2>
             <div>
@@ -38,7 +38,7 @@
         </div>
     </template>
 
-    <template id="github-user">
+    <template data-route="/">
         <div>
           <h1>Github user data</h1>
           <p> 
@@ -58,25 +58,12 @@
         }
     </template>
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
-    <script type="module" src="../../../src/ihjs/build/1.1.2/ihjs.js"></script>
+    <template data-route="error">
+      <h1>Unknown route - 404</h1>
+    </template>
 
-    <script type="module">
-      window.onload = () => require(["ihjs/spa"], ({Router, Manager}) => new Router({
-          routes: {
-            "/": { 
-              view: "template!github-user" 
-            },
-            "/github-user-info": {
-              view: "template!github-user-info",
-              paramsMap: params => (params.length === 1 ? params[0] : false)
-            }
-          },
-          error: event => console.error(event)
-        })
-        .useViewManager(new Manager(document.getElementById("app").html("").showElement()))
-        .start());
-    </script>
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
 
   </body>
 </html>

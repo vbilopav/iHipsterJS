@@ -26,18 +26,25 @@ define(["ihjs/app"], app => {
     
     // element to render app to 
     let element;
+    // all templates in document
+    let templates = document.getElementsByTagName("template");
+
+    for (let template of templates) {
+        if (template.dataset.route) {
+            require(["ihjs/spa/document"], spa => spa(templates, getElement()));
+            return;
+        }
+    }
 
     // default view isn't defined
     if (!app.config.view) { 
-        let templates = document.getElementsByTagName("template");
-
         // document doesn't contain templates
         if (!templates.length) { 
             throw new Error(error);
         } else {
 
             // find last (closest to the bottom of document) template without id, otherwise raise error
-            let template;
+            let template, found = false;
             for (let i = templates.length-1; i >=0; i--) {
                 template = templates[i];
                 
@@ -45,11 +52,12 @@ define(["ihjs/app"], app => {
                 if (!template.id) {
                     template.id = _app.config.name;
                     app.config.view = "template!" + _app.config.name;
+                    found = true;
                     break;
                 }
             }
             // no template found
-            if (!template) {
+            if (!found) {
                 throw new Error(error);
             }
             element = getElement(templates);

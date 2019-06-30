@@ -494,4 +494,8 @@ interface String {
      * 
      */
     createElement(id?: string, content?: string): HTMLElement | NodeList
+    /**
+     * 
+     */
+    dom(): HTMLElement | NodeList
 }

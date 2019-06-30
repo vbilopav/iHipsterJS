@@ -1,8 +1,8 @@
 define(["ihjs/template/html", "ihjs/models/test-proto"], (html, test) => {
 
-    test(String, ["toElements"]);
+    test(String, ["dom"]);
 
-    String.prototype.toElements = function() {
+    String.prototype.dom = function() {
         return html.strToElement(this);
     }
 });

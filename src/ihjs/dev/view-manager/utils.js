@@ -1,7 +1,7 @@
 define(["ihjs/models/model"], Model  => {
 
     const 
-        isTemplate = (name, view) => ((name && name.indexOf("template!") !== -1) || (view && view.toString().indexOf("parseTemplate") !== -1)),
+        isTemplate = (name, view) => ((name && name.indexOf("template!") !== -1) || (view && (view._isTemplate || view.toString().indexOf("parseTemplate") !== -1))),
         prefix = "_view",
         getId = uriHash => prefix + "-" + uriHash,
         types = {template: 1, class: 2, string: 3, promise: 4, object: 5},

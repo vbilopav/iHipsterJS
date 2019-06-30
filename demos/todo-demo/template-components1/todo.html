@@ -45,7 +45,7 @@ ${
 <script>
     () => {
         this.input = "initial value";
-        this.createNewToDoItem = () => this.model.content.append(`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements())
+        this.createNewToDoItem = () => this.model.content.append(`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom())
     }
 </script>
 }

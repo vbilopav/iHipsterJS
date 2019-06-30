@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="../../shared/css/water/dark.css">
+    <link rel="stylesheet" href="../../shared/css/demos.css">
+    <title></title>
+  </head>
+  <body>
+
+    <div id="app">
+      <script src="../../shared/loading.js"></script>
+    </div>
+
+    <template id="github-user-info">
+        <div>
+            <h2>Github user data</h2>
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th colspan=2>${this.value}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <script>
+                  ${async () => this.template.forEach(
+                      await _app.fetch("https://api.github.com/users/" + this.value), (key, value) => `<tr><td>${key}</td><td>${value}</td></tr>`
+                  )}
+                </script>
+                </tbody>
+              </table>
+            </div>
+            <button onclick="window.history.back();">Go back</button>
+        </div>
+    </template>
+
+    <template id="github-user">
+        <div>
+          <h1>Github user data</h1>
+          <p> 
+            <label for="username">Enter valid github username: </label> 
+            <input type="text" id="username" autofocus spellcheck="false" onkeypress="e => e.keyCode === 13 && this.model.btn.click()">
+            <br />
+            <button name="btn" onclick="showClick">Show github user data</button>
+          </p>
+        </div>
+        ${<script>
+          () => {
+            this.username = _app.queryString || "vbilopav"; // default value
+            this.showClick = () => window.location = "#/github-user-info/" + this.model.username.value;
+          }
+        </script>}
+    </template>
+
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
+
+    <script type="module">
+      window.onload = () => require(["ihjs/spa"], ({Router, Manager}) => new Router({
+          routes: {
+            "/": { 
+              view: "template!github-user" 
+            },
+            "/github-user-info": {
+              view: "template!github-user-info",
+              paramsMap: params => (params.length === 1 ? params[0] : false)
+            }
+          },
+          error: event => console.error(event)
+        })
+        .useViewManager(new Manager(document.getElementById("app").html("").showElement()))
+        .start());
+    </script>
+
+  </body>
+</html>

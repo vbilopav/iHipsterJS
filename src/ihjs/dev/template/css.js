@@ -27,7 +27,7 @@ define(["ihjs/app"], _app => {
             document.head.appendChild(
                 `<style type="text/css">
                     ${content}
-                </style>`.toElements()
+                </style>`.dom()
             )
         },
         shouldLoad() {

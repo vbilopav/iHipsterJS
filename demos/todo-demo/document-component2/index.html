@@ -52,7 +52,7 @@
                     this.count = 0;
                     this.input = "initial value";
                     this.createNewToDoItem = () => this.model.content.append(
-                        `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.toElements()
+                        `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom()
                     );
                     let {subscribe} = this.template.import("ihjs/pubsub");
                     subscribe("item/removed", () => this.count--);
@@ -79,8 +79,8 @@
         </div>
     </template>
 
-    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
-    <!-- <script type="module" src="../../../src/ihjs/build/1.1.2/ihjs.js"></script> -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
 
 </body>
 </html>
