@@ -33,16 +33,40 @@
         top: 3px;
         position: relative;
       }
+      img {
+        width: 165px;
+      }
+      .item-info {
+          position: absolute;
+          padding: 4px;
+      }
+      .results-info {
+        width: 100%;
+      }
+      .results-info button {
+        padding: 4px;
+        float: right;;
+        border: 2px;
+      }
     </style>
     <title></title>
   </head>
   <body>
+    <script>
+      // script to display message for users to use decent browser
+      var e = document.createElement("div"); document.body.appendChild(e);
+      setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and Edge are not supported. Use FireFox or Chromium based browser.</h1>" }, 1000);
+    </script>
 
     <template data-tag="github-result">
       <div class="panel">
-          <img src="https://avatars2.githubusercontent.com/u/2060047?v=4" />
-          <div>
-            ${this.innerHTML}
+          <a href="${this.item.html_url}"><img src="${this.item.avatar_url}" /></a>
+          <span class="item-info">
+            <ul>
+              <li>
+                <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
+              </li>
+            </ul>
           </div>
       </div>
     </template>
@@ -51,64 +75,109 @@
       ${<script>
         /*
         * resolve url parameters for this route:
-        * * more then one parameter is forbidden for this route, return false
-        * * return `{query: param}` object which is merged with template instance (`this` object on template) and automatically bind to `query` input element
+        * * more then two parameters is forbidden for this route - return false
+        * * return `{page: Number, query: param}` object which is merged with template instance 
         */
         () => this.paramsMap = params => {
-          if (params.length > 1) {
+          if (params.length > 2) {
             return false;
           }
-          return {query: (params.length === 1 ? params[0] : "")}
-        }
-    </script>}
-
-    <p>
-      <label for="query">Enter valid <code>GitHub <img src="favicon.ico" /></code> query into search box and hit key <code>enter</code> or <code>search</code> button.
-        <div class="info-text ">
-          <span>Example of search query 
-            <code class="example" onclick="e => {this.model.query.value = e.target.innerText.trim(); this.model.query.focus();}">
-              tom repos:>42 followers:>1000
-            </code> - 
-            username or email starts with "tom" and with more than 42 repositories, and only if they have over 1,000 followers. See
-            <a href="https://developer.github.com/v3/search/#constructing-a-search-query" target="_blank">docs &nbsp;&#x2197;</a> for more info.
-          </span>
-        </div>
-      </label>
-      <p>
-        <input 
-          type="text" id="query" 
-          placeholder="search box" autofocus 
-          spellcheck="false" 
-          autocomplete="off"
-          onkeypress="e => e.keyCode === 13 && this.model.search.click()"
-          onfocus="this.select()"
-        />
-        <button id="search" onclick="searchClick">search</button>
-      </p>
-    </p>
-
-    <div id="results">
-    </div>
-
-      ${<script>
-      () => this.searchClick = () => {
-          let search = this.model.query.value.replace(new RegExp("/", 'g'), "");
-          this.model.query.value = search;
-          this.template.route.params(search);
-          if (!search) {
-            this.model.results.html("");
-          } else {
-            this.model.results.html("<github-result>" + search + "</github-result>");
+          let page = (params.length > 0 ? Number(params[0]) : 1)
+          if (isNaN(page)) {
+            page = 1;
           }
-          
+          return {
+            page: page,
+            query: (params.length > 1 ? params[1] : "")
+          }
         }
       </script>}
 
-      ${<script>
-        /*
-        * call search on rendered event which to ensure that model is constructed
-        */
-        () => this.template.rendered = () => this.searchClick()
+      <p>
+        <label for="query">Enter valid 
+          <code>GitHub 
+              <img src="data:image/ico;base64, AAABAAIAEBAAAAEAIAAoBQAAJgAAACAgAAABACAAKBQAAE4FAAAoAAAAEAAAACAAAAABACAAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEtLUDNOTlOYQUFBLwAAAAAAAAAAAAAAAEtLT4FPT1RtNjY2DgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAIsAAAb/AAAG/wAAAEYAAAAAAAAAAAAAAAAAAADIAAAG/wAAAtAAAAA6AAAAAAAAAAAAAAAAAAAAAwYGDacLCxL/BAQMfAQEBD4AAAAJAAAAAAAAAAAAAAAABgYJvQsLEv8KChD/CQkP8QQEBD8AAAAAAAAAAAYGCW8LCxL/BgYOnAQECWwICA3LBQUIWQAAAAAAAAAAAAAAEQoKD+IKChD/CgoQ/woKEP8JCQ7eAAAAFgAAACUGBg7mBgYO8AYGDacJCQ/sBgYJpgAABkoAAAAAAAAAAAAAABYEBAh7BQUNygoKEP8KChD/CwsS/wQECH8FBQ6MCgoQ/woKEP8JCQ7vBAQEOQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYFBQ2XCgoQ/woKEP8GBg7QBgYO3woKEP8LCxL/BAQMfQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEwYGD+YKChD/BgYO8goKEP8KChD/CwsS/wAABD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBg6/CgoQ/woKEP8GBg76CgoQ/wsLEv8AAAQ9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgYOvwoKEP8GBg79BQUPxwoKEP8LCxL/BQUMiwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJgkJD+kKChD/BgYO6AQEDGcGBg7+CgoQ/wkJDdwAAAANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICCW4LCxL/CgoQ/wYGDrwAAAAMBgYMxgoKEP8JCQ/YAAAAAwAAACECAgdjAwMDRQAAAD0FBQhYAAAGUAAAAAAEBARnCwsS/wsLEv8AAAVYAAAAAAAABD4JCQ/7BgYO+gYGDL0JCQ/pCwsS/wsLEv8LCxL/CwsS/wsLEv8GBgzFBQUO1wsLEv8FBQ6wAAAABAAAAAAAAAAABQUIXwkJD/kKChL/CgoQ/woKEP8KChD/CgoQ/woKEP8KChD/CgoQ/wsLEv8GBg6+AAAAEgAAAAAAAAAAAAAAAAAAAAAAAAQ/BgYOwQYGDvsKChD/CgoQ/woKEP8KChD/CgoQ/wUFDuUFBQmEAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkCAgxjCQkPwQYGDvgKChD/BgYO4wgIDZMAAAAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAIAAAAEAAAAABACAAAAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQGBgxVBgYOvAYGDvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYGDusGBg68BgYMVQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwdIBQUO1goKEP8KChD/CgoQ/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgoQ/woKEP8KChD/BQUO1wMDB0gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAMFQICDGMGBg+kBgYO0gYGDvMKChD/CgoQ/wYGDvMGBg7SBgYPpAICDGMAAAwVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" />
+          </code> query into search box and hit key <code>enter</code> or <code>search</code> button.
+          <div class="info-text ">
+            <span>Example of search query 
+              <code class="example" onclick="e => {this.model.query.value = e.target.innerText.trim(); this.model.query.focus();}">
+                tom repos:>42 followers:>1000
+              </code> - 
+              username or email starts with "tom" and with more than 42 repositories, and only if they have over 1,000 followers. See
+              <a href="https://developer.github.com/v3/search/#constructing-a-search-query" target="_blank">docs &nbsp;&#x2197;</a> for more info.
+            </span>
+          </div>
+        </label>
+        <p>
+          <input 
+            type="text" id="query" 
+            placeholder="search box" autofocus 
+            spellcheck="false" 
+            autocomplete="off"
+            onkeypress="e => e.keyCode === 13 && this.model.search.click()"
+            onfocus="this.select()"
+          />
+          <button id="search" onclick="searchClick">search</button>
+        </p>
+        <div id="results-header" class="results-info">
+          <code id="msg">results</code>
+          <button id="next" onclick="() => {this.page++; this.performSearch()}">next</button>
+          <button id="prev" onclick="() => {this.page--; this.performSearch()}">prev</button>
+        </div>
+      </p>
+
+      <div id="results">
+      </div>
+
+      ${<script>() => {
+        const 
+          pageSize = 5,
+          showNextPrev = (next, prev) => {
+            this.model.prev.showElement(prev);
+            this.model.next.showElement(next);
+          }
+
+        this.performSearch = async () => {
+            // set hash route parameter in url to search value
+            this.template.route.params(this.page + "/" + this.query);
+            // `html` element extension acts exactly like jquery `html` method
+            this.model.results.html("");
+            this.model.resultsHeader.hideElement();
+            if (!this.query) {
+              return;
+            }
+            const result = await _app.fetch(`https://api.github.com/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`);
+            this.model.resultsHeader.showElement();
+            if (result.message) {
+              this.model.msg.html(result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`));
+              this.model.next.hideElement();
+              this.model.prev.hideElement();
+              showNextPrev(false, false);
+              return;
+            }
+            this.model.msg.html(`Result ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
+            this.template.forEach(result.items, item => {
+              // `dom` string extension creates dom object from string
+              let element = "<github-result></github-result>".dom();
+              // assign result item to element instance to be used in github-result element
+              element.item = item;
+              // `append` element extension acts exactly like jquery `append` method
+              this.model.results.append(element);
+            });
+            showNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
+        }
+
+        this.searchClick = async () => {
+            this.page = 1;
+            // remove "/" characters from search query
+            this.query = this.model.query.value.replace(new RegExp("/", 'g'), "")
+            await this.performSearch();
+        }
+        
+        // call search on rendered event to ensure that model is constructed
+        this.template.rendered = async () => await this.performSearch();
+        
+      }
       </script>}
 
     </template>
