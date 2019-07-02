@@ -117,7 +117,7 @@ define([
                         data.instance = view;
                         const 
                             result = view(params, {injected: injected});
-
+                        view.__params = params;
                         if (typeof result === "string") {
     
                             element.html(result);

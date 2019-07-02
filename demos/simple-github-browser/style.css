@@ -2,15 +2,37 @@ button {
     border: #0096bf3b solid;
 }
 .panel {
+    position: relative;
     margin-bottom: 20px;
     border:  2px solid #9c9c9c6e;
     border-radius: 4px;
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    padding: 10px;
+    padding-bottom: 5px;
+    min-height: 170px;
 }
 .info-text {
     font-size: 0.9em;
     color: gray;
+}
+.panel-info {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  float: right;
+  font-size: 0.8em;
+  color: gray;
+}
+.panel-save {
+  position: absolute;
+  right: 10px;
+  top: -2px;
+  float: right;
+  color: gray;
+  font-size: 2em;
+  cursor: pointer;
+  z-index: 9999;
 }
 #query {
   width: calc(100% - 18px);
@@ -25,7 +47,7 @@ code > img {
   position: relative;
 }
 img {
-  width: 165px;
+  width: 90px;
 }
 .item-info {
     position: absolute;
@@ -41,4 +63,5 @@ img {
 }
 ul {
   max-width: 550px;
+  margin: 0;
 }

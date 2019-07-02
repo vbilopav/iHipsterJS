@@ -31,11 +31,17 @@ define([
         return this;
     }
 
-    // updateUriHash(id, uri) {
-    //     if (this._views && this._views[id]) {
-    //         this._views[id]["uriHash"] = uri.hashCode();
-    //     }
-    // }
+    updateViewUri(id, uri) {
+        let found = this._views[id],
+            uriHash = uri.hashCode(),
+            elementId = utils.getId(uriHash);
+        if (!found) {
+            return
+        }
+        let oldId = utils.getId(found.uriHash);
+        found.uriHash = uriHash;
+        this._container.find("#" + oldId).attr("id", elementId);
+    }
 
     async reveal({id="", view=null, params={}, uri=""}) {
         if (view == null) {
@@ -69,6 +75,12 @@ define([
                 let element = this._container.find("#" + elementId);
 
                 if (found.type === utils.types.template) {
+                    if (found.instance && found.instance.__params) {
+                        params = Object.assign(params, found.instance.__params);
+                    }
+                    if (params.template.navigate) {
+                        params.template.navigate(element);
+                    }
                     if (!element.length) {
                         element = "span".createElement(elementId);
                         this._container.appendChild(element);

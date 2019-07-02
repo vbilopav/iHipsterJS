@@ -42,12 +42,16 @@ define([], () => class {
                 if (silent) {
                     this._skipChange = true;
                 }
-                document.location.replace(this._hash + route + (route.endsWith("/") ? "" : "/") + value)
+                let uri = (route.endsWith("/") ? "" : "/") + value;
+                document.location.replace(this._hash + route + uri)
+                //document.location.hash = this._hash + route + uri;
+                this._manager.updateViewUri(data.id, route + uri);
                 setTimeout(() => this._skipChange = false, 0);
             }
         }
         this._current = undefined; 
         this._manager = {
+            updateViewUri: (id, uri) => {},
             reveal: ({id,view,params,uri}) => {return new Promise(resolve=>resolve())},
             leave: (viewId, elementId) => this._manager
         };

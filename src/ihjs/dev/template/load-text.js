@@ -11,12 +11,14 @@ define(["ihjs/template/tags"], tagsParser => {
                 data: t.data
             }
         }
-        const e = element || document.getElementById(name) || document.getElementsByName(name);
+        let e = element || document.getElementById(name) || document.getElementsByName(name);
+        if (e[0]) {
+            e = e[0];
+        }
         if (!e || (e.length !== undefined && e.length === 0)) {
             return;
         }
-        setTimeout(()=> e.remove(), 0);
-        const textarea = "textarea".createElement();
+        let textarea = "textarea".createElement();
         return {
             html: tagsParser.parse(textarea.html(e.html()).innerText),
             data: e.dataset

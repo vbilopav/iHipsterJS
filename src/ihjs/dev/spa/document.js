@@ -32,7 +32,7 @@ define([
 
         for (let template of templates) {
             const path = template.dataset.route;
-            if (!template.dataset.route) {
+            if (!path) {
                 continue;
             }
             const 
