@@ -9,36 +9,28 @@ define([
 ) => {
 
     app.template = (pieces, ...subs) => {
-        let promises = [];
-        for(let i = 0, l = subs.length; i < l; i++) {
-            let sub = subs[i];
-            if (typeof sub === "function") {
-                let result = sub();
-                sub = result === undefined || typeof result === "function" ? "" : result;
-                subs[i] = sub;
-            }
-            if (sub instanceof Promise) {
-                promises.push({index: i, sub: sub});
-            }
-            if (sub === undefined || typeof sub === "object") {
-                subs[i] = "";
-            }
-        }
-        if (!promises.length) {
-            return String.raw(pieces, ...subs);
-        }
         return (async () => {
-            for(let i = 0, l = promises.length; i < l; i++) {
-                let promise = promises[i],
-                    sub = await promise.sub;
+            for(let i = 0, l = subs.length; i < l; i++) {
+                let sub = subs[i];
                 if (typeof sub === "function") {
                     let result = sub();
-                    if (result instanceof Promise) {
-                        result = await result;
+                    sub = result === undefined || typeof result === "function" ? "" : result;
+                    subs[i] = sub;
+                }
+                if (sub instanceof Promise) {
+                    let result = await sub;
+                    if (typeof sub === "function") {
+                        result = sub();
+                        if (result instanceof Promise) {
+                            result = await result;
+                        }
                     }
                     sub = result === undefined || typeof result === "function" ? "" : result;
+                    subs[i] = sub;
                 }
-                subs[promise.index] = sub === undefined || typeof sub === "object" ? "" : sub;
+                if (sub === undefined || typeof sub === "object") {
+                    subs[i] = "";
+                }
             }
             return String.raw(pieces, ...subs);
         })();

@@ -13,11 +13,12 @@ define([
 ) => (templates, element) => {
 
     app.__temp = (_, ...subs) => {
-        for (let sub of subs) {
+        for (let [i, sub] of Object.entries(subs))  {
             if (sub.toString().indexOf("paramsMap") === -1) {
                 continue;
             }
             sub();
+            delete subs[i];
             return;
         }
     }

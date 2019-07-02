@@ -50,8 +50,6 @@
     <template>
         ${
         <script>
-            (
-                // constructor
                 () => {
                     // to inject css content to header element as style tag use:
                     // this.template.css("text!demos/shared/css/todo.css")
@@ -70,7 +68,6 @@
                         `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom()
                     );
                 }
-            )()
         </script>
         }
         

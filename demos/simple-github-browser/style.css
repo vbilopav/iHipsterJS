@@ -1,0 +1,44 @@
+button {
+    border: #0096bf3b solid;
+}
+.panel {
+    margin-bottom: 20px;
+    border:  2px solid #9c9c9c6e;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.info-text {
+    font-size: 0.9em;
+    color: gray;
+}
+#query {
+  width: calc(100% - 18px);
+}
+.example:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+code > img {
+  width: 15px;
+  top: 3px;
+  position: relative;
+}
+img {
+  width: 165px;
+}
+.item-info {
+    position: absolute;
+    padding: 4px;
+}
+.results-info {
+  width: 100%;
+}
+.results-info button {
+  padding: 4px;
+  float: right;;
+  border: 2px;
+}
+ul {
+  max-width: 550px;
+}

@@ -33,8 +33,7 @@
     <template>
         ${
         <script>
-            // constructor 
-            (() => {
+            () => {
                 const templates = this.template.import("composite!templates")();
                 this.header = templates[0];
                 this.item = templates[1];
@@ -46,7 +45,7 @@
                     console.log("I also have following model defined:");
                     console.log(this.model);
                 }
-            })()
+            }
         </script>
         }
         <div>

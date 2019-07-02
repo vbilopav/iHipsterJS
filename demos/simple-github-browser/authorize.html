@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title></title>
+  </head>
+  <body>
+    authorize github...
+    <script>
+      window.result = null;
+      (function() {
+        //https://www.netlify.com/docs/authentication-providers/
+        /*
+          var authenticator = new netlify.default ({});
+          authenticator.authenticate({provider:"github", scope: "user"}, function(err, data) {
+            console.log(err);
+            console.log(data);
+          });
+        
+        let query = queryString = (input => {
+          let i = input.slice(input.indexOf('?') + 1),
+              v = i.match(/[\w\d%\-!.~'()\*]+=[\w\d%\-!.~'()\*]+/g);
+          if (!v) {
+              return i;
+          }
+          return v.map(s => s.split('=').map(decodeURIComponent)).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
+        })(document.location.search);
+
+        if (query.code) {
+          fetch("https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token?client_id=28fee3211179bfecc977&client_secret=3752e607a9b6b93d0af52866aa3f122abc81d6f0&redirect_uri=http://localhost:8081/demos/simple-github-browser/&code=" + query.code, {
+              method: "POST", headers: {"Accept": "application/json"}
+          }).then(response => response.json().then(data => { 
+            window.result = data;
+            window.close();
+          }));
+        } else {
+          document.location = "https://github.com/login/oauth/authorize?client_id=28fee3211179bfecc977&redirect_uri=http://localhost:8081/demos/simple-github-browser/";
+        }
+        */
+      })();
+    </script>
+  </body>
+</html>

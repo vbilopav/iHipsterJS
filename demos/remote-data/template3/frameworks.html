@@ -1,7 +1,5 @@
-${
-<script>
-// constructor 
-(() => {
+${<script>
+() => {
     // any template or module imported with template.import is imported synchronously
     const templates = this.template.import("composite!demos/remote-data/module-view3/templates.html")();
     this.header = templates[0];
@@ -14,9 +12,8 @@ ${
         console.log("I also have following model defined:");
         console.log(this.model);
     }
-})()
-</script>
 }
+</script>}
 
 <div>
     <p>

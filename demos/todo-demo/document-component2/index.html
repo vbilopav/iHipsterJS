@@ -46,7 +46,6 @@
     <template>
         ${
         <script>
-            (   // ctor
                 () => {
                     this.template.css("/demos/shared/css/todo.css");
                     this.count = 0;
@@ -57,7 +56,6 @@
                     let {subscribe} = this.template.import("ihjs/pubsub");
                     subscribe("item/removed", () => this.count--);
                 }
-            )()
         </script>
         }
         
