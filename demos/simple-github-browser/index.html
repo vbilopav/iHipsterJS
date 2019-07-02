@@ -14,8 +14,9 @@
 
     <script>
       // script to display message for users to use decent browser
-      var e = document.createElement("div"); document.body.appendChild(e);
-      setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and Edge are not supported. Use FireFox or Chromium based browser.</h1>" }, 1000);
+      var e = document.createElement("div"); 
+      document.body.appendChild(e);
+      setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and non-chromium Edge are NOT supported. Use FireFox or any Chromium based browser.</h1>" }, 1500);
     </script>
 
     <template id="utils">
@@ -34,7 +35,7 @@
     <template data-tag="github-result">
       ${<script>
       async () => {
-          const {publish} = this.template.import("ihjs/pubsub");
+          const {publish, subscribe} = this.template.import("ihjs/pubsub");
           if (!this.details) {
             const {fetchGitHub} = this.template.import("template-import!utils");
             this.details = await fetchGitHub(`/users/${this.item.login}`);
@@ -52,7 +53,13 @@
             } else {
               element.html("&#10032;").attr("title", "save");
             }
-          }
+          };
+
+          subscribe("item/removed/" + this.item.id, () => {
+            this.saved = false;
+            this.starElement(this.template.model.star);
+          });
+
           this.starClick = e => {
             const key = "item-" + this.item.id;
             if (!this.saved) {
@@ -66,12 +73,14 @@
               localStorage.removeItem(key);
               this.saved = false;
               publish("item/removed", key);
+              publish("item/removed/" + this.item.id);
             }
             this.starElement(e.target);
-          }
+          };
+
           this.rendered = () => {
             this.starElement(this.template.model.star);
-          }
+          };
       }
       </script>}
       <div class="panel">
