@@ -17,13 +17,28 @@
       setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and Edge are not supported. Use FireFox or Chromium based browser.</h1>" }, 1000);
     </script>
 
-    <template data-tag="github-result">
-      ${<script>async () => {
-        this.message = null;
-        this.details = await _app.fetch(`https://api.github.com/users/${this.item.login}`);
-        if (this.details.message) {
-          this.message = "<li>" + this.details.message.replace("documentation", `<a href=${this.details.documentation_url}>documentation</a>`) + "</li>"; 
+    <template id="utils">
+        fetchGitHub
+        ${<script>
+        async url => {
+            let result = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
+            if (result.message) {
+              return result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`);
+            }
+            return result;
         }
+        </script>}
+    </template>
+
+    <template data-tag="github-result">
+      ${<script>
+      async () => {
+          const {fetchGitHub} = this.template.import("template-import!utils");
+          this.message = null;
+          this.details = await fetchGitHub(`/users/${this.item.login}`);
+          if (this.details.message) {
+            this.message = "<li>" + this.details.message + "</li>"; 
+          }
       }
       </script>}
       <div class="panel">
@@ -33,28 +48,26 @@
               <li>
                 <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
               </li>
-              ${() => this.message || `
-                  <li>
-                      <strong>Name:</strong>&nbsp;${this.details.name}
-                  </li>
-                  <li>
-                      <strong>Company:</strong>&nbsp;${this.details.company}
-                  </li>
-                  <li>
-                      <strong>Location:</strong>&nbsp;${this.details.location}
-                  </li>
-                  <li>
-                      <strong>Blog:</strong>&nbsp;<a href="${this.details.blog ? this.details.blog : ''}">${this.details.blog ? this.details.blog : ""}</a>
-                  </li>
-                  <li>
-                      <strong>Email:</strong>&nbsp;<a href="${this.details.email ? this.details.email : ''}">${this.details.email ? this.details.email : ""}</a>
-                  </li>
-                `
-              }
+            ${() => this.message || `
+              <li>
+                  <strong>Name:</strong>&nbsp;${this.details.name}
+              </li>
+              <li>
+                  <strong>Company:</strong>&nbsp;${this.details.company}
+              </li>
+              <li>
+                  <strong>Location:</strong>&nbsp;${this.details.location}
+              </li>
+              <li>
+                  <strong>Blog:</strong>&nbsp;<a href="${this.details.blog ? this.details.blog : ''}">${this.details.blog ? this.details.blog : ""}</a>
+              </li>
+              <li>
+                  <strong>Email:</strong>&nbsp;<a href="${this.details.email ? this.details.email : ''}">${this.details.email ? this.details.email : ""}</a>
+              </li>
+              `}
             </ul>
           </div>
       </div>
-
     </template>
 
     <template data-route="/">
@@ -97,7 +110,7 @@
             <p>
                 <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
                 To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
-                <a href="authorize.html" onclick="authorizeClick">login to your GitHub account</a>
+                <a href="authorize" onclick="e => {e.preventDefault(); window.open('', '_blank', 'menubar=no').document.write('<h1>If you would like version with implemented GitHub authorization, contact me at <a href=\'mailto:vbilopav@gmail.com\'>vbilopav@gmail.com<a> </h1>');}">login to your GitHub account</a>
             </p>
           </div>
         </label>
@@ -122,72 +135,61 @@
       <div id="results">
       </div>
 
-      ${<script>() => {
-        const 
-          pageSize = 5,
-          showNextPrev = (next, prev) => {
-            this.model.prev.showElement(prev);
-            this.model.next.showElement(next);
+      ${<script>
+      () => {
+
+          const 
+            pageSize = 5,
+            {fetchGitHub} = this.template.import("template-import!utils"),
+            showNextPrev = (next, prev) => {
+              this.model.prev.showElement(prev);
+              this.model.next.showElement(next);
+            };
+
+          this.performSearch = async () => {
+              // set hash route parameter in url to search value
+              this.template.route.params(this.page + "/" + this.query);
+              // `html` element extension acts exactly like jquery `html` method
+              this.model.results.html("");
+              this.model.resultsHeader.hideElement();
+              if (!this.query) {
+                return;
+              }
+              const result = await fetchGitHub(`/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`);
+              this.model.resultsHeader.showElement();
+              if (result.message) {
+                this.model.msg.html(result.message);
+                showNextPrev(false, false);
+                return;
+              }
+              this.model.msg.html(`Result ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
+              this.template.forEach(result.items, item => {
+                // `dom` string extension creates dom object from string
+                let element = "<github-result></github-result>".dom();
+                // assign result item to element instance to be used in github-result element
+                element.item = item;
+                // `append` element extension acts exactly like jquery `append` method
+                this.model.results.append(element);
+              });
+              showNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
           }
 
-        this.authorizeClick = e => {
-          e.preventDefault();
-          let w = 600, h = 600;
-          let ret = window.open("authorize.html?v=2", "_blank", `toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,copyhistory=no,width=${w},height=${h},top=${(screen.height/2)-(h/2)},left=${(screen.width/2)-(w/2)}`);
-          console.log(ret.result);
-          /*
-          if (ret) {
-            this.token = ret.token;
-            this.user = ret.user;
+          this.searchClick = async () => {
+              this.page = 1;
+              // remove "/" characters from search query
+              this.query = this.model.query.value.replace(new RegExp("/", 'g'), "")
+              await this.performSearch();
           }
-          */
-        };
+          
+          // call search on rendered event to ensure that model is constructed
+          this.template.rendered = async () => await this.performSearch();
 
-        this.performSearch = async () => {
-            // set hash route parameter in url to search value
-            this.template.route.params(this.page + "/" + this.query);
-            // `html` element extension acts exactly like jquery `html` method
-            this.model.results.html("");
-            this.model.resultsHeader.hideElement();
-            if (!this.query) {
-              return;
-            }
-            const result = await _app.fetch(`https://api.github.com/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`);
-            this.model.resultsHeader.showElement();
-            if (result.message) {
-              this.model.msg.html(result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`));
-              showNextPrev(false, false);
-              return;
-            }
-            this.model.msg.html(`Result ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
-            this.template.forEach(result.items, item => {
-              // `dom` string extension creates dom object from string
-              let element = "<github-result></github-result>".dom();
-              // assign result item to element instance to be used in github-result element
-              element.item = item;
-              // `append` element extension acts exactly like jquery `append` method
-              this.model.results.append(element);
-            });
-            showNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
-        }
-
-        this.searchClick = async () => {
-            this.page = 1;
-            // remove "/" characters from search query
-            this.query = this.model.query.value.replace(new RegExp("/", 'g'), "")
-            await this.performSearch();
-        }
-        
-        // call search on rendered event to ensure that model is constructed
-        this.template.rendered = async () => await this.performSearch();
-        
       }
       </script>}
-
     </template>
 
-    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
-    <!-- <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script> -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
 
   </body>
 </html>

@@ -36,7 +36,14 @@ define([
         })();
     };
 
-    app.composite = (_, ...subs) => subs;
+    app.templateImport = (pieces, ...subs) => {
+        const result = {};
+        subs.map((sub, i) => {
+            let name = pieces[i].trim();
+            result[!name ? i : name] = sub;
+        });
+        return result;
+    };
 
     const
         prepareTemplate = (data, name, locale) => {
@@ -50,8 +57,7 @@ define([
         },
         parseTemplate = (text, data, locale, name) => 
             new Function("return " + app.config.name + ".template`" + text + "`;").call(prepareTemplate(data, name, locale)),
-        parseComposite = (text, data, locale, name) => 
-            new Function("return " + app.config.name + ".composite`" + text + "`;").call(prepareTemplate(data, name, locale));
+        parseComposite = text => new Function("return " + app.config.name + ".templateImport`" + text + "`;").call();
 
     app.parse = async (template, data, locale, name) => {
         let text;

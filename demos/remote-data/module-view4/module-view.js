@@ -1,10 +1,8 @@
-define(["composite!demos/remote-data/module-view4/templates.html"], templates => class {
-
+define(["template-import!demos/remote-data/module-view4/templates.html"], ({headerTemplate, itemTemplate})  => class {
     //
     // if render returns function or array [func, args], template will be avaluated immediately and result will be rendered 
     //
     render() {
-        let [headerTemplate, itemTemplate] = templates();
         return [() => String.html`
             <div>
                 <p>

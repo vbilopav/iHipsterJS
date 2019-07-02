@@ -1,8 +1,6 @@
-define(["composite!demos/remote-data/module-view3-custom-build/templates.html"], templates => class {
+define(["template-import!demos/remote-data/module-view3-custom-build/templates.html"], ({headerTemplate, itemTemplate})  => class {
 
     async render() {
-        let [headerTemplate, itemTemplate] = templates();
-
         let result = String.html`
             <div class="container-fluid">
                 <p class="text-center">

@@ -3,13 +3,16 @@ define([
     "ihjs/spa/view-manager", 
     "ihjs/template/load-text",
     "ihjs/template/parser",
+    "ihjs/template/import",
     "ihjs/app"
 ], (
     Router, 
     Manager,
     {getTemplate},
     {parseTemplate},
+    {parseImportsAsync},
     app
+
 ) => (templates, element) => {
 
     app.__temp = (_, ...subs) => {
@@ -23,44 +26,54 @@ define([
         }
     }
 
-    const routes = {};
+    (async () => {
 
-    for (let template of templates) {
-        let path = template.dataset.route;
-        if (!template.dataset.route) {
-            continue;
-        }
-        let 
-            route = {},
-            t = getTemplate(undefined, template),
-            view = (data, locale) => {
-                data.template = {route: route};
-                return parseTemplate(t.html, data, locale);
+        const routes = {};
+
+        for (let template of templates) {
+            const path = template.dataset.route;
+            if (!template.dataset.route) {
+                continue;
             }
+            const 
+                route = {},
+                t = getTemplate(undefined, template);
+            await parseImportsAsync(t.html);
+            const
+                view = (data, locale) => {
+                    data.template = {route: route};
+                    return parseTemplate(t.html, data, locale);
+                };
             view._isTemplate = true;
-        if (path === "error" || path === "404" || path === "unknown") {
-            routes["/error"] = {view: view};
-            continue;
-        }
-        route["view"] = view;
-        let that = {};
-        Function("return " + app.config.name + ".__temp`" + t.html + "`;").call(that);
-        if (that.paramsMap) {
-            route.paramsMap = that.paramsMap;
-        }
-        routes[path] = route;
-    }
-
-    delete app.__temp;
-
-    new Router({
-        routes: routes, 
-        error: event => {
-            console.error(event);
-            if (routes["/error"]) {
-                event.router.reveal("/error");
+            if (path === "error" || path === "404" || path === "unknown") {
+                routes["/error"] = {view: view};
+                continue;
             }
+            route["view"] = view;
+            const that = {};
+            Function("return " + app.config.name + ".__temp`" + t.html + "`;").call(that);
+            if (that.paramsMap) {
+                route.paramsMap = that.paramsMap;
+            }
+            routes[path] = route;
         }
-    }).useViewManager(new Manager(element.html("").showElement())).start();
+
+        return routes;
+
+    })().then(routes => {
+
+        delete app.__temp;
+
+        new Router({
+            routes: routes, 
+            error: event => {
+                console.error(event);
+                if (routes["/error"]) {
+                    event.router.reveal("/error");
+                }
+            }
+        }).useViewManager(new Manager(element.html("").showElement())).start();
+
+    });
 
 });

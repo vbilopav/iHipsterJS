@@ -17,11 +17,13 @@
     <script src="../../shared/loading.js"></script>
 
     <template id="templates">
+        header
         ${name => `
             <div class="panel-heading">
                 <span>${name}</span>
             </div>
         `}
+        item
         ${(key, value) => `
             <li class="list-group-item">
                 <strong>${key}: </strong>${value}
@@ -34,10 +36,9 @@
         ${
         <script>
             () => {
-                const templates = this.template.import("composite!templates")();
-                this.header = templates[0];
-                this.item = templates[1];
-                console.log(templates);
+                const {header, item} = this.template.import("template-import!templates");
+                this.header = header;
+                this.item = item;
 
                 this.template.rendered = element => {
                     console.log("Template rendered into element:");
