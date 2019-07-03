@@ -149,7 +149,7 @@ define([
         })
     };
 
-    for(let element of document.findAll("template[data-tag]")) {
+    for(let element of document.querySelectorAll("template[data-tag]")) {
         let t = getTemplate(undefined, element),
             view = (data, locale) => parseTemplate(t.html, data, locale);
         view._isTemplate = true;

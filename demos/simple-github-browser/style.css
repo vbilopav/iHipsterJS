@@ -24,6 +24,11 @@ button {
   font-size: 0.8em;
   color: gray;
 }
+.panel-info > a {
+  text-align: end;
+  float: right;
+  width: 100%;
+}
 .panel-save {
   position: absolute;
   right: 10px;

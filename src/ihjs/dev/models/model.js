@@ -1,5 +1,7 @@
-define(["ihjs/extensions/HTMLElement/forEachChild"], () => class {
-
+define([
+    "ihjs/extensions/apply"
+], ({applyExtensionsExcept}) => class {
+    
     constructor({
         model, 
         oncreate=(()=>{})
@@ -8,6 +10,8 @@ define(["ihjs/extensions/HTMLElement/forEachChild"], () => class {
         this._instance = undefined;
         this._names = [];
         this._oncreate = oncreate;
+        this.HTMLModelArray = class extends Array {};
+        applyExtensionsExcept(this.HTMLModelArray, "HTMLElement", ["find", "findAll"], true);
     }
 
     bind(element, instance, eventContext) {
@@ -142,11 +146,25 @@ define(["ihjs/extensions/HTMLElement/forEachChild"], () => class {
         
         const node = element.nodeName;
         const that = this;
-        Object.defineProperty(this, name, {
-            get: () => that._getValue(node, element),
-            set: value1 => that._assignValue(node, element, value1)
-        });
-        this._names.push(name);
+        if (!this._names.includes(name)) {
+            Object.defineProperty(this, name, {
+                get: () => that._getValue(node, element),
+                set: value1 => that._assignValue(node, element, value1),
+                configurable: true
+            });
+            this._names.push(name);
+        } else {
+            let current = this[name];
+            if (Array.isArray(current)) {
+                current.push(element)
+            } else {
+                current = new this.HTMLModelArray(current, element);
+            }
+            Object.defineProperty(this, name, {
+                get: () => current,
+                configurable: true
+            });
+        }
         this._oncreate(element);
         const value = this._instance[name];
         if (value === undefined) {

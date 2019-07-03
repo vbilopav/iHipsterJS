@@ -21,29 +21,33 @@
 
     <template id="utils">
         fetchGitHub
-        ${<script>
-        async url => {
+        ${<script>async url => {
             let result = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
             if (result.message) {
               result.message = result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`);
             }
+            for(let [key, value] of Object.entries(result)) {
+              if (!value) {
+                result[key] = "";
+              }
+            }
             return result;
-        }
-        </script>}
+        }</script>}
     </template>
 
     <template data-tag="github-result">
       ${<script>
       async () => {
           const {publish, subscribe} = this.template.import("ihjs/pubsub");
+          const {fetchGitHub} = this.template.import("template-import!utils");
+
           if (!this.details) {
-            const {fetchGitHub} = this.template.import("template-import!utils");
             this.details = await fetchGitHub(`/users/${this.item.login}`);
           }
 
-          this.message = null;
+          this.error = null;
           if (this.details.message) {
-            this.message = "<li>" + this.details.message + "</li>"; 
+            this.error = "<li>" + this.details.message + "</li>"; 
           }
           this.saved = localStorage.getItem("item-" + this.item.id) !== null;
           
@@ -84,29 +88,37 @@
       }
       </script>}
       <div class="panel">
+          ${this.error ? "" : `
           <div id="star" class="panel-save" onclick="starClick" ></div>
-          ${this.dataset.doNotShowScore ? "" : `<span class="panel-info">Search score = ${this.item.score}</span>`}
+          `}
+          <span class="panel-info">
+              <a href="#/details/${this.item.id}">See more details</a>
+              ${this.dataset.doNotShowScore ? "" : `
+              <div>Search score = ${this.item.score}</div>
+              `}
+          </span>
+
           <a href="${this.item.html_url}"><img src="${this.item.avatar_url}" /></a>
           <span class="item-info">
             <ul id="item-list">
               <li>
                 <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
               </li>
-            ${() => this.message || `
+            ${() => this.error || `
               <li>
                   <strong>Name:</strong>&nbsp;${this.details.name}
               </li>
               <li>
-                  <strong>Company:</strong>&nbsp;${this.details.company}
+                  <strong>Company:</strong>&nbsp;<a href="${this.details.company ? 'https://www.google.com/search?q=' + this.details.company : ''}">${this.details.company}</a>
               </li>
               <li>
-                  <strong>Location:</strong>&nbsp;${this.details.location}
+                  <strong>Location:</strong>&nbsp;<a href="${this.details.location ? 'https://www.google.com/maps?q=' + this.details.location : ''}">${this.details.location}</a>
               </li>
               <li>
-                  <strong>Blog:</strong>&nbsp;<a href="${this.details.blog ? this.details.blog : ''}">${this.details.blog ? this.details.blog : ""}</a>
+                  <strong>Blog:</strong>&nbsp;<a href="${this.details.blog}">${this.details.blog}</a>
               </li>
               <li>
-                  <strong>Email:</strong>&nbsp;<a href="${this.details.email ? this.details.email : ''}">${this.details.email ? this.details.email : ""}</a>
+                  <strong>Email:</strong>&nbsp;<a href="${this.details.email}">${this.details.email}</a>
               </li>
               `}
             </ul>
@@ -228,6 +240,12 @@
       <div id="results">
       </div>
 
+      <div id="results-header" class="results-info">
+          <code id="msg">results</code>
+          <button id="next" onclick="() => {this.page++; this.performSearch()}">next</button>
+          <button id="prev" onclick="() => {this.page--; this.performSearch()}">prev</button>
+      </div>
+
       ${<script>
       () => {
 
@@ -240,6 +258,7 @@
             };
 
           this.performSearch = async () => {
+
               // set hash route parameter in url to search value
               this.template.route.params(this.page + "/" + this.query);
               // `html` element extension acts exactly like jquery `html` method
@@ -281,8 +300,8 @@
       </script>}
     </template>
 
-    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
-    <!-- <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script> -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
 
   </body>
 </html>
