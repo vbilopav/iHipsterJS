@@ -45,8 +45,11 @@ define([], () => class {
                 let uri = (route.endsWith("/") ? "" : "/") + value;
                 document.location.replace(this._hash + route + uri)
                 //document.location.hash = this._hash + route + uri;
-                this._manager.updateViewUri(data.id, route + uri);
-                setTimeout(() => this._skipChange = false, 0);
+                //this._manager.updateViewUri(data.id, route + uri);
+                setTimeout(() => {
+                    this._manager.updateViewUri(data.id, route + uri);
+                    this._skipChange = false;
+                }, 0);
             }
         }
         this._current = undefined; 
