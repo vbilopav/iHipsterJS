@@ -16,7 +16,7 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
     min-height: 170px;
 }
 .info-text {
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: gray;
 }
 .panel-info {

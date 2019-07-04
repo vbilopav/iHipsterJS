@@ -103,6 +103,7 @@ define([], () => class {
         if (!event.newHash && event.newURL) {
             event.newHash = event.newURL.replace(document.location.origin + document.location.pathname, "");
         }
+        event.newHash = event.newHash.replace(document.location.search, "");
         this.currentHash = event.newHash;
         let
             uri = event.newHash.replace(this._hash, ""),

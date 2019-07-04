@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="/demos/shared/themes-switcher.js"></script>
+    <script src="themes.js"></script>
     <link rel="stylesheet" href="style.css">
     </style>
     <title></title>
@@ -20,37 +20,53 @@
     </script>
 
     <template id="utils">
+
         fetchGitHub
-        ${<script>async (url, page, pageSize) => {
-          if (url.startsWith("/search")) {
-              let response = JSON.parse('{"total_count":5,"incomplete_results":false,"items":[{"login":"A","id":1410106,"node_id":"MDQ6VXNlcjE0MTAxMDY=","avatar_url":"https://avatars2.githubusercontent.com/u/1410106?v=4","gravatar_id":"","url":"https://api.github.com/users/A","html_url":"https://github.com/A","followers_url":"https://api.github.com/users/A/followers","following_url":"https://api.github.com/users/A/following{/other_user}","gists_url":"https://api.github.com/users/A/gists{/gist_id}","starred_url":"https://api.github.com/users/A/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/A/subscriptions","organizations_url":"https://api.github.com/users/A/orgs","repos_url":"https://api.github.com/users/A/repos","events_url":"https://api.github.com/users/A/events{/privacy}","received_events_url":"https://api.github.com/users/A/received_events","type":"User","site_admin":false,"score":167.8391},{"login":"snyff","id":45491,"node_id":"MDQ6VXNlcjQ1NDkx","avatar_url":"https://avatars1.githubusercontent.com/u/45491?v=4","gravatar_id":"","url":"https://api.github.com/users/snyff","html_url":"https://github.com/snyff","followers_url":"https://api.github.com/users/snyff/followers","following_url":"https://api.github.com/users/snyff/following{/other_user}","gists_url":"https://api.github.com/users/snyff/gists{/gist_id}","starred_url":"https://api.github.com/users/snyff/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/snyff/subscriptions","organizations_url":"https://api.github.com/users/snyff/orgs","repos_url":"https://api.github.com/users/snyff/repos","events_url":"https://api.github.com/users/snyff/events{/privacy}","received_events_url":"https://api.github.com/users/snyff/received_events","type":"User","site_admin":false,"score":66.34858},{"login":"adamwiggins","id":177,"node_id":"MDQ6VXNlcjE3Nw==","avatar_url":"https://avatars0.githubusercontent.com/u/177?v=4","gravatar_id":"","url":"https://api.github.com/users/adamwiggins","html_url":"https://github.com/adamwiggins","followers_url":"https://api.github.com/users/adamwiggins/followers","following_url":"https://api.github.com/users/adamwiggins/following{/other_user}","gists_url":"https://api.github.com/users/adamwiggins/gists{/gist_id}","starred_url":"https://api.github.com/users/adamwiggins/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/adamwiggins/subscriptions","organizations_url":"https://api.github.com/users/adamwiggins/orgs","repos_url":"https://api.github.com/users/adamwiggins/repos","events_url":"https://api.github.com/users/adamwiggins/events{/privacy}","received_events_url":"https://api.github.com/users/adamwiggins/received_events","type":"User","site_admin":false,"score":57.996746},{"login":"Amichai","id":313874,"node_id":"MDQ6VXNlcjMxMzg3NA==","avatar_url":"https://avatars3.githubusercontent.com/u/313874?v=4","gravatar_id":"","url":"https://api.github.com/users/Amichai","html_url":"https://github.com/Amichai","followers_url":"https://api.github.com/users/Amichai/followers","following_url":"https://api.github.com/users/Amichai/following{/other_user}","gists_url":"https://api.github.com/users/Amichai/gists{/gist_id}","starred_url":"https://api.github.com/users/Amichai/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/Amichai/subscriptions","organizations_url":"https://api.github.com/users/Amichai/orgs","repos_url":"https://api.github.com/users/Amichai/repos","events_url":"https://api.github.com/users/Amichai/events{/privacy}","received_events_url":"https://api.github.com/users/Amichai/received_events","type":"User","site_admin":false,"score":56.702385},{"login":"adulau","id":3309,"node_id":"MDQ6VXNlcjMzMDk=","avatar_url":"https://avatars2.githubusercontent.com/u/3309?v=4","gravatar_id":"","url":"https://api.github.com/users/adulau","html_url":"https://github.com/adulau","followers_url":"https://api.github.com/users/adulau/followers","following_url":"https://api.github.com/users/adulau/following{/other_user}","gists_url":"https://api.github.com/users/adulau/gists{/gist_id}","starred_url":"https://api.github.com/users/adulau/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/adulau/subscriptions","organizations_url":"https://api.github.com/users/adulau/orgs","repos_url":"https://api.github.com/users/adulau/repos","events_url":"https://api.github.com/users/adulau/events{/privacy}","received_events_url":"https://api.github.com/users/adulau/received_events","type":"User","site_admin":false,"score":56.33152}]}');
-              response.items = [response.items[page-1]];
-              return response;
-          }
-          if (url.startsWith("/users")) {
-            return {message: 'no request for you!'}
-          }
-          
-          /*
-          
-          let result = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
-          if (result.message) {
-            result.message = result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`);
-          }
-          for(let [key, value] of Object.entries(result)) {
-            if (!value) {
-              result[key] = "";
+        ${<script>async url => {
+          let response;
+          if (_app.queryString.test) {
+            if (url.startsWith("/search")) {
+              response = await(await fetch(`users.json`)).json();
+              let q = _app.parseQueryString(url);
+              response.items = response.items.slice(Number(q.page)-1, Number(q.page)-1+Number(q.per_page));
+            }
+            if (url.startsWith("/users")) {
+              response = await(await fetch(`vbilopav.json`)).json();
+            }
+          } else {
+            response = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
+            if (response.message) {
+              response.message = response.message.replace("documentation", `<a href=${response.documentation_url}>documentation</a>`);
             }
           }
-          return result;
-          */
+          for(let [key, value] of Object.entries(response)) {
+            if (!value) {
+              response[key] = "";
+            }
+          }
+          return response;
         }</script>}
+
+        authorizeClick
+        ${e => {
+            e.preventDefault(); 
+            window.open('', '_blank', 'menubar=no, left: 50, top: 50').document.write(`
+            <style>body {background-color: #efefef;}</style>
+            <h2 style="font-family: system-ui,-apple-system; margin: 50px;">
+              If you would like version with fully implemented GitHub authorization and integration, 
+              contact me at <a href=mailto:vbilopav@gmail.com>vbilopav@gmail.com</a> or join iHipsterJS
+              <a target="_blank" href=https://join.slack.com/t/vb-software/shared_invite/enQtNjczNTMwMTk1OTA4LTc3ODFhMzU5Yzc0ZTZlM2Y4YzE3MGNjZGUwMDNjZGQyZjVhYjNhZTAxNmY1MTgxZTEwYzkxMmI3YTVlN2I5ZDc>Slack Channel</a>
+            </h2>
+          `)}
+        }
     </template>
 
     <template data-tag="github-result">
       ${<script>
       async () => {
+          // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
           const {publish, subscribe} = this.template.import("ihjs/pubsub");
+          // fetchGitHub function from template above
           const {fetchGitHub} = this.template.import("template-import!utils");
 
           if (!this.details) {
@@ -98,7 +114,7 @@
       }
       </script>}
       <div class="panel">
-          ${this.error == null ? "" : `
+          ${this.error != null ? "" : `
             <div id="star" class="panel-save" onclick="starClick" ></div>
           `}
           <span class="panel-info">
@@ -242,9 +258,20 @@
               <a href="https://developer.github.com/v3/search/#constructing-a-search-query" target="_blank">docs &nbsp;&#x2197;</a> for more info.
             </span>
             <p>
+                ${_app.queryString.test ?
+                  `
+                  <strong>Note:</strong> Currently working on local <strong>test sample of 100 records</strong>. 
+                  Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="favicon.ico" /></code> data.
+                  `
+                  :
+                  `
                 <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
                 To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
-                <a href="authorize" onclick="e => {e.preventDefault(); window.open('', '_blank', 'menubar=no').document.write('<h1>If you would like version with implemented GitHub authorization, contact me at <a href=\'mailto:vbilopav@gmail.com\'>vbilopav@gmail.com<a> </h1>');}">login to your GitHub account</a>
+                <a href="authorize" onclick="e => this.template.import('template-import!utils').authorizeClick(e)">login to your GitHub account</a>
+                or click <a href="${document.location.pathname + '?test=true' + document.location.hash}"><code>here</code></a> to use local <strong>test sample of 100 records</strong>.
+                  `
+                }
+              
             </p>
           </div>
         </label>
@@ -280,7 +307,7 @@
       ${<script>
       () => {
 
-          const pageSize = 1;
+          const pageSize = 5;
           const {fetchGitHub} = this.template.import("template-import!utils");
           const enableNextPrev = (next, prev) => {
             // toggle disabled attributes
@@ -295,7 +322,7 @@
               if (!this.query) {
                 return;
               }
-              const result = await fetchGitHub(`/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`, this.page, pageSize);
+              const result = await fetchGitHub(`/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`);
               this.model.resultsHeader.showElement();
               if (result.message) {
                 this.model.msg.html(result.message);
@@ -313,9 +340,6 @@
               });
               enableNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
           }
-
-          // remove "/" characters from search query and redirect browser to ne location
-          //this.searchClick = () => document.location.hash = '#/1/' + this.model.query.value.replace(new RegExp("/", 'g'), "")
 
           // call search on rendered event to ensure that model is constructed
           this.template.rendered = async ({revealed}) => {
