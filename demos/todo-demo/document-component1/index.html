@@ -88,7 +88,7 @@
             </div>
         </div>
         ${<script>
-            () => this.template.rendered = element => {
+            () => this.template.rendered = ({element}) => {
                 console.log("Main template have following components: ");
                 console.log(element.findAll("todo-item"));
                 console.log("Change some attribute value on todo-item element...");

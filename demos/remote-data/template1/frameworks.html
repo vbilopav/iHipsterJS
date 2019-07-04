@@ -42,7 +42,7 @@ ${
             this.model.modalWin.hideElement();
         }
     });
-    this.template.rendered = element => {
+    this.template.rendered = ({element}) => {
         console.log("Template rendered into element:");
         console.log(element);
         console.log("I also have following model defined:");

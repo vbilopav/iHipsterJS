@@ -23,7 +23,9 @@ define([], () => class {
     }
 
     showClick() {
-        window.location = "#/github-user-info/" + this.model.username.value;
+        this.username = this.model.username.value; // model is rebind on reveal
+        window.location = "#/github-user-info/" + this.username;
     }
+
 
 });

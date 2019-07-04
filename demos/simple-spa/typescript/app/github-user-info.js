@@ -2,9 +2,6 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
-        constructor(args) {
-            args.options.disableCaching = true;
-        }
         async render(args) {
             let user = args.params.value;
             let response = await fetch(`https://api.github.com/users/${user}`);
@@ -33,6 +30,12 @@ define(["require", "exports"], function (require, exports) {
                 <button onclick="window.history.back();">Go back</button>
             </div>`;
             return result;
+        }
+        rendered(args) {
+            console.log("rendered", args);
+        }
+        revealed(args) {
+            console.log("revealed", args);
         }
     }
     exports.default = default_1;

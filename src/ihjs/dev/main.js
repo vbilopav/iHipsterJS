@@ -1,14 +1,15 @@
-define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions}) => {
+define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions, applyExtensionsExcept}) => {
 
     loadExtensions({
         "HTMLElement": [
             "addClass", "appendElement", "appendElementTo", "attr", "css", "dataAttr", "find", "findAll", "forEachChild", "hasClass",
-            "hideElement", "html", "off", "on", "overflownX", "overflownY", "removeClass", "setFocus", "showElement", "toggleClass", "trigger", "visible"
+            "hideElement", "html", "off", "on", "overflownX", "overflownY", "removeAttr", "removeClass", "setFocus", "showElement", 
+            "toggleClass", "trigger", "visible"
         ],
         "String": ["hashCode", "html", "dom", "toCamelCase", "createElement"]
     }).then(() => {
     
-        applyExtensions("NodeList", ["addClass", "removeClass", "toggleClass", "hasClass", "showElement", "hideElement", "visible"], true);
+        applyExtensionsExcept("NodeList", "HTMLElement", ["find", "findAll"], true);
         applyExtensions("Document", ["on", "off", "trigger", "find", "findAll"]);
         applyExtensions("Window", ["on", "off", "trigger"]);
 

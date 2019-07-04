@@ -1,12 +1,5 @@
 define([], () => class {
 
-    constructor({options}) {
-        //
-        // when disableCaching option is set to true view will be rendered on every navigate
-        //
-        options.disableCaching = true;
-    }
-
     render({params}) {
         return [
             () => String.html`
@@ -36,6 +29,14 @@ define([], () => class {
             `, 
             params
         ]
+    }
+
+    rendered(args) {
+        console.log("rendered", args);
+    }
+
+    revealed(args) {
+        console.log("revealed", args);
     }
 
 });

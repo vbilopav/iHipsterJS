@@ -21,17 +21,29 @@
 
     <template id="utils">
         fetchGitHub
-        ${<script>async url => {
-            let result = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
-            if (result.message) {
-              result.message = result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`);
+        ${<script>async (url, page, pageSize) => {
+          if (url.startsWith("/search")) {
+              let response = JSON.parse('{"total_count":5,"incomplete_results":false,"items":[{"login":"A","id":1410106,"node_id":"MDQ6VXNlcjE0MTAxMDY=","avatar_url":"https://avatars2.githubusercontent.com/u/1410106?v=4","gravatar_id":"","url":"https://api.github.com/users/A","html_url":"https://github.com/A","followers_url":"https://api.github.com/users/A/followers","following_url":"https://api.github.com/users/A/following{/other_user}","gists_url":"https://api.github.com/users/A/gists{/gist_id}","starred_url":"https://api.github.com/users/A/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/A/subscriptions","organizations_url":"https://api.github.com/users/A/orgs","repos_url":"https://api.github.com/users/A/repos","events_url":"https://api.github.com/users/A/events{/privacy}","received_events_url":"https://api.github.com/users/A/received_events","type":"User","site_admin":false,"score":167.8391},{"login":"snyff","id":45491,"node_id":"MDQ6VXNlcjQ1NDkx","avatar_url":"https://avatars1.githubusercontent.com/u/45491?v=4","gravatar_id":"","url":"https://api.github.com/users/snyff","html_url":"https://github.com/snyff","followers_url":"https://api.github.com/users/snyff/followers","following_url":"https://api.github.com/users/snyff/following{/other_user}","gists_url":"https://api.github.com/users/snyff/gists{/gist_id}","starred_url":"https://api.github.com/users/snyff/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/snyff/subscriptions","organizations_url":"https://api.github.com/users/snyff/orgs","repos_url":"https://api.github.com/users/snyff/repos","events_url":"https://api.github.com/users/snyff/events{/privacy}","received_events_url":"https://api.github.com/users/snyff/received_events","type":"User","site_admin":false,"score":66.34858},{"login":"adamwiggins","id":177,"node_id":"MDQ6VXNlcjE3Nw==","avatar_url":"https://avatars0.githubusercontent.com/u/177?v=4","gravatar_id":"","url":"https://api.github.com/users/adamwiggins","html_url":"https://github.com/adamwiggins","followers_url":"https://api.github.com/users/adamwiggins/followers","following_url":"https://api.github.com/users/adamwiggins/following{/other_user}","gists_url":"https://api.github.com/users/adamwiggins/gists{/gist_id}","starred_url":"https://api.github.com/users/adamwiggins/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/adamwiggins/subscriptions","organizations_url":"https://api.github.com/users/adamwiggins/orgs","repos_url":"https://api.github.com/users/adamwiggins/repos","events_url":"https://api.github.com/users/adamwiggins/events{/privacy}","received_events_url":"https://api.github.com/users/adamwiggins/received_events","type":"User","site_admin":false,"score":57.996746},{"login":"Amichai","id":313874,"node_id":"MDQ6VXNlcjMxMzg3NA==","avatar_url":"https://avatars3.githubusercontent.com/u/313874?v=4","gravatar_id":"","url":"https://api.github.com/users/Amichai","html_url":"https://github.com/Amichai","followers_url":"https://api.github.com/users/Amichai/followers","following_url":"https://api.github.com/users/Amichai/following{/other_user}","gists_url":"https://api.github.com/users/Amichai/gists{/gist_id}","starred_url":"https://api.github.com/users/Amichai/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/Amichai/subscriptions","organizations_url":"https://api.github.com/users/Amichai/orgs","repos_url":"https://api.github.com/users/Amichai/repos","events_url":"https://api.github.com/users/Amichai/events{/privacy}","received_events_url":"https://api.github.com/users/Amichai/received_events","type":"User","site_admin":false,"score":56.702385},{"login":"adulau","id":3309,"node_id":"MDQ6VXNlcjMzMDk=","avatar_url":"https://avatars2.githubusercontent.com/u/3309?v=4","gravatar_id":"","url":"https://api.github.com/users/adulau","html_url":"https://github.com/adulau","followers_url":"https://api.github.com/users/adulau/followers","following_url":"https://api.github.com/users/adulau/following{/other_user}","gists_url":"https://api.github.com/users/adulau/gists{/gist_id}","starred_url":"https://api.github.com/users/adulau/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/adulau/subscriptions","organizations_url":"https://api.github.com/users/adulau/orgs","repos_url":"https://api.github.com/users/adulau/repos","events_url":"https://api.github.com/users/adulau/events{/privacy}","received_events_url":"https://api.github.com/users/adulau/received_events","type":"User","site_admin":false,"score":56.33152}]}');
+              response.items = [response.items[page-1]];
+              return response;
+          }
+          if (url.startsWith("/users")) {
+            return {message: 'no request for you!'}
+          }
+          
+          /*
+          
+          let result = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
+          if (result.message) {
+            result.message = result.message.replace("documentation", `<a href=${result.documentation_url}>documentation</a>`);
+          }
+          for(let [key, value] of Object.entries(result)) {
+            if (!value) {
+              result[key] = "";
             }
-            for(let [key, value] of Object.entries(result)) {
-              if (!value) {
-                result[key] = "";
-              }
-            }
-            return result;
+          }
+          return result;
+          */
         }</script>}
     </template>
 
@@ -82,19 +94,17 @@
             this.starElement(e.target);
           };
 
-          this.rendered = () => {
-            this.starElement(this.template.model.star);
-          };
+          this.rendered = () => this.template.model.star && this.starElement(this.template.model.star);
       }
       </script>}
       <div class="panel">
-          ${this.error ? "" : `
-          <div id="star" class="panel-save" onclick="starClick" ></div>
+          ${this.error == null ? "" : `
+            <div id="star" class="panel-save" onclick="starClick" ></div>
           `}
           <span class="panel-info">
-              <a href="#/details/${this.item.id}">See more details</a>
+              <a href="#/details/${() => this.item.id + (this.details ? '/' + encodeURIComponent(JSON.stringify(this.details)) : '')}">See more details</a>
               ${this.dataset.doNotShowScore ? "" : `
-              <div>Search score = ${this.item.score}</div>
+                <div>Search score = ${this.item.score}</div>
               `}
           </span>
 
@@ -104,7 +114,7 @@
               <li>
                 <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
               </li>
-            ${() => this.error || `
+              ${() => this.error || `
               <li>
                   <strong>Name:</strong>&nbsp;${this.details.name}
               </li>
@@ -124,6 +134,30 @@
             </ul>
           </div>
       </div>
+    </template>
+
+    <template data-route="/details">
+      ${<script>
+        () => this.paramsMap = params => {
+          return params.length > 0 && params.length < 3 ? {itemId: params[0], details: (params.length === 2 ? JSON.parse(params[1]) : undefined)} : false
+        }
+      </script>}
+
+      <h3>Details for <code>GitHub <img src="favicon.ico" /></code> user search. Total <code id=total></code> items.</h3>
+      <button onclick="window.history.back();">Go back</button>
+
+    <details open>
+        <summary>Beauxbatons Academy of Magic</summary>
+        <p>
+            If you like your magic served with a dash of savoir faire, this school is for you. Beauxbatons welcomes a multitude of students of different nationalities, mainly French, but also Spanish, Portuguese, Dutch, Luxembourgian and Belgian.
+        </p>
+    </details>
+    
+
+    ${<script>() => {
+      console.log(this);
+    }
+    </script>}
     </template>
 
     <template data-route="/saved-items">
@@ -155,10 +189,6 @@
           addItem(key);
           this.model.total.html(++this.count);
         });
-        /*
-        * `rendered` event is called only first time view is rendered
-        * even that handles subsequent navigation is `navigate`
-        */
         this.template.rendered = () => {
           this.model.results.html("");
           for(let key in localStorage) {
@@ -228,12 +258,13 @@
             onfocus="this.select()"
           />
           <a style="float: right;" href="#/saved-items/">view saved items</a>
-          <button id="search" onclick="searchClick">search</button>
+          <button id="search" onclick="() => document.location.hash = '#/1/' + this.model.query.value.replace(new RegExp('/', 'g'), '')">search</button>
         </p>
+        
         <div id="results-header" class="results-info">
           <code id="msg">results</code>
-          <button id="next" onclick="() => {this.page++; this.performSearch()}">next</button>
-          <button id="prev" onclick="() => {this.page--; this.performSearch()}">prev</button>
+          <button id="next" onclick="() => document.location.hash = '#/' + ++this.page + '/' + this.query">next</button>
+          <button id="prev" onclick="() => document.location.hash = '#/' + --this.page + '/' + this.query">prev</button>
         </div>
       </p>
 
@@ -242,36 +273,33 @@
 
       <div id="results-header" class="results-info">
           <code id="msg">results</code>
-          <button id="next" onclick="() => {this.page++; this.performSearch()}">next</button>
-          <button id="prev" onclick="() => {this.page--; this.performSearch()}">prev</button>
+          <button id="next" onclick="() => document.location.hash = '#/' + ++this.page + '/' + this.query">next</button>
+          <button id="prev" onclick="() => document.location.hash = '#/' + --this.page + '/' + this.query">prev</button>
       </div>
 
       ${<script>
       () => {
 
-          const 
-            pageSize = 5,
-            {fetchGitHub} = this.template.import("template-import!utils"),
-            showNextPrev = (next, prev) => {
-              this.model.prev.showElement(prev);
-              this.model.next.showElement(next);
-            };
-
+          const pageSize = 1;
+          const {fetchGitHub} = this.template.import("template-import!utils");
+          const enableNextPrev = (next, prev) => {
+            // toggle disabled attributes
+            this.model.prev.attr("disabled", "", !prev);
+            this.model.next.attr("disabled", "", !next);
+          };
+          
           this.performSearch = async () => {
-
-              // set hash route parameter in url to search value
-              this.template.route.params(this.page + "/" + this.query);
               // `html` element extension acts exactly like jquery `html` method
               this.model.results.html("");
               this.model.resultsHeader.hideElement();
               if (!this.query) {
                 return;
               }
-              const result = await fetchGitHub(`/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`);
+              const result = await fetchGitHub(`/search/users?q=${this.query}&page=${this.page}&per_page=${pageSize}`, this.page, pageSize);
               this.model.resultsHeader.showElement();
               if (result.message) {
                 this.model.msg.html(result.message);
-                showNextPrev(false, false);
+                enableNextPrev(false, false);
                 return;
               }
               this.model.msg.html(`Result ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
@@ -283,25 +311,27 @@
                 // `append` element extension acts exactly like jquery `append` method
                 this.model.results.append(element);
               });
-              showNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
+              enableNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
           }
 
-          this.searchClick = async () => {
-              this.page = 1;
-              // remove "/" characters from search query
-              this.query = this.model.query.value.replace(new RegExp("/", 'g'), "")
-              await this.performSearch();
-          }
-          
+          // remove "/" characters from search query and redirect browser to ne location
+          //this.searchClick = () => document.location.hash = '#/1/' + this.model.query.value.replace(new RegExp("/", 'g'), "")
+
           // call search on rendered event to ensure that model is constructed
-          this.template.rendered = async () => await this.performSearch();
+          this.template.rendered = async ({revealed}) => {
+            if (revealed) {
+              // No need to re-render already rendered view. Remove this to have search triggered on every navigate within this route.
+              return;
+            }
+            await this.performSearch();
+          }
 
       }
       </script>}
     </template>
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
-    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
+    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
+    <!-- <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script> -->
 
   </body>
 </html>

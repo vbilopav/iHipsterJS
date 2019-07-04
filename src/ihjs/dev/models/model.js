@@ -85,26 +85,48 @@ define([
             if (!attr.startsWith("on")) {
                 continue;
             }
-            let val = this._instance[node.value.toCamelCase()];
+            let nodeVal = node.value;
+            if (nodeVal === "") {
+                nodeVal = element.dataAttr(attr);
+            }
+            let val = this._instance[nodeVal.toCamelCase()];
             if (typeof val === "function") {
+                if (node.value !== "") {
+                    element.attr(attr, "");
+                    element.dataAttr(attr, nodeVal);
+                }
                 this._assignEvent(element, attr, val);
                 continue;
             } else {
-                if (node.value.startsWith("javascript:") || node.value.indexOf("=>") === -1) {
+                if (nodeVal.startsWith("javascript:") || nodeVal.indexOf("=>") === -1) {
                     continue;
                 }
-                this._assignEvent(element, attr, node.value);
+                this._assignEvent(element, attr, nodeVal);
             }
         }
     }
 
+    _addEventListener(element, eventName, eventHandler) {
+        if (element.__modelEvents) {
+            let oldHandler = element.__modelEvents[eventName];
+            if (oldHandler) {
+                element.off(eventName, oldHandler);
+                delete element.__modelEvents[eventName];
+            }
+        } else {
+            element.__modelEvents = {};
+        }
+        element.on(eventName, eventHandler);
+        element.__modelEvents[eventName] = eventHandler;
+    }
+
     _assignEvent(element, attr, val) {
-        element.removeAttribute(attr);
+        let eventName = attr.replace("on", "").toLowerCase();
         let inst = this._eventContext || this._instance;
         if (typeof val === "function") {
-            element.on(attr.replace("on", "").toLowerCase(), (...args) => val.apply(inst, args));
+            this._addEventListener(element, eventName, (...args) => val.apply(inst, args));
         } else {
-            element.on(attr.replace("on", "").toLowerCase(), (...args) => {
+            this._addEventListener(element, eventName, (...args) => {
                 return (function() { 
                     return eval(val).apply(this, args); 
                 }).apply(inst);

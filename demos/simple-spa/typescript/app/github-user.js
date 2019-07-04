@@ -14,6 +14,7 @@ define(["require", "exports"], function (require, exports) {
             </div>`;
         }
         showClick() {
+            this.username = this.model.username.value;
             window.location.href = "#/github-user-info/" + this.model.username.value;
         }
     }

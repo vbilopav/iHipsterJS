@@ -73,6 +73,7 @@ define([
                                             } else {
                                                 element.html("").appendChild(s);
                                             }
+                                            data.instance.__params = params;
                                             utils.moduleRendered(data.instance, {params: params, element: element});
                                         })
                                     } else if (typeof c === "string" || c instanceof HTMLElement) {
@@ -81,6 +82,7 @@ define([
                                         } else {
                                             element.html("").appendChild(c);
                                         }
+                                        data.instance.__params = params;
                                         utils.moduleRendered(data.instance, {params: params, element: element});
                                     }
                                 };
@@ -148,8 +150,6 @@ define([
                     if (type === utils.types.class || type === utils.types.object) {
                         const
                             options = {
-                                disableCaching: false,
-                                callRenderOnlyOnce: false,
                                 css: []
                             };
                         if (type === utils.types.class) {

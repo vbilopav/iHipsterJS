@@ -1,12 +1,5 @@
 define([], () => class {
 
-    constructor({options}) {
-        //
-        // when disableCaching option is set to true view will be rendered on every navigate
-        //
-        options.disableCaching = true;
-    }
-
     async render({params}) {
         let user = params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
         let response = await fetch(`https://api.github.com/users/${user}`);
@@ -38,6 +31,14 @@ define([], () => class {
             </div>`;
 
         return result;
+    }
+    
+    rendered(args) {
+        console.log("rendered", args);
+    }
+
+    revealed(args) {
+        console.log("revealed", args);
     }
 
 });

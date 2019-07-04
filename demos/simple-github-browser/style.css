@@ -1,6 +1,9 @@
 button {
     border: #0096bf3b solid;
 }
+button:disabled, input:disabled, select:disabled, textarea:disabled {
+  cursor: default !important;
+}
 .panel {
     position: relative;
     margin-bottom: 20px;
@@ -28,6 +31,7 @@ button {
   text-align: end;
   float: right;
   width: 100%;
+  font-size: 1.5em;
 }
 .panel-save {
   position: absolute;

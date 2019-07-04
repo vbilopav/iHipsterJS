@@ -1,10 +1,7 @@
 ///<reference path="../../../../src/ihjs/build/1.2.0/types/core.d.ts"/>
 
 export default class implements View {
-    constructor(args: ViewConstructorArgs) {
-        args.options.disableCaching = true;
-    }
-
+    
     async render(args: ViewMethodArgs) {
 
         let user = args.params.value; // paramsMap has returned plain string instead of object, so it is contained in value field
@@ -37,6 +34,14 @@ export default class implements View {
             </div>`;
 
         return result;
+    }
+
+    rendered(args) {
+        console.log("rendered", args);
+    }
+
+    revealed(args) {
+        console.log("revealed", args);
     }
 
 };

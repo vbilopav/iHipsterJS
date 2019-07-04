@@ -5,7 +5,7 @@ ${<script>
     this.header = headerTemplate;
     this.item = itemTemplate;
 
-    this.template.rendered = element => {
+    this.template.rendered = ({element}) => {
         console.log("Template rendered into element:");
         console.log(element);
         console.log("I also have following model defined:");

@@ -20,6 +20,7 @@ export default class {
     }
 
     showClick() {
+        this.username = this.model.username.value; // model is rebind on reveal
         window.location.href = "#/github-user-info/" + this.model.username.value;
     }
 

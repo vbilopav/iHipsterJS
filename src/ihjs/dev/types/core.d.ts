@@ -5,14 +5,6 @@ interface ViewConstructorOptions {
     /**
     * 
     */
-    disableCaching: boolean,
-    /**
-    * 
-    */
-    callRenderOnlyOnce: boolean,
-    /**
-    * 
-    */
     css: Array<string>,
     /**
     * 
