@@ -22,9 +22,6 @@ define(["ihjs/models/model"], Model  => {
             }
             throw new Error("unknown view type " + view);
         },
-        showView = item => {
-            window.scrollTo(item.x, item.y);
-        },
         templateRendered = (params, element, revealed=false) => {
             if (revealed) {
                 params.model = undefined;
@@ -50,7 +47,6 @@ define(["ihjs/models/model"], Model  => {
         
         types,
         getViewType,
-        showView,
         templateRendered,
         moduleRendered,
         isTemplate

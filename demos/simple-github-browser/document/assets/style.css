@@ -13,7 +13,7 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
     padding: 10px;
     padding-bottom: 5px;
-    min-height: 170px;
+
 }
 .info-text {
     font-size: 0.85em;
@@ -41,7 +41,7 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
   color: gray;
   font-size: 2em;
   cursor: pointer;
-  z-index: 9999;
+  z-index: 9;
 }
 #query {
   width: calc(100% - 18px);
@@ -57,10 +57,15 @@ code > img {
 }
 img {
   width: 90px;
+  vertical-align: top;
 }
 .item-info {
-    position: absolute;
     padding: 4px;
+    display: inline-block;
+}
+.item-info ul {
+  margin: 0;
+  max-width: 600px;
 }
 .results-info {
   width: 100%;
@@ -70,7 +75,11 @@ img {
   float: right;;
   border: 2px;
 }
-ul {
-  max-width: 550px;
-  margin: 0;
+ul.item-details-list {
+  display: inline-block;
+  margin: 0px;
+}
+summary h4 {
+  display: inline;
+  cursor: pointer;
 }

@@ -2,12 +2,10 @@ define([
 
     "ihjs/view-manager/utils", 
     "ihjs/view-manager/reveal",
-    "ihjs/app"
 
 ], (
     utils, 
-    {reveal},
-    app
+    {reveal}
 ) => class {
 
     constructor(
@@ -45,6 +43,10 @@ define([
         let oldId = this._getId(id, found.uriHash);
         found.uriHash = uriHash;
         this._container.find("#" + oldId).attr("id", elementId);
+    
+    }
+    showView(item) {
+        window.scrollTo(item.x, item.y);
     }
 
     async reveal({id="", view=null, params={}, uri=""}) {
@@ -80,8 +82,8 @@ define([
                         utils.moduleRendered(found.data.instance, {params: found.data.instance.__params, element: element}, true);
                     }
 
-                    utils.showView(found.data, element);
                     this._current = element.showElement();
+                    this.showView(found, element);
                     return resolve(element.id);
                 }
             }
@@ -90,7 +92,7 @@ define([
                 this._views[id] = result;
                 this._current = result.element;
                 this._container.appendChild(result.element);
-                utils.showView(result.data, result.element);
+                this.showView(result.data, result.element);
                 return resolve(result.element.id);
             });
 

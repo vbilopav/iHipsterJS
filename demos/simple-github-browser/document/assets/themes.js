@@ -13,7 +13,7 @@
     
     var css = document.createElement("LINK");
     css.async = true;
-    css.href = current + ".css";
+    css.href = 'assets/' + current + ".css";
     css.rel = "stylesheet";
     document.head.appendChild(css);
 
@@ -32,6 +32,7 @@
         btn.style.margin = "8px";
         btn.style.padding = "4px";
         btn.style.backgroundColor = "transparent";
+        btn.style.zIndex = 99999;
         btn.innerHTML = opposite(current) + " theme";
     
         wrap.appendChild(btn);

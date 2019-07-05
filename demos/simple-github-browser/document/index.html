@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="themes.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="assets/themes.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
     </style>
     <title></title>
   </head>
@@ -25,14 +25,27 @@
         ${<script>async url => {
           let response;
           if (_app.queryString.test) {
+            
             if (url.startsWith("/search")) {
-              response = await(await fetch(`users.json`)).json();
+              response = await(await fetch('test-data/users.json')).json();
               let q = _app.parseQueryString(url);
               response.items = response.items.slice(Number(q.page)-1, Number(q.page)-1+Number(q.per_page));
+            } else if (url.endsWith("repos")) {
+              response = await(await fetch('test-data/repos.json')).json();
+            } else if (url.endsWith("followers")) {
+              response = await(await fetch('test-data/followers.json')).json();
+            } else if (url.endsWith("following")) {
+              response = await(await fetch('test-data/following.json')).json();
+            } else if (url.endsWith("gists")) {
+              response = await(await fetch('test-data/gists.json')).json();
+            } else if (url.endsWith("starred")) {
+              response = await(await fetch('test-data/starred.json')).json();
+            } else if (url.endsWith("subscriptions")) {
+              response = await(await fetch('test-data/subscriptions.json')).json();
+            } else if (url.startsWith("/users")) {
+              response = await(await fetch('test-data/vbilopav.json')).json();
             }
-            if (url.startsWith("/users")) {
-              response = await(await fetch(`vbilopav.json`)).json();
-            }
+
           } else {
             response = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
             if (response.message) {
@@ -59,6 +72,25 @@
             </h2>
           `)}
         }
+
+        detailsList
+        ${details => `
+          <li>
+            <strong>Name:</strong>&nbsp;${details.name}
+          </li>
+          <li>
+              <strong>Company:</strong>&nbsp;<a href="${details.company ? 'https://www.google.com/search?q=' + details.company : ''}">${details.company}</a>
+          </li>
+          <li>
+              <strong>Location:</strong>&nbsp;<a href="${details.location ? 'https://www.google.com/maps?q=' + details.location : ''}">${details.location}</a>
+          </li>
+          <li>
+              <strong>Blog:</strong>&nbsp;<a href="${details.blog}">${details.blog}</a>
+          </li>
+          <li>
+              <strong>Email:</strong>&nbsp;<a href="${details.email}">${details.email}</a>
+          </li>
+        `}
     </template>
 
     <template data-tag="github-result">
@@ -66,9 +98,10 @@
       async () => {
           // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
           const {publish, subscribe} = this.template.import("ihjs/pubsub");
-          // fetchGitHub functions from template above
-          const {fetchGitHub} = this.template.import("template-functions!utils");
-
+          // fetchGitHub and detailsList functions from template above
+          const {fetchGitHub, detailsList} = this.template.import("template-functions!utils");
+          this.detailsList = detailsList;
+          this.fetchGitHub = this.fetchGitHub;
           if (!this.details) {
             this.details = await fetchGitHub(`/users/${this.item.login}`);
           }
@@ -119,7 +152,7 @@
           `}
           <span class="panel-info">
               ${() => this.error != null ? "" : `
-              <a href="#/details/${() => this.item.id + (this.details ? '/' + encodeURIComponent(JSON.stringify(this.details)) : '')}">See more details</a>
+              <a href="#/details/` + this.item.login + (this.details ? '/' + encodeURIComponent(JSON.stringify(this.details)) : '') + `">See more details</a>
               `}
               ${this.dataset.doNotShowScore ? "" : `
                 <div>Search score = ${this.item.score}</div>
@@ -132,54 +165,146 @@
               <li>
                 <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
               </li>
-              ${() => this.error || `
-              <li>
-                  <strong>Name:</strong>&nbsp;${this.details.name}
-              </li>
-              <li>
-                  <strong>Company:</strong>&nbsp;<a href="${this.details.company ? 'https://www.google.com/search?q=' + this.details.company : ''}">${this.details.company}</a>
-              </li>
-              <li>
-                  <strong>Location:</strong>&nbsp;<a href="${this.details.location ? 'https://www.google.com/maps?q=' + this.details.location : ''}">${this.details.location}</a>
-              </li>
-              <li>
-                  <strong>Blog:</strong>&nbsp;<a href="${this.details.blog}">${this.details.blog}</a>
-              </li>
-              <li>
-                  <strong>Email:</strong>&nbsp;<a href="${this.details.email}">${this.details.email}</a>
-              </li>
-              `}
+              ${() => this.error || this.detailsList(this.details)}
             </ul>
           </div>
       </div>
     </template>
 
     <template data-route="/details">
-      ${<script>
-        () => this.paramsMap = params => {
-          return params.length > 0 && params.length < 3 ? {itemId: params[0], details: (params.length === 2 ? JSON.parse(params[1]) : undefined)} : false
+      ${<script>() => this.paramsMap = params => params.length > 0 && params.length < 3 ? {login: params[0], details: (params.length === 2 ? JSON.parse(params[1]) : undefined)} : false</script>}
+      ${<script>async () => {
+        const {fetchGitHub, detailsList} = this.template.import("template-functions!utils");
+        this.fetchGitHub = fetchGitHub;
+        this.detailsList = detailsList;
+        if (!this.details) {
+          this.details = await fetchGitHub(`/users/${this.login}`);
         }
+      }
       </script>}
-
-      <h3>Details for <code>GitHub <img src="favicon.ico" /></code> user search. Total <code id=total></code> items.</h3>
+      <h3>User details for user <code>${this.login}</code></h3>
+      <p>
+      ${_app.queryString.test ?
+          `
+          <strong>Note:</strong> Currently working on local <strong>test sample</strong>. 
+          Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
+          `
+          :
+          ''
+        }
+      </p>
       <button onclick="window.history.back();">Go back</button>
 
-    <details open>
-        <summary>Beauxbatons Academy of Magic</summary>
-        <p>
-            If you like your magic served with a dash of savoir faire, this school is for you. Beauxbatons welcomes a multitude of students of different nationalities, mainly French, but also Spanish, Portuguese, Dutch, Luxembourgian and Belgian.
-        </p>
-    </details>
-    
+      <div class="panel">
+        <a href="${() => this.details.html_url}"><img src="${() => _app.queryString.test ? 'assets/github.ico' : this.details.avatar_url}" /></a>
+        <ul class="item-details-list">
+            <li>
+                <strong>${() => this.details.type}:</strong>&nbsp;<a href="${() => this.details.html_url}">${() => this.login}</a>
+            </li>
+            ${() => this.details.message || this.detailsList(this.details)}
+            ${() => this.details.message ? "" : `
+            <li>
+                <strong>Hireable:</strong>&nbsp;${this.details.hireable}
+            </li>
+            <li>
+                <strong>Bio:</strong>&nbsp;${this.details.bio}
+            </li>
+            `}
+        </ul>
+      </div>
 
-    ${<script>() => {
-      console.log(this);
-    }
-    </script>}
+      <div id="repos" class="panel" style="display: none"></div>
+      <div id="gists" class="panel" style="display: none"></div>
+      <div id="subscriptions" class="panel" style="display: none"></div>
+      <div id="starred" class="panel" style="display: none"></div>
+      <div id="followers" class="panel"style="display: none"></div>
+      <div id="following" class="panel"style="display: none"></div>
+
+      ${<script>() => this.template.rendered = async  ({revealed}) => {
+        // do this on render event not to stall view load
+        if (revealed) {
+          return;
+        }
+
+        const formatCodeItem = (name, lang, item, url, desc) => 
+          `<li>
+            ${typeof name === "string" ? `<strong>${name}</strong>${lang ? "&nbsp;<code>" + lang + "</code>" : ""}&nbsp;` : name.join(", ")}
+            ${item ? "<span class=info-text>(" + (item.fork ? "forked, " : "") + "&#11088;: <strong>" + item.stargazers_count + "</strong>, &#128065;: <strong>" + item.watchers_count + ")</strong></span>&nbsp;" : ""}
+            <a href="${url}" target=_blank>&#x2197;</a>
+            ${desc ? " - <span class=info-text>" + desc + "</span>" : ""}
+          </li>`;
+        const countLang = (lang, langs) => lang && (langs[lang] = {count: langs[lang] === undefined ? 1 : langs[lang].count + 1});
+        const formatCodeResult = (name, count, result, langs) => {
+          if (count === 0) {
+            return `
+            <details>
+                <summary><h4>No ${name} found!</h4></summary>
+            </details>
+            `;
+          } else {
+            let sorted = Object.entries(langs).sort((a,b) => a[1].count - b[1].count).reverse().map(i => "<code>" + i[0] + "</code>" + " (" + i[1].count + ")").join(", ");
+            return `
+              <details>
+                <summary><h4>Total <code>${count}</code> ${name} found - ${sorted}</h4></summary>
+                <ul class='item-detail-list'>${result}</ul>
+              </details>
+              `;
+          }
+        };
+        const updateRepos = async (endpoint, name, element) => {
+          let result = "", count = 0, response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+          let langs = {};
+          if (response.message) {
+            element.html(response.message).showElement();
+            return false;
+          }
+          for (let item of response) {
+            count++;
+            result += formatCodeItem(item.name, item.language, item, item.html_url, item.description);
+            countLang(item.language, langs);
+          }
+          element.html(formatCodeResult(name, count, result, langs)).showElement();
+          return true;
+        };
+        const updateGists = async (endpoint, name, element) => {
+          let result = "", count = 0, response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+          if (response.message) {
+            element.html(response.message).showElement();
+            return false;
+          }
+          langs = {};
+          for (let item of response) {
+            count++;
+            let files = [];
+            for(let file of Object.values(item.files)) {
+              files.push("<strong>" + file.filename + "</strong>" + (file.language ? "&nbsp;<code>" + file.language + "</code>" : ""));
+              countLang(file.language, langs);
+            }
+            result += formatCodeItem(files, undefined, undefined, item.html_url, item.description);
+          }
+          element.html(formatCodeResult(name, count, result, langs)).showElement();
+          return true;
+        }
+
+        if (!await updateRepos("repos", "repos", this.model.repos)) {
+          return;
+        }
+        if (!await updateGists("gists", "gists", this.model.gists)) {
+          return;
+        }
+        if (!await updateRepos("subscriptions", "subscriptions", this.model.subscriptions)) {
+          return;
+        }
+        if (!await updateRepos("starred", "starred", this.model.starred)) {
+          return;
+        }
+
+      }
+      </script>}
     </template>
 
     <template data-route="/saved-items">
-      <h3>Your saved items of your <code>GitHub <img src="favicon.ico" /></code> user search. Total <code id=total></code> items.</h3>
+      <h3>Your saved items of your <code>GitHub <img src="assets/github.ico" /></code> user search. Total <code id=total></code> items.</h3>
       <button onclick="window.history.back();">Go back</button>
       <div id="results"></div>
       ${<script>() => {
@@ -248,7 +373,7 @@
         <label for="query">
           <h3>Enter valid 
             <code>GitHub 
-                <img src="favicon.ico" />
+                <img src="assets/github.ico" />
             </code> query into search box and hit key <code>enter</code> or <code>search</code> button.
           </h3>
           <div class="info-text ">
@@ -263,7 +388,7 @@
                 ${_app.queryString.test ?
                   `
                   <strong>Note:</strong> Currently working on local <strong>test sample of 100 records</strong>. 
-                  Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="favicon.ico" /></code> data.
+                  Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
                   `
                   :
                   `
@@ -340,7 +465,7 @@
                 // `append` element extension acts exactly like jquery `append` method
                 this.model.results.append(element);
               };
-              enableNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
+              enableNextPrev(this.page <= Math.floor(result.total_count / pageSize), this.page > 1);
           }
 
           // call search on rendered event to ensure that model is constructed
