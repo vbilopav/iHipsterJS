@@ -163,7 +163,7 @@
             "ihjs": sysPath,
             "text": sysPath + "/plugins/text",
             "template": sysPath + "/plugins/template",
-            "template-import": sysPath + "/plugins/template-import",
+            "template-functions": sysPath + "/plugins/template-functions",
             "cors-text": sysPath + "/plugins/cors-text",
             "cors-template": sysPath + "/plugins/cors-template"
         }

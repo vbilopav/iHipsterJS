@@ -66,8 +66,8 @@
       async () => {
           // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
           const {publish, subscribe} = this.template.import("ihjs/pubsub");
-          // fetchGitHub function from template above
-          const {fetchGitHub} = this.template.import("template-import!utils");
+          // fetchGitHub functions from template above
+          const {fetchGitHub} = this.template.import("template-functions!utils");
 
           if (!this.details) {
             this.details = await fetchGitHub(`/users/${this.item.login}`);
@@ -114,11 +114,13 @@
       }
       </script>}
       <div class="panel">
-          ${this.error != null ? "" : `
-            <div id="star" class="panel-save" onclick="starClick" ></div>
+          ${() => this.error != null ? "" : `
+          <div id="star" class="panel-save" onclick="starClick" ></div>
           `}
           <span class="panel-info">
+              ${() => this.error != null ? "" : `
               <a href="#/details/${() => this.item.id + (this.details ? '/' + encodeURIComponent(JSON.stringify(this.details)) : '')}">See more details</a>
+              `}
               ${this.dataset.doNotShowScore ? "" : `
                 <div>Search score = ${this.item.score}</div>
               `}
@@ -267,7 +269,7 @@
                   `
                 <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
                 To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
-                <a href="authorize" onclick="e => this.template.import('template-import!utils').authorizeClick(e)">login to your GitHub account</a>
+                <a href="authorize" onclick="e => this.template.import('template-functions!utils').authorizeClick(e)">login to your GitHub account</a>
                 or click <a href="${document.location.pathname + '?test=true' + document.location.hash}"><code>here</code></a> to use local <strong>test sample of 100 records</strong>.
                   `
                 }
@@ -308,7 +310,7 @@
       () => {
 
           const pageSize = 5;
-          const {fetchGitHub} = this.template.import("template-import!utils");
+          const {fetchGitHub} = this.template.import("template-functions!utils");
           const enableNextPrev = (next, prev) => {
             // toggle disabled attributes
             this.model.prev.attr("disabled", "", !prev);
@@ -329,15 +331,15 @@
                 enableNextPrev(false, false);
                 return;
               }
-              this.model.msg.html(`Result ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
-              this.template.forEach(result.items, item => {
+              this.model.msg.html(`Results ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
+              for(let item of result.items) {
                 // `dom` string extension creates dom object from string
                 let element = "<github-result></github-result>".dom();
                 // assign result item to element instance to be used in github-result element
                 element.item = item;
                 // `append` element extension acts exactly like jquery `append` method
                 this.model.results.append(element);
-              });
+              };
               enableNextPrev(this.page < Math.floor(result.total_count / pageSize), this.page > 1);
           }
 
@@ -354,8 +356,8 @@
       </script>}
     </template>
 
-    <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script>
-    <!-- <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script> -->
+    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
 
   </body>
 </html>

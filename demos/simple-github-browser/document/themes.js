@@ -31,6 +31,7 @@
         btn.style.fontSize = "0.7em"; 
         btn.style.margin = "8px";
         btn.style.padding = "4px";
+        btn.style.backgroundColor = "transparent";
         btn.innerHTML = opposite(current) + " theme";
     
         wrap.appendChild(btn);

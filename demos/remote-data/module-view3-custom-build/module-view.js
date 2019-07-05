@@ -1,4 +1,4 @@
-define(["template-import!demos/remote-data/module-view3-custom-build/templates.html"], ({headerTemplate, itemTemplate})  => class {
+define(["template-functions!demos/remote-data/module-view3-custom-build/templates.html"], ({headerTemplate, itemTemplate})  => class {
 
     async render() {
         let result = String.html`

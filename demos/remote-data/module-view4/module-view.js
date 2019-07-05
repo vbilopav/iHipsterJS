@@ -1,4 +1,4 @@
-define(["template-import!demos/remote-data/module-view4/templates.html"], ({headerTemplate, itemTemplate})  => class {
+define(["template-functions!demos/remote-data/module-view4/templates.html"], ({headerTemplate, itemTemplate})  => class {
     //
     // if render returns function or array [func, args], template will be avaluated immediately and result will be rendered 
     //
