@@ -94,6 +94,15 @@ define([], () => class {
         return this;
     }
 
+    navigateToRoute(name) {
+        let route = this._routes[name];
+        if (!route) {
+            return;
+        }
+        document.location.hash = this._hash + route.name + (route.pieces ? route.pieces.join("/") : "");
+        return this;
+    }
+
     reveal(location) {
         this._onChangeEvent({newHash: this._hash + location});
         return this;
@@ -127,7 +136,9 @@ define([], () => class {
             if (uriPieces[uriPieces.length - 1] == "") {
                 uriPieces.splice(-1, 1);
             }
-            params = route.paramsMap(uriPieces.slice(sliceIndex));
+            let pieces = uriPieces.slice(sliceIndex);
+            route.pieces = pieces;
+            params = route.paramsMap(pieces);
         }
 
         if (route === undefined || !params) {

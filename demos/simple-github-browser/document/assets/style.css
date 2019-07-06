@@ -87,3 +87,14 @@ summary h4 {
   position: relative;
   right: 0;
 }
+.big-link {
+  float: right;
+  font-size: 1.2em
+}
+.user-item {
+  margin: 10px;
+  padding: 10px;
+}
+.user-item img {
+  width: 30px; height: 30px; margin: 5px
+}

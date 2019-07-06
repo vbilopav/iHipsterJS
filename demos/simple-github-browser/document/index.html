@@ -154,9 +154,9 @@
       }
       </script>}
       <div class="panel">
-          ${() => this.error != null /*&& !ihjs.queryString.test*/ ? "" : `
+          ${() => !this.error && !ihjs.queryString.test ? `
           <user-github-star data-item=${this.encodedDetails()}></user-github-star>
-          `}
+          `: ""}
           <span class="panel-info">
               ${() => this.error != null ? "" : `
               <a href="#/details/` + this.item.login + (this.details ? '/' + this.encodedDetails() : '') + `">See more details</a>
@@ -202,12 +202,14 @@
         }
       </p>
       <button onclick="window.history.back();">Go back</button>
-      ${() => this.error != null /*&& !ihjs.queryString.test*/ ? "" : `
+      <button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+      ${() => !this.details.message && !ihjs.queryString.test ? `
       <user-github-star class="details-star" data-item=${this.encodedDetails()}></user-github-star>
-      `}
+      <a class="big-link" style="right: 25px;position: relative;top: 10px;" href="#/saved-items/">view saved items</a>
+      ` : ""}
       <div class="panel">
         <a href="${() => this.details.html_url}"><img src="${() => ihjs.queryString.test ? 'assets/github.ico' : this.details.avatar_url}" /></a>
-        <ul class="item-details-list">
+        <ul class="item-details-list" id="list">
             <li>
                 <strong>${() => this.details.type}:</strong>&nbsp;<a href="${() => this.details.html_url}">${() => this.login}</a>
             </li>
@@ -223,14 +225,15 @@
         </ul>
       </div>
 
+      <div id="followers" class="panel" style="display: none"></div>
+      <div id="following" class="panel" style="display: none"></div>
       <div id="repos" class="panel" style="display: none"></div>
       <div id="gists" class="panel" style="display: none"></div>
       <div id="subscriptions" class="panel" style="display: none"></div>
       <div id="starred" class="panel" style="display: none"></div>
-      <div id="followers" class="panel"style="display: none"></div>
-      <div id="following" class="panel"style="display: none"></div>
 
       ${<script>() => this.template.rendered = async  () => {
+
         const formatCodeItem = (name, lang, item, url, desc) => 
           `<li>
             ${typeof name === "string" ? `<strong>${name}</strong>${lang ? "&nbsp;<code>" + lang + "</code>" : ""}&nbsp;` : name.join(", ")}
@@ -250,14 +253,14 @@
             let sorted = Object.entries(langs).sort((a,b) => a[1].count - b[1].count).reverse().map(i => "<code>" + i[0] + "</code>" + " (" + i[1].count + ")").join(", ");
             return `
               <details>
-                <summary><h4>Total <code>${count}</code> ${name} found - ${sorted}</h4></summary>
+                <summary><h4><code>${count}</code> ${name} - ${sorted}</h4></summary>
                 <ul class='item-detail-list'>${result}</ul>
               </details>
               `;
           }
         };
-        const updateRepos = async (endpoint, name, element) => {
-          let result = "", count = 0, response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+        const updateRepos = async (endpoint, name) => {
+          let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
           let langs = {};
           if (response.message) {
             element.html(response.message).showElement();
@@ -271,8 +274,8 @@
           element.html(formatCodeResult(name, count, result, langs)).showElement();
           return true;
         };
-        const updateGists = async (endpoint, name, element) => {
-          let result = "", count = 0, response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+        const updateGists = async (endpoint, name) => {
+          let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
           if (response.message) {
             element.html(response.message).showElement();
             return false;
@@ -290,19 +293,34 @@
           element.html(formatCodeResult(name, count, result, langs)).showElement();
           return true;
         }
+        const updateUsers = async (endpoint, name) => {
+          let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+          if (response.message) {
+            element.html(response.message).showElement();
+            return false;
+          }
+          let users = [];
+          for(let user of response) {
+            users.push(`<span class="user-item"><a href="#/details/${user.login}"><img src="${user.avatar_url}" />&nbsp;${user.login}</a></span>`);
+            count++;
+          }
+          element.html(`
+              <details>
+                <summary><h4><code>${count}</code>&nbsp;${name}</h4></summary>
+                <p>
+                ${users.join("")}
+                </p>
+              </details>
+              `).showElement();
+          return true
+        }
 
-        if (!await updateRepos("repos", "repos", this.model.repos)) {
-          return;
-        }
-        if (!await updateGists("gists", "gists", this.model.gists)) {
-          return;
-        }
-        if (!await updateRepos("subscriptions", "subscriptions", this.model.subscriptions)) {
-          return;
-        }
-        if (!await updateRepos("starred", "starred", this.model.starred)) {
-          return;
-        }
+        if (!await updateUsers("followers", "Followers")) return;
+        if (!await updateUsers("following", "Following")) return;
+        if (!await updateRepos("repos", "repos")) return;
+        if (!await updateGists("gists", "gists")) return;
+        if (!await updateRepos("subscriptions", "subscriptions")) return;
+        !await updateRepos("starred", "starred");
 
       }
       </script>}
@@ -311,6 +329,7 @@
     <template data-route="/saved-items">
       <h3>Your saved items of your <code>GitHub <img src="assets/github.ico" /></code> user search. Total <code id=total></code> items.</h3>
       <button onclick="window.history.back();">Go back</button>
+      <button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
       <div id="results"></div>
       ${<script>() => {
         this.count = 0;
@@ -416,7 +435,7 @@
             onkeypress="e => e.keyCode === 13 && this.model.search.click()"
             onfocus="this.select()"
           />
-          <a style="float: right;" href="#/saved-items/">view saved items</a>
+          <a class="big-link" href="#/saved-items/">view saved items</a>
           <button id="search" onclick="() => document.location.hash = '#/1/' + this.model.query.value.replace(new RegExp('/', 'g'), '')">search</button>
         </p>
         
