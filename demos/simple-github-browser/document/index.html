@@ -11,12 +11,12 @@
     <title></title>
   </head>
   <body>
-
+  <div id="app">
     <script>
-      // script to display message for users to use decent browser
-      var e = document.createElement("div"); 
-      document.body.appendChild(e);
-      setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and non-chromium Edge are NOT supported. Use FireFox or any Chromium based browser.</h1>" }, 1500);
+          // script to display message for users to use decent browser
+          var e = document.createElement("div"); 
+          document.body.querySelector("#app").appendChild(e);
+          setTimeout(function() { e.innerHTML = "<h1>Please update your browser. Internet Explorer and non-chromium Edge are NOT supported. Use FireFox or any Chromium based browser.</h1>" }, 1500);
     </script>
 
     <template id="utils">
@@ -49,7 +49,9 @@
           } else {
             response = await(await fetch(`https://api.github.com${url}`, {cache: "force-cache"})).json();
             if (response.message) {
-              response.message = response.message.replace("documentation", `<a href=${response.documentation_url}>documentation</a>`);
+              let goodNews = response.message.substring(response.message.indexOf("("), response.message.length);
+              response.message = response.message.replace(goodNews, 
+              `(But here's the good news: API rate limit can be significantly increased by signing in to your <code>GitHub <img src="assets/github.ico" /></code> account.)`);
             }
           }
           for(let [key, value] of Object.entries(response)) {
@@ -59,19 +61,6 @@
           }
           return response;
         }</script>}
-
-        authorizeClick
-        ${e => {
-            e.preventDefault(); 
-            window.open('', '_blank', 'menubar=no, left: 50, top: 50').document.write(`
-            <style>body {background-color: #efefef;}</style>
-            <h2 style="font-family: system-ui,-apple-system; margin: 50px;">
-              If you would like version with fully implemented GitHub authorization and integration, 
-              contact me at <a href=mailto:vbilopav@gmail.com>vbilopav@gmail.com</a> or join iHipsterJS
-              <a target="_blank" href=https://join.slack.com/t/vb-software/shared_invite/enQtNjczNTMwMTk1OTA4LTc3ODFhMzU5Yzc0ZTZlM2Y4YzE3MGNjZGUwMDNjZGQyZjVhYjNhZTAxNmY1MTgxZTEwYzkxMmI3YTVlN2I5ZDc>Slack Channel</a>
-            </h2>
-          `)}
-        }
 
         detailsList
         ${details => `
@@ -224,7 +213,7 @@
             `}
         </ul>
       </div>
-
+      <div id="loading" style="text-align: center; margin-top: -20px;">...</div>
       <div id="followers" class="panel" style="display: none"></div>
       <div id="following" class="panel" style="display: none"></div>
       <div id="repos" class="panel" style="display: none"></div>
@@ -233,6 +222,11 @@
       <div id="starred" class="panel" style="display: none"></div>
 
       ${<script>() => this.template.rendered = async  () => {
+        
+        let loading = 1; interval = setInterval(() => {
+          this.model.loading.html(".".repeat(loading++));
+          if (loading === 5) loading = 1;
+        }, 500);
 
         const formatCodeItem = (name, lang, item, url, desc) => 
           `<li>
@@ -321,7 +315,8 @@
         if (!await updateGists("gists", "gists")) return;
         if (!await updateRepos("subscriptions", "subscriptions")) return;
         !await updateRepos("starred", "starred");
-
+        clearInterval(interval);
+        this.model.loading.hideElement();
       }
       </script>}
     </template>
@@ -418,7 +413,9 @@
                   `
                 <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
                 To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
-                <a href="authorize" onclick="e => this.template.import('template-functions!utils').authorizeClick(e)">login to your GitHub account</a>
+                <code>
+                  <a href="authorize" onclick="e => {e.preventDefault(); window.open('authorize.html', '_blank', 'menubar=no, width=800,height=600');}">login to your GitHub account</a>
+                </code>
                 or click <a href="${document.location.pathname + '?test=true' + document.location.hash}"><code>here</code></a> to use local <strong>test sample of 100 records</strong>.
                   `
                 }
@@ -460,10 +457,11 @@
 
           const pageSize = 5;
           const {fetchGitHub} = this.template.import("template-functions!utils");
-          const enableNextPrev = (next, prev) => {
+          const enableNextPrev = (next, prev, hideLast=false) => {
             // toggle disabled attributes
             this.model.prev.attr("disabled", "", !prev);
             this.model.next.attr("disabled", "", !next);
+            this.model.resultsHeader[1].showElement(!hideLast);
           };
           
           this.performSearch = async () => {
@@ -477,7 +475,7 @@
               this.model.resultsHeader.showElement();
               if (result.message) {
                 this.model.msg.html(result.message);
-                enableNextPrev(false, false);
+                enableNextPrev(false, false, true);
                 return;
               }
               this.model.msg.html(`Results ${(this.page * pageSize) - pageSize + 1}-${this.page * pageSize} of total ${result.total_count}.`)
@@ -489,7 +487,7 @@
                 // `append` element extension acts exactly like jquery `append` method
                 this.model.results.append(element);
               };
-              enableNextPrev(this.page <= Math.floor(result.total_count / pageSize), this.page > 1);
+              enableNextPrev(this.page <= Math.floor(result.total_count / pageSize), this.page > 1, false);
           }
 
           // call search on rendered event to ensure that model is constructed
@@ -497,6 +495,16 @@
       }
       </script>}
     </template>
+  
+  </div>
+
+    <div class="footer">
+      Built with iHipster JavaScript framework under <a href="https://github.com/vbilopav/iHipsterJS/blob/master/LICENSE">MIT licence</a>
+      <br />
+      <a target="_blank" href=https://join.slack.com/t/vb-software/shared_invite/enQtNjczNTMwMTk1OTA4LTc3ODFhMzU5Yzc0ZTZlM2Y4YzE3MGNjZGUwMDNjZGQyZjVhYjNhZTAxNmY1MTgxZTEwYzkxMmI3YTVlN2I5ZDc>Slack Channel</a></li>
+      <br />
+      email to: <a href=mailto:vbilopav@gmail.com>vbilopav@gmail.com</a>
+    </div>
 
     <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
     <script type="module" src="../../../src/ihjs/build/1.2.0/ihjs.js"></script>
