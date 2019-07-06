@@ -16,7 +16,7 @@ define([], () => class {
                 </p>
             `;
         
-        for(let [name, item] of Object.entries(await _app.fetch("../../shared/frameworks.json"))) {
+        for(let [name, item] of Object.entries(await ihjs.fetch("../../shared/frameworks.json"))) {
             result += String.html`
                 <div class="panel panel-default">
                     <div class="panel-heading">

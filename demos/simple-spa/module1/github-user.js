@@ -1,7 +1,7 @@
 define([], () => class {
 
     constructor() {
-        this.username = _app.queryString || "vbilopav"; // default value for the model element username
+        this.username = ihjs.queryString || "vbilopav"; // default value for the model element username
     }
 
     render() {

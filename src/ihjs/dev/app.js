@@ -1,1 +1,1 @@
-define([], () => window[require.getConfig().__appObjName]);
+define([], () => window[require.getConfig()._ihjsObjName]);

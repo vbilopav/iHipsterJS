@@ -8,7 +8,7 @@ define(["template-functions!demos/remote-data/module-view3/templates.html"], ({h
                 </p>
             `;
         
-        for(let [name, item] of Object.entries(await _app.fetch("../../shared/frameworks.json"))) {
+        for(let [name, item] of Object.entries(await ihjs.fetch("../../shared/frameworks.json"))) {
             result += String.html`
                 <div class="panel panel-default">
                     ${headerTemplate(name)}

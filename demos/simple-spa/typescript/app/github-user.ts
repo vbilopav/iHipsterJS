@@ -7,7 +7,7 @@ export default class {
     };
 
     constructor() {
-        this.username = window._app.queryString as string || "vbilopav"; // default value for the model element username
+        this.username = window.ihjs.queryString as string || "vbilopav"; // default value for the model element username
     }
 
     render() {

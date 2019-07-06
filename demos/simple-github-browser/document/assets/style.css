@@ -83,3 +83,7 @@ summary h4 {
   display: inline;
   cursor: pointer;
 }
+.details-star .panel-save {
+  position: relative;
+  right: 0;
+}

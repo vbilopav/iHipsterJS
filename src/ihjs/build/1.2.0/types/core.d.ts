@@ -455,7 +455,7 @@ interface Window {
     /**
      * 
      */
-    _app: AppObject
+    ihjs: AppObject
 }
 /**
  * 

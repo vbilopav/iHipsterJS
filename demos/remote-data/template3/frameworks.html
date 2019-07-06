@@ -18,7 +18,7 @@ ${<script>
     <p>
         <h2>JavaScript application frameworks</h2>
     </p>
-    ${async () => this.template.forEach(await _app.fetch("../../shared/frameworks.json"), (name, item) => 
+    ${async () => this.template.forEach(await ihjs.fetch("../../shared/frameworks.json"), (name, item) => 
         `<div class="panel panel-default" name="${name}">
             ${this.header(name)}
             <ul>

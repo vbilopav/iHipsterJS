@@ -56,7 +56,7 @@
                     this.template.css("/demos/shared/css/todo.css");
 
                     // define custom component
-                    _app.customElements.define({
+                    ihjs.customElements.define({
                         tag: "todo-item", 
                         src: "template!todo-item",
                         observedAttributes: ['id', 'data-index'],
@@ -76,7 +76,7 @@
             <div class="ToDo-Container">
                 <div class="ToDo-Content" id="content">
                     ${<script>
-                        async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), (item, index) => 
+                        async () => this.template.forEach(await ihjs.fetch("/demos/shared/todo.json"), (item, index) => 
                         `
                             <todo-item id="${'todo-item-' + index}" data-index="${this.count = index+1}">${item}</todo-item>
                         `

@@ -11,7 +11,7 @@ define(["ihjs/app"], app => {
             if (!element) {
                 // remember templates because rendering into body removes everything
                 if (templates) {
-                    _app.config.__templates = new Map(Array.from(templates).map(e => { 
+                    ihjs.config.__templates = new Map(Array.from(templates).map(e => { 
                         return [e.id, {
                             html: e.html(),
                             data: e.dataset
@@ -50,8 +50,8 @@ define(["ihjs/app"], app => {
                 
                 // template found
                 if (!template.id) {
-                    template.id = _app.config.name;
-                    app.config.view = "template!" + _app.config.name;
+                    template.id = ihjs.config.name;
+                    app.config.view = "template!" + ihjs.config.name;
                     found = true;
                     break;
                 }

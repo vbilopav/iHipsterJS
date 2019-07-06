@@ -3,7 +3,7 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
         constructor() {
-            this.username = window._app.queryString || "vbilopav";
+            this.username = window.ihjs.queryString || "vbilopav";
         }
         render() {
             return String.html `

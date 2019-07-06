@@ -24,11 +24,11 @@
         fetchGitHub
         ${<script>async url => {
           let response;
-          if (_app.queryString.test) {
+          if (ihjs.queryString.test) {
             
             if (url.startsWith("/search")) {
               response = await(await fetch('test-data/users.json')).json();
-              let q = _app.parseQueryString(url);
+              let q = ihjs.parseQueryString(url);
               response.items = response.items.slice(Number(q.page)-1, Number(q.page)-1+Number(q.per_page));
             } else if (url.endsWith("repos")) {
               response = await(await fetch('test-data/repos.json')).json();
@@ -93,12 +93,52 @@
         `}
     </template>
 
+    <template data-tag="user-github-star">
+      ${<script>() => {
+        // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
+        const {publish, subscribe} = this.template.import("ihjs/pubsub");
+
+        this.data = JSON.parse(decodeURIComponent(this.dataset.item));
+        this.key = "item-" + this.data.id;
+        this.saved = localStorage.getItem(this.key) !== null;
+
+        this.starElement = () => {
+          const e = this.template.model.star;
+          if (this.saved) {
+            e.html("&#11088;").attr("title", "remove from saved");
+          } else {
+            e.html("&#10032;").attr("title", "save");
+          }
+        };
+
+        subscribe("item/toggle/" + this.data.id, state => {
+          this.saved = state;
+          this.starElement();
+        });
+
+        this.starClick = () => {
+          if (!this.saved) {
+            localStorage.setItem(this.key, JSON.stringify(this.data));
+            this.saved = true;
+            publish("item/saved", this.key);
+            publish("item/toggle/" + this.data.id, true);
+          } else {
+            localStorage.removeItem(this.key);
+            this.saved = false;
+            publish("item/removed", this.key);
+            publish("item/toggle/" + this.data.id, false);
+          }
+          this.starElement();
+        }
+        this.rendered = () => this.starElement();
+      }
+      </script>}
+      <div id="star" class="panel-save" onclick="starClick" ></div></div>
+    </template>
+
     <template data-tag="github-result">
       ${<script>
       async () => {
-          // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
-          const {publish, subscribe} = this.template.import("ihjs/pubsub");
-          // fetchGitHub and detailsList functions from template above
           const {fetchGitHub, detailsList} = this.template.import("template-functions!utils");
           this.detailsList = detailsList;
           this.fetchGitHub = this.fetchGitHub;
@@ -110,52 +150,19 @@
           if (this.details.message) {
             this.error = "<li>" + this.details.message + "</li>"; 
           }
-          this.saved = localStorage.getItem("item-" + this.item.id) !== null;
-          
-          this.starElement = element => {
-            if (this.saved) {
-              element.html("&#11088;").attr("title", "remove from saved");
-            } else {
-              element.html("&#10032;").attr("title", "save");
-            }
-          };
-
-          subscribe("item/removed/" + this.item.id, () => {
-            this.saved = false;
-            this.starElement(this.template.model.star);
-          });
-
-          this.starClick = e => {
-            const key = "item-" + this.item.id;
-            if (!this.saved) {
-              localStorage.setItem(key, JSON.stringify({
-                item: this.item,
-                details: this.details
-              }));
-              this.saved = true;
-              publish("item/saved", key);
-            } else {
-              localStorage.removeItem(key);
-              this.saved = false;
-              publish("item/removed", key);
-              publish("item/removed/" + this.item.id);
-            }
-            this.starElement(e.target);
-          };
-
-          this.rendered = () => this.template.model.star && this.starElement(this.template.model.star);
+          this.encodedDetails = () => encodeURIComponent(JSON.stringify(this.details));
       }
       </script>}
       <div class="panel">
-          ${() => this.error != null ? "" : `
-          <div id="star" class="panel-save" onclick="starClick" ></div>
+          ${() => this.error != null /*&& !ihjs.queryString.test*/ ? "" : `
+          <user-github-star data-item=${this.encodedDetails()}></user-github-star>
           `}
           <span class="panel-info">
               ${() => this.error != null ? "" : `
-              <a href="#/details/` + this.item.login + (this.details ? '/' + encodeURIComponent(JSON.stringify(this.details)) : '') + `">See more details</a>
+              <a href="#/details/` + this.item.login + (this.details ? '/' + this.encodedDetails() : '') + `">See more details</a>
               `}
               ${this.dataset.doNotShowScore ? "" : `
-                <div>Search score = ${this.item.score}</div>
+              <div>Search score = ${this.item.score}</div>
               `}
           </span>
 
@@ -167,7 +174,7 @@
               </li>
               ${() => this.error || this.detailsList(this.details)}
             </ul>
-          </div>
+          </span>
       </div>
     </template>
 
@@ -180,11 +187,12 @@
         if (!this.details) {
           this.details = await fetchGitHub(`/users/${this.login}`);
         }
+        this.encodedDetails = () => encodeURIComponent(JSON.stringify(this.details));
       }
       </script>}
       <h3>User details for user <code>${this.login}</code></h3>
       <p>
-      ${_app.queryString.test ?
+      ${ihjs.queryString.test ?
           `
           <strong>Note:</strong> Currently working on local <strong>test sample</strong>. 
           Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
@@ -194,9 +202,11 @@
         }
       </p>
       <button onclick="window.history.back();">Go back</button>
-
+      ${() => this.error != null /*&& !ihjs.queryString.test*/ ? "" : `
+      <user-github-star class="details-star" data-item=${this.encodedDetails()}></user-github-star>
+      `}
       <div class="panel">
-        <a href="${() => this.details.html_url}"><img src="${() => _app.queryString.test ? 'assets/github.ico' : this.details.avatar_url}" /></a>
+        <a href="${() => this.details.html_url}"><img src="${() => ihjs.queryString.test ? 'assets/github.ico' : this.details.avatar_url}" /></a>
         <ul class="item-details-list">
             <li>
                 <strong>${() => this.details.type}:</strong>&nbsp;<a href="${() => this.details.html_url}">${() => this.login}</a>
@@ -220,12 +230,7 @@
       <div id="followers" class="panel"style="display: none"></div>
       <div id="following" class="panel"style="display: none"></div>
 
-      ${<script>() => this.template.rendered = async  ({revealed}) => {
-        // do this on render event not to stall view load
-        if (revealed) {
-          return;
-        }
-
+      ${<script>() => this.template.rendered = async  () => {
         const formatCodeItem = (name, lang, item, url, desc) => 
           `<li>
             ${typeof name === "string" ? `<strong>${name}</strong>${lang ? "&nbsp;<code>" + lang + "</code>" : ""}&nbsp;` : name.join(", ")}
@@ -313,8 +318,8 @@
           addItem = key => {
             let value = JSON.parse(localStorage.getItem(key));
             let element = `<github-result id=${key} data-do-not-show-score='true' data-remove-on-unstar='true'></github-result>`.dom();
-            element.item = value.item;
-            element.details = value.details;
+            element.item = value;
+            element.details = value;
             this.model.results.append(element);
           };
 
@@ -385,7 +390,7 @@
               <a href="https://developer.github.com/v3/search/#constructing-a-search-query" target="_blank">docs &nbsp;&#x2197;</a> for more info.
             </span>
             <p>
-                ${_app.queryString.test ?
+                ${ihjs.queryString.test ?
                   `
                   <strong>Note:</strong> Currently working on local <strong>test sample of 100 records</strong>. 
                   Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
@@ -469,14 +474,7 @@
           }
 
           // call search on rendered event to ensure that model is constructed
-          this.template.rendered = async ({revealed}) => {
-            if (revealed) {
-              // No need to re-render already rendered view. Remove this to have search triggered on every navigate within this route.
-              return;
-            }
-            await this.performSearch();
-          }
-
+          this.template.rendered = async () => await this.performSearch();
       }
       </script>}
     </template>

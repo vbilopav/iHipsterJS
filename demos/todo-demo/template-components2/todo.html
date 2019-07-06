@@ -1,35 +1,33 @@
-${<script>this.template.css("/demos/shared/css/todo.css")</script>}
+${this.template.css("/demos/shared/css/todo.css")}
 
-${
-<script>
-        () => {
-            // register "todo-item" tag with the application
-            _app.customElements.define({
-                tag: "todo-item", 
-                src: "template!demos/todo-demo/template-components2/todo-item.html",
-                observedAttributes: ['id', 'data-index']
-            });
+${<script>
+() => {
+    // register "todo-item" tag with the application
+    ihjs.customElements.define({
+        tag: "todo-item", 
+        src: "template!demos/todo-demo/template-components2/todo-item.html",
+        observedAttributes: ['id', 'data-index']
+    });
 
-            let {setCount, increase} = this.template.import("demos/todo-demo/template-components2/count");
-            this.setCount = setCount;
-            this.increase = increase;
+    let {setCount, increase} = this.template.import("demos/todo-demo/template-components2/count");
+    this.setCount = setCount;
+    this.increase = increase;
 
-            this.template.rendered = ({element}) => {
-                // Only rendered components that have name or id attribute will ba available in children property
-                console.log("I haz following components: ");
-                console.log(element.findAll("todo-item"));
-                console.log("Change some attribute value on todo-item element...");
-            }
-        }
-</script>
+    this.template.rendered = ({element}) => {
+        // Only rendered components that have name or id attribute will ba available in children property
+        console.log("I haz following components: ");
+        console.log(element.findAll("todo-item"));
+        console.log("Change some attribute value on todo-item element...");
+    }
 }
+</script>}
 
 <div class="ToDo">
     <h1 class="ToDo-Header">ihjs To Do demo</h1>
     <div class="ToDo-Container">
         <div class="ToDo-Content" id="content">
             ${<script>
-                async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), (item, index) => 
+                async () => this.template.forEach(await ihjs.fetch("/demos/shared/todo.json"), (item, index) => 
                 `
                     <todo-item id="${'todo-item-' + index}" data-index="${this.setCount(index+1)}">${item}</todo-item>
                 `

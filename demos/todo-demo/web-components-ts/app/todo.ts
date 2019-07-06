@@ -10,7 +10,7 @@ export default class {
     }
 
     constructor(args: ViewConstructorArgs) {
-        window._app.customElements.define({
+        window.ihjs.customElements.define({
             tag: "todo-item", 
             src: "demos/todo-demo/web-components-ts/app/todo-item",
             observedAttributes: ['id', 'data-index']
@@ -36,7 +36,7 @@ export default class {
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">`;
         
-        for(let item of await window._app.fetch("/demos/shared/todo.json")) {
+        for(let item of await window.ihjs.fetch("/demos/shared/todo.json")) {
             result += String.html`
                 <todo-item id="${'todo-item-' + index}" data-index="${index = index+1}">${item}</todo-item>
             `;

@@ -1,7 +1,7 @@
 define([], () => class {
 
     constructor({options}) {
-        _app.customElements.define({
+        ihjs.customElements.define({
             tag: "todo-item", 
             src: "demos/todo-demo/component1/todo-item",
             observedAttributes: ['id', 'data-index'],
@@ -29,7 +29,7 @@ define([], () => class {
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">`;
         
-        for(let item of await _app.fetch("/demos/shared/todo.json")) {
+        for(let item of await ihjs.fetch("/demos/shared/todo.json")) {
             result += String.html`
                 <todo-item id="${'todo-item-' + index}" data-index="${++this.count}">${item}</todo-item>
             `;

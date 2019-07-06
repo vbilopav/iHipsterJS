@@ -18,7 +18,7 @@ define([], () => class {
                     <button name="btn" onclick="showClick">Show github user data</button>
                 </p>
             </div>`,
-            {username: _app.queryString || "vbilopav"}
+            {username: ihjs.queryString || "vbilopav"}
         ];
     }
 

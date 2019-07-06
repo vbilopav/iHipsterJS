@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-        ${async () => this.template.forEach(await _app.fetch("https://api.github.com/users/" + this.value), (key, value) => 
+        ${async () => this.template.forEach(await ihjs.fetch("https://api.github.com/users/" + this.value), (key, value) => 
             `
             <tr>
                 <td>${key}</td>

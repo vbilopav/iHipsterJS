@@ -11,7 +11,7 @@
             libsUrl: null,
             appModule: "ihjs/single-view-app",
             appElementId: "app",
-            appObjectName: "_app",
+            appObjectName: "ihjs",
             loaderUrl: path => `${path}loader/loader.js`
         };
 
@@ -157,7 +157,7 @@
     const config = {
         urlArgs: urlArgs,
         baseUrl: window[appObjectName].appUrl,
-        __appObjName: appObjectName,
+        _ihjsObjName: appObjectName,
         paths: {
             libs: libsPath,
             "ihjs": sysPath,

@@ -3,7 +3,7 @@
     <div class="ToDo-Container">
         <div class="ToDo-Content" id="content">
             ${
-            async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), item => 
+            async () => this.template.forEach(await ihjs.fetch("/demos/shared/todo.json"), item => 
             `<span data-index=${++this.count} data-item="${item}"></span>`)
             }
         </div>
@@ -19,11 +19,11 @@ ${
         this.itemTemplate = this.template.import("template!demos/todo-demo/template/todo-item.html");
         this.input = "initial value"; 
         this.count = 0;
-        this.template.rendered = () => this.model.content.findAll("span").forEach(span => _app.render(this.itemTemplate, span, {parent: this}));
+        this.template.rendered = () => this.model.content.findAll("span").forEach(span => ihjs.render(this.itemTemplate, span, {parent: this}));
         this.createNewToDoItem = () => {
             let element = `<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.dom();
             this.model.content.append(element);
-            _app.render(this.itemTemplate, element, {parent: this});
+            ihjs.render(this.itemTemplate, element, {parent: this});
         };
     }
 </script>

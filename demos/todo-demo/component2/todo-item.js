@@ -38,7 +38,7 @@ define([], () => class {
     }
 
     /* 
-    * observedAttributes list is defined in call  _app.customElements.define (see todo.js)
+    * observedAttributes list is defined in call  ihjs.customElements.define (see todo.js)
     * is can also be defined here (as proscribed by current standard)
     */
     // static get observedAttributes() { return ['id', 'data-index'] }

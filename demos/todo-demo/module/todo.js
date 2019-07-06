@@ -14,7 +14,7 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
                     <div class="ToDo-Content" id="content">
         `;
 
-        for (let [index, item] of Object.entries(await _app.fetch("/demos/shared/todo.json"))) {
+        for (let [index, item] of Object.entries(await ihjs.fetch("/demos/shared/todo.json"))) {
             html += String.html`<span data-index=${this.count = ++index} data-item="${item}"></span>`;
         }
 
@@ -30,12 +30,12 @@ define(["demos/todo-demo/module/todo-item"], Item => class {
     }
 
     rendered() {
-        this.model.content.findAll("span").forEach(span => _app.render(new Item(this), span));
+        this.model.content.findAll("span").forEach(span => ihjs.render(new Item(this), span));
     }
 
     createNewToDoItem() {
         let element = String.html`<span data-index=${++this.count} data-item="${this.model.input.value}"></span>`.dom();
-        _app.render(new Item(this), element);
+        ihjs.render(new Item(this), element);
         this.model.content.append(element);
     }
 

@@ -29,8 +29,9 @@ define(["ihjs/models/model"], Model  => {
             if (params.model === undefined || (params.model && !(params.model instanceof Model))) {
                 params.model = new Model({model: params.model}).bind(element, params, params);
             }
-            params.template.rendered && params.template.rendered({element, revealed});
+            revealed || params.template.rendered && params.template.rendered(element);
             revealed && params.template.revealed && params.template.revealed(element);
+            params.template.shown && params.template.shown(element);
         },
         moduleRendered = (instance, args, revealed=false) => {
             if (instance._options.context === undefined) {
@@ -39,8 +40,9 @@ define(["ihjs/models/model"], Model  => {
             if (instance._options.model !== null && instance._options.model instanceof Model === false && (instance._options.context || instance._options.model)) {
                 instance.model = new Model({model: instance._options.model}).bind(args.element, instance._options.context);
             }
-            instance.rendered && instance.rendered({params: args.params, element: args.element, revealed});
+            revealed || instance.rendered && instance.rendered({params: args.params, element: args.element});
             revealed && instance.revealed && instance.revealed({params: args.params, element: args.element});
+            instance.shown && instance.shown({params: args.params, element: args.element});
         }
 
     return {

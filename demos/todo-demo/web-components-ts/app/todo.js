@@ -3,7 +3,7 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], fu
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
         constructor(args) {
-            window._app.customElements.define({
+            window.ihjs.customElements.define({
                 tag: "todo-item",
                 src: "demos/todo-demo/web-components-ts/app/todo-item",
                 observedAttributes: ['id', 'data-index']
@@ -22,7 +22,7 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], fu
                 <h1 class="ToDo-Header">ihjs To Do demo</h1>
                 <div class="ToDo-Container">
                     <div class="ToDo-Content" id="content">`;
-            for (let item of await window._app.fetch("/demos/shared/todo.json")) {
+            for (let item of await window.ihjs.fetch("/demos/shared/todo.json")) {
                 result += String.html `
                 <todo-item id="${'todo-item-' + index}" data-index="${index = index + 1}">${item}</todo-item>
             `;

@@ -64,7 +64,7 @@
             <div class="ToDo-Container">
                 <div class="ToDo-Content" id="content">
                     ${<script>
-                        async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), (item, index) => 
+                        async () => this.template.forEach(await ihjs.fetch("/demos/shared/todo.json"), (item, index) => 
                         `
                             <todo-item id="${'todo-item-' + index}" data-index="${this.count = index+1}">${item}</todo-item>
                         `

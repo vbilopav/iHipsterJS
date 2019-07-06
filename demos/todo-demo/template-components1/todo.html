@@ -1,32 +1,29 @@
-${<script>this.template.css("/demos/shared/css/todo.css")</script>}
+${this.template.css("/demos/shared/css/todo.css")}
 
-${
-<script>
-        () => {
-            // register "todo-item" tag with the application
-            _app.customElements.define({
-                tag: "todo-item", 
-                src: "template!demos/todo-demo/template-components1/todo-item.html",
-                observedAttributes: ['id', 'data-index'],
-                context: this
-            });
-            this.count = 0;
-            this.template.rendered = ({element}) => {
-                // Only rendered components that have name or id attribute will ba available in children property
-                console.log("I haz following components: ");
-                console.log(element.findAll("todo-item"));
-                console.log("Change some attribute value on todo-item element...");
-            }
-        }
-</script>
+${<script>() => {
+    // register "todo-item" tag with the application
+    ihjs.customElements.define({
+        tag: "todo-item", 
+        src: "template!demos/todo-demo/template-components1/todo-item.html",
+        observedAttributes: ['id', 'data-index'],
+        context: this
+    });
+    this.count = 0;
+    this.template.rendered = ({element}) => {
+        // Only rendered components that have name or id attribute will ba available in children property
+        console.log("I haz following components: ");
+        console.log(element.findAll("todo-item"));
+        console.log("Change some attribute value on todo-item element...");
+    }
 }
+</script>}
 
 <div class="ToDo">
     <h1 class="ToDo-Header">ihjs To Do demo</h1>
     <div class="ToDo-Container">
         <div class="ToDo-Content" id="content">
             ${<script>
-                async () => this.template.forEach(await _app.fetch("/demos/shared/todo.json"), (item, index) => 
+                async () => this.template.forEach(await ihjs.fetch("/demos/shared/todo.json"), (item, index) => 
                 `
                     <todo-item id="${'todo-item-' + index}" data-index="${this.count = index+1}">${item}</todo-item>
                 `
@@ -38,11 +35,9 @@ ${
     </div>
 </div>
 
-${
-<script>
+${<script>
     () => {
         this.input = "initial value";
         this.createNewToDoItem = () => this.model.content.append(`<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom())
     }
-</script>
-}
+</script>}

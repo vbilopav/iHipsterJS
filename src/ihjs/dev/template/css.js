@@ -1,4 +1,4 @@
-define(["ihjs/app"], _app => {
+define(["ihjs/app"], ihjs => {
 
     const 
         _cssImported = [];
@@ -31,7 +31,7 @@ define(["ihjs/app"], _app => {
             )
         },
         shouldLoad() {
-            return !(_app.dev === false && _app.config.loadCssAlways === false)
+            return !(ihjs.dev === false && ihjs.config.loadCssAlways === false)
         }
     }
 });

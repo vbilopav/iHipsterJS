@@ -333,7 +333,7 @@ var AMDLoader;
         getOptionsLiteral() {
             return this.options;
         }
-        _applyPaths(moduleId) {
+        ihjslyPaths(moduleId) {
             let pathRule;
             for (let i = 0, len = this.sortedPathsRules.length; i < len; i++) {
                 pathRule = this.sortedPathsRules[i];
@@ -377,7 +377,7 @@ var AMDLoader;
             let result = moduleId;
             let results;
             if (!AMDLoader.Utilities.endsWith(result, '.js') && !AMDLoader.Utilities.isAbsolutePath(result)) {
-                results = this._applyPaths(result);
+                results = this.ihjslyPaths(result);
                 for (let i = 0, len = results.length; i < len; i++) {
                     if (this.isBuild() && results[i] === 'empty:') {
                         continue;
@@ -404,7 +404,7 @@ var AMDLoader;
         requireToUrl(url) {
             let result = url;
             if (!AMDLoader.Utilities.isAbsolutePath(result)) {
-                result = this._applyPaths(result)[0];
+                result = this.ihjslyPaths(result)[0];
                 if (!AMDLoader.Utilities.isAbsolutePath(result)) {
                     result = this.options.baseUrl + result;
                 }
