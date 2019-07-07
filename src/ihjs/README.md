@@ -28,7 +28,7 @@ Seriously ... here is the simplest possible example to display remote data from 
 </html>
 ```
 
-If you want cool and modern SPA (Single Page) application (Single Page) you can just declare it in your templates like this:
+If you want cool and modern SPA (Single Page) application - you can just declare it in your templates like this:
 
 ```html
 
