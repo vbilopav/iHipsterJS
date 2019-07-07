@@ -1,0 +1,112 @@
+button {
+    border: #0096bf3b solid;
+}
+button:disabled, input:disabled, select:disabled, textarea:disabled {
+  cursor: default !important;
+}
+.panel {
+    position: relative;
+    margin-bottom: 20px;
+    border:  2px solid #9c9c9c6e;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    padding: 10px;
+    padding-bottom: 5px;
+
+}
+.info-text {
+    font-size: 0.85em;
+    color: gray;
+}
+.panel-info {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  float: right;
+  font-size: 0.8em;
+  color: gray;
+}
+.panel-info > a {
+  text-align: end;
+  float: right;
+  width: 100%;
+  font-size: 1.5em;
+}
+.panel-save {
+  position: absolute;
+  right: 10px;
+  top: -2px;
+  float: right;
+  color: gray;
+  font-size: 2em;
+  cursor: pointer;
+  z-index: 9;
+}
+#query {
+  width: calc(100% - 18px);
+}
+.example:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+code > img {
+  width: 15px;
+  top: 3px;
+  position: relative;
+}
+img {
+  width: 90px;
+  vertical-align: top;
+}
+.item-info {
+    padding: 4px;
+    display: inline-block;
+}
+.item-info ul {
+  margin: 0;
+  max-width: 600px;
+}
+.results-info {
+  width: 100%;
+}
+.results-info button {
+  padding: 4px;
+  float: right;;
+  border: 2px;
+}
+ul.item-details-list {
+  display: inline-block;
+  margin: 0px;
+}
+summary h4 {
+  display: inline;
+  cursor: pointer;
+}
+.details-star .panel-save {
+  position: relative;
+  right: 0;
+}
+.big-link {
+  float: right;
+  font-size: 1.2em
+}
+.user-item {
+  margin: 10px;
+  padding: 10px;
+}
+.user-item img {
+  width: 30px; height: 30px; margin: 5px
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8em;
+  color: gray;
+}
+#app {
+  margin-bottom: 100px
+}

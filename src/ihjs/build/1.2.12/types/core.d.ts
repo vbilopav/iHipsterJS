@@ -324,7 +324,7 @@ interface HTMLElement {
     /**
      * 
      */
-    forEachChild(callback: (e?: HTMLElement)=>void=()=>{}, callFirst: boolean=false): HTMLElement
+    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): HTMLElement
     /**
      * 
      */
