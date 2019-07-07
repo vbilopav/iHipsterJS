@@ -61,7 +61,7 @@ And if you want to create reusable web components with its own tag and all, simp
 - Every template is your standard JavaScript [template string literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 - Template expressions can be lambda functions (useful for code blocks) or future promises.
 - Every template lambda function and promise are execute within same context and share `this` object for same template.
-- Every HTML element within template that have `id` or `name` defined will have it's instance exposed in `this.model` object (with few helper jquery-like extensions).
+- Every HTML element within template that have `id` or `name` defined will have it's instance exposed in `this.model` object (with few helper jquery-like [extensions](https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/docs/extensions.md)).
 - Every template context will have couple of helper methods on `this.template` object, such as for example `this.template.import` that allows you to do your standard JavaScript imports - within template expression.
 - Every event in HTML elements within template can have lambda expressions declared in event `onclick="e => console.log(this)"` and share same context and `this` as the rest of the template ... or simply point to method declared on `this` context ... or do neither and retain old JavaScript event mechanism.
 
