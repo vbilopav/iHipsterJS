@@ -124,7 +124,7 @@
 
 ### `visible(state?: Boolean): HTMLElement | NodeList | HTMLModelArray`
 - Applies to: `HTMLElement`, `NodeList`, `HTMLModelArray`.
-- If satte is not present, adds visibility: visible attribute, otherwise toggles between visible and hidden and returns same instance.
+- If state is not present, adds visibility: visible attribute, otherwise toggles between visible and hidden and returns same instance.
 
 
 # String extensions:

@@ -1,7 +1,8 @@
 (function () {
-    if (this) {
-        throw "ihjs script must be included as module, add type='module' to your script tag!";
-    }
+    try { 
+        Function("() => {};"); 
+        window.customElements.get("test");
+    } catch(e) { throw "update your browser!"; }
     const
         defaults = {
             /*dev*/dev: true,/*dev*/

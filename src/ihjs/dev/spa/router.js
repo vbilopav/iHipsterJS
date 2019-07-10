@@ -24,6 +24,10 @@ define([], () => class {
         this._routes = {};
         for(let route in routes) {
             let data = routes[route];
+            if (typeof data === "string") {
+                data = {view: data};
+                routes[route] = data;
+            }
             data.id = data.id || route.replace(/\//g, "-").replace("-", "").toCamelCase();
             this._test(route) || (() => {throw route})();
             this._routes[route] = {
@@ -132,35 +136,51 @@ define([], () => class {
                 sliceIndex = i + 1;
             }
         }
-        if (route) {
-            if (uriPieces[uriPieces.length - 1] == "") {
-                uriPieces.splice(-1, 1);
-            }
-            let pieces = uriPieces.slice(sliceIndex);
-            route.pieces = pieces;
-            params = route.paramsMap(pieces);
-        }
 
-        if (route === undefined || !params) {
-            this._error({router: this, uri: uri});
-            return;
-        } 
-
-        let viewId, elementId;
-        if (this._current) {
-            viewId = this._current.id;
-            elementId = this._current.elementId;
-        }
-        this._manager.leave(viewId, elementId).reveal(
-            {id: route.id, view: route.view, params: params, uri: uri}
-        ).then(elementId => {
-            if (!starting) {
-                this._leave({ router: this, route: this._current});
+        const resolveRoute = (route, paramsMap) => {
+            if (route) {
+                if (uriPieces[uriPieces.length - 1] == "") {
+                    uriPieces.splice(-1, 1);
+                }
+                let pieces = uriPieces.slice(sliceIndex);
+                route.pieces = pieces;
+                params = (paramsMap ? paramsMap(pieces) : route.paramsMap(pieces));
             }
-            this._current = route;
-            this._current.elementId = elementId;
-            this._navigate({router: this, route: route, params: params})
-        });
+    
+            if (route === undefined || !params) {
+                this._error({router: this, uri: uri});
+                return;
+            } 
+    
+            let viewId, elementId;
+            if (this._current) {
+                viewId = this._current.id;
+                elementId = this._current.elementId;
+            }
+            this._manager.leave(viewId, elementId).reveal(
+                {id: route.id, view: route.view, params: params, uri: uri}
+            ).then(elementId => {
+                if (!starting) {
+                    this._leave({ router: this, route: this._current});
+                }
+                this._current = route;
+                this._current.elementId = elementId;
+                this._navigate({router: this, route: route, params: params})
+            });
+        };
+        if (typeof route.view === "string") {
+            require([route.view], result => {
+                let paramsMap;
+                if (result && result.paramsMap) {
+                    paramsMap = paramsMap;
+                } else if (result && result.default && result.default.paramsMap) {
+                    paramsMap = result.default.paramsMap;
+                }
+                resolveRoute(route, paramsMap);
+            })
+        } else {
+            resolveRoute(route);
+        }
     }
 
 });

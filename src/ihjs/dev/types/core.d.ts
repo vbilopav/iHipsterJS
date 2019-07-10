@@ -32,6 +32,9 @@ interface ViewConstructorArgs {
  * 
  */
 interface ViewMethodArgs {
+    /**
+    * returned by paramsMap
+    */
     params?: any
     /**
     * 
@@ -39,21 +42,36 @@ interface ViewMethodArgs {
     element?: HTMLElement
 }
 /**
- * 
+ * `interface` for **`ihjs` view** object that can be either
+ * - ### single-page app view
+ *      - or - 
+ * - ### main view in single-view app
+ *      - or 
+ * - ### web-component view
  */
-interface View {
+interface IView {
     /**
+    * To render the view return from this method:
+    * - a `string` or `Promise` to return a `string`: 
+    * 
+    *   - resolves as template bound to instance of a view where this `render` method is defined
+    *   - events are bound to view instance and template expressions are not parsed
+    * 
+    * ---
+    * 
+    * - function that returns a `string` or `Promise` to return a `string` 
+    *       - or -
+    * - two element array where first element element function that returns a `string` or `Promise` to return a `string` and second element is any object
+    * 
+    *   - resolves as self-contained template where template instance (`this` in template) expression is passed as second array parameter (if any)
+    *   - events are bound to template `this` instance 
     * 
     */
-    render(args?: ViewMethodArgs): string | Promise<string>
+    render(args?: ViewMethodArgs): string | Promise<string> | (() => string) | [(() => string), any]
     /**
     * 
     */
     rendered?(args?: ViewMethodArgs): void
-    /**
-    * 
-    */
-    changed?(args?: ViewMethodArgs): void
 }
 /**
  * 
@@ -62,7 +80,7 @@ interface ViewConstructor {
     /**
     * 
     */
-    new(args: ViewConstructorArgs): View
+    new(args: ViewConstructorArgs): IView
 }
 /**
  * 
@@ -334,7 +352,7 @@ interface HTMLElement {
      */
     hideElement(): HTMLElement
     /**
-     * 
+     * Sets innerHTML value of element or elements and returns same instance.
      */
     html(content?: string): HTMLElement
     /**
@@ -362,7 +380,8 @@ interface HTMLElement {
      */
     setFocus(): HTMLElement
     /**
-     * 
+     * - If state parameter is not present sets display css attribute to empty (inherit) and returns same instance.
+     * - If state parameter not present toggles display css attribute none or empty and returns same instance.
      */
     showElement(state?: boolean): HTMLElement
     /**
@@ -462,7 +481,15 @@ interface Window {
  */
 interface StringConstructor {
     /**
+     * Support for Visual Studio Code [`lit-html` extension](https://github.com/Polymer/lit-html)
      * 
+     * *Syntax highlighting and IntelliSense for html inside of JavaScript and TypeScript tagged template strings.*
+     * 
+     * ---
+     * 
+     * Example: `String.html``<div>some html</div>``
+     * 
+     * Returns unchanged string value.
      */
     html: any
 }

@@ -1,20 +1,10 @@
-///<reference path="../../../../src/ihjs/build/1.2.12/types/spa.d.ts"/>
+///<reference path="../../../../src/ihjs/dev/types/spa.d.ts"/>
 
 import {Router, Manager} from "ihjs/spa"; 
 
-
 new Router({
-    routes: {
-        "/": {
-            view: "demos/simple-spa/typescript/app/github-user"
-        },
-        "/github-user-info": {
-            view: "demos/simple-spa/typescript/app/github-user-info",
-            paramsMap: params => (params.length === 1 ? params[0] : false)
-        }
-    },
+    routes: {"/": "demos/simple-github-browser/typescript/_app/search"},
     error: event => console.log(event)
 })
 .useViewManager(new Manager(document.body.html("").showElement()))
-.start()
-
+.start();

@@ -22,7 +22,7 @@ interface ViewManagerRevealArgs {
     uri?: string
 }
 /**
- * 
+ * View Manager class is responsible for handling views rendering in leave and reveal methods called by client Router
  */
 declare class ViewManagerClass {
     /**
@@ -94,15 +94,15 @@ interface RouterLeaveEvent {
     route: Route
 }
 /**
- * 
+ * Router err event parameter
  */
 interface RouterErrorEvent {
     /**
-    * 
+    * router that initiated this error
     */
     router: RouterClass, 
     /**
-    * 
+    * router definition where errror occured
     */
     route: Route
 }
@@ -119,7 +119,7 @@ interface RouterConstructorArgs {
      */
     leave?: (e: RouterLeaveEvent) => any,
     /**
-     * 
+     * Event is fired when browser navigates to non existing route
      */
     error?: (e: RouterErrorEvent) => any,
     /**
@@ -131,9 +131,12 @@ interface RouterConstructorArgs {
      */
     test?: (route: string) => any,
     /**
-     * 
+     * Defines routes object:
+     * key is route path starting with slash - e.g "/" or "/view-name"
+     * value is Route object {id?: string, name?: string, view: ViewDefinition, paramsMap?: (args: string[]) => void, data?}
+     * or simple module path in a string containing view or template
      */
-    routes: {[key: string]: Route;}
+    routes: {[key: string]: Route | String}
 }
 /**
  * Router class to create instance of the router component.
@@ -141,11 +144,11 @@ interface RouterConstructorArgs {
 declare class RouterClass {
     constructor(args: RouterConstructorArgs)
     /**
-    * 
+    * Tells router that it should use following view manager instance, responsible for rendering spa views
     */
     useViewManager(manager: ViewManagerClass): RouterClass
     /**
-    * 
+    * Tell router to render current view (based on url) and start listening to url changes
     */
     start(): RouterClass
     /**
@@ -163,7 +166,7 @@ declare class RouterClass {
 }
 
 /**
-* 
+* ihjs/spa declares all components needed for SPA application - client router and spa view manager
 */
 declare module "ihjs/spa" {
     /**
@@ -175,7 +178,6 @@ declare module "ihjs/spa" {
     */
     export class Manager extends ViewManagerClass {}
 }
-
 /**
 * 
 */
@@ -185,7 +187,6 @@ declare module "ihjs/spa/router" {
     */
     export default class Router extends RouterClass {}
 }
-
 /**
 * 
 */
