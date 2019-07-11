@@ -4,14 +4,16 @@ define([
     "ihjs/template/load-text",
     "ihjs/template/parser",
     "ihjs/template/import",
-    "ihjs/app"
+    "ihjs/app",
+    "ihjs/view-manager/utils"
 ], (
     Router, 
     Manager,
     {getTemplate},
     {parseTemplate},
     {parseImportsAsync},
-    app
+    app,
+    {isTemplate}
 
 ) => (templates, element) => {
 
@@ -35,15 +37,27 @@ define([
             if (!path) {
                 continue;
             }
-            const 
-                route = {},
-                t = getTemplate(undefined, template);
-            await parseImportsAsync(t.html);
-            const
+            const route = {};
+            let content, view;
+            if (template.dataset.src) {
+                let result = await ihjs.import(template.dataset.src);
+                if (!isTemplate(undefined, result)) {
+                    routes[path] = template.dataset.src;
+                    continue;
+                } 
+                content = result._raw;
                 view = (data, locale) => {
                     data.template = {route: route};
-                    return parseTemplate(t.html, data, locale);
+                    return result(data, locale);
                 };
+            } else {
+                content = getTemplate(undefined, template).html;
+                await parseImportsAsync(content);
+                view = (data, locale) => {
+                    data.template = {route: route};
+                    return parseTemplate(content, data, locale);
+                };
+            }
             view._isTemplate = true;
             if (path === "error" || path === "404" || path === "unknown") {
                 routes["/error"] = {view: view};
@@ -51,7 +65,7 @@ define([
             }
             route["view"] = view;
             const that = {};
-            Function("return " + app.config.name + ".__temp`" + t.html + "`;").call(that);
+            Function("return " + app.config.name + ".__temp`" + content + "`;").call(that);
             if (that.paramsMap) {
                 route.paramsMap = that.paramsMap;
             }

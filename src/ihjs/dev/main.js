@@ -16,9 +16,8 @@ define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions, applyExtens
         require([
             "ihjs/app",
             "ihjs/view-manager/reveal",
-            "ihjs/template/parser",
-            "ihjs/view-manager/components"
-        
+            "ihjs/template/parser"
+
         ], (ihjs, {reveal}) => {
         
                 ihjs.import = m => new Promise(resolve => require([m], r => resolve(r)));

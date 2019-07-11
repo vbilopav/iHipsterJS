@@ -1,0 +1,40 @@
+${<script>
+async () => {
+    const {fetchGitHub, detailsList} = this.template.import("template-functions!demos/simple-github-browser/template/templates/utils.html");
+    this.detailsList = detailsList;
+    this.fetchGitHub = this.fetchGitHub;
+    if (!this.details) {
+      this.details = await fetchGitHub(`/users/${this.item.login}`);
+    }
+
+    this.error = null;
+    if (this.details.message) {
+      this.error = "<li>" + this.details.message + "</li>"; 
+    }
+    this.encodedDetails = () => encodeURIComponent(JSON.stringify(this.details));
+}
+</script>}
+
+<div class="panel">
+    ${() => !this.error && !ihjs.queryString.test ? `
+    <user-github-star data-item=${this.encodedDetails()}></user-github-star>
+    `: ""}
+    <span class="panel-info">
+        ${() => this.error != null ? "" : `
+        <a href="#/details/` + this.item.login + (this.details ? '/' + this.encodedDetails() : '') + `">See more details</a>
+        `}
+        ${this.dataset.doNotShowScore ? "" : `
+        <div>Search score = ${this.item.score}</div>
+        `}
+    </span>
+
+    <a href="${this.item.html_url}"><img src="${this.item.avatar_url}" /></a>
+    <span class="item-info">
+      <ul id="item-list">
+        <li>
+          <strong>${this.item.type}:</strong>&nbsp;<a href="${this.item.html_url}">${this.item.login}</a>
+        </li>
+        ${() => this.error || this.detailsList(this.details)}
+      </ul>
+    </span>
+</div>

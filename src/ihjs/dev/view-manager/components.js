@@ -149,15 +149,25 @@ define([
         })
     };
 
-    for(let element of document.querySelectorAll("template[data-tag]")) {
-        let t = getTemplate(undefined, element),
-            view = (data, locale) => parseTemplate(t.html, data, locale);
-        view._isTemplate = true;
-        resolveModule(
-            {tag: t.data.tag, observedAttributes: t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null}, 
-            view, 
-            types.template
-        );
+    return templates => {
+        let promises = [];
+        for(let element of templates) {
+            let t = getTemplate(undefined, element);
+            let observedAttributes = t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null
+            if (t.data.tag && !t.data.src) {
+                let view = (data, locale) => parseTemplate(t.html, data, locale);
+                view._isTemplate = true;
+                promises.push(resolveModule(
+                    {tag: t.data.tag, observedAttributes: observedAttributes}, 
+                    view, 
+                    types.template
+                ));
+            } else if (t.data.tag && t.data.src) {
+                promises.push(app.customElements.define({tag: t.data.tag, src: t.data.src, observedAttributes: observedAttributes}));
+            }
+        }
+        if (promises.length) {
+            Promise.all(promises);
+        }
     }
-
 });

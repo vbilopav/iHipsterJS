@@ -1,0 +1,42 @@
+${<script>() => {
+    // import publish/subscribe module from core library https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/dev/pubsub.js
+    const {publish, subscribe} = this.template.import("ihjs/pubsub");
+
+    this.data = JSON.parse(decodeURIComponent(this.dataset.item));
+    this.key = "item-" + this.data.id;
+    this.saved = localStorage.getItem(this.key) !== null;
+
+    this.starElement = () => {
+      const e = this.template.model.star;
+      if (this.saved) {
+        e.html("&#11088;").attr("title", "remove from saved");
+      } else {
+        e.html("&#10032;").attr("title", "save");
+      }
+    };
+
+    subscribe("item/toggle/" + this.data.id, state => {
+      this.saved = state;
+      this.starElement();
+    });
+
+    this.starClick = () => {
+      if (!this.saved) {
+        localStorage.setItem(this.key, JSON.stringify(this.data));
+        this.saved = true;
+        publish("item/saved", this.key);
+        publish("item/toggle/" + this.data.id, true);
+      } else {
+        localStorage.removeItem(this.key);
+        this.saved = false;
+        publish("item/removed", this.key);
+        publish("item/toggle/" + this.data.id, false);
+      }
+      this.starElement();
+    }
+    this.rendered = () => this.starElement();
+  }
+  </script>}
+
+  <div id="star" class="panel-save" onclick="starClick"></div>
+  

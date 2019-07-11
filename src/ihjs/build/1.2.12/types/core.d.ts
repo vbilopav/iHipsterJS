@@ -209,13 +209,9 @@ interface ParseTemplateArg {
     name?: string
 }
 /**
- * 
+ * defines global constants
  */
 interface AppObject {
-    /**
-     * 
-     */
-    Model: ModelInterface
     /**
      * 
      */
@@ -228,22 +224,19 @@ interface AppObject {
      * 
      */
     config: {
+        module: string,
         /**
          * 
          */
-        module?: string, 
+        defaultElementId: string, 
         /**
          * 
          */
-        view?: string, 
+        name: string,
         /**
          * 
          */
-        elementId: string, 
-        /**
-         * 
-         */
-        name: string
+        loadCssAlways: boolean
     }
     /**
      * 
@@ -263,7 +256,10 @@ interface AppObject {
      */
     fetch(input: RequestInfo, init?: RequestInit): Promise<any>
     /**
-     * 
+     * creates a promise to import a module: 
+     * ```javascript
+     * ihjs.import = m => new Promise(resolve => require([m], r => resolve(r)));
+     * ```
      */
     import(module: string): Promise<any>
     /**
@@ -275,9 +271,9 @@ interface AppObject {
      */
     parse(template: string, data?: object, local?: {[key: string]: (...args: any)=>any}, name?: string): Promise<string>
     /**
-     * 
+     * URL query string decoded to object
      */
-    queryString: string | object
+    queryString: any
     /**
      * 
      */
@@ -472,7 +468,7 @@ interface Window {
      */
     trigger(eventName: string): Window
     /**
-     * 
+     * Global application object
      */
     ihjs: AppObject
 }

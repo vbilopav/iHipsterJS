@@ -29,11 +29,19 @@ define(["ihjs/app"], app => {
     // all templates in document
     let templates = document.getElementsByTagName("template");
 
+    let spaRequired = false, componentRequired = false;
     for (let template of templates) {
-        if (template.dataset.route) {
+        if (template.dataset.route && !spaRequired) {
             require(["ihjs/spa/document"], spa => spa(templates, getElement()));
-            return;
+            spaRequired = true;
         }
+        if (template.dataset.tag && !componentRequired) {
+            require(["ihjs/view-manager/components"], comps => comps(templates));
+            componentRequired = true;
+        }
+    }
+    if (spaRequired) {
+        return;
     }
 
     // default view isn't defined

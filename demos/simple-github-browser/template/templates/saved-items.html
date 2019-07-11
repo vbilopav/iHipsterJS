@@ -1,0 +1,43 @@
+<h3>Your saved items of your <code>GitHub <img src="assets/github.ico" /></code> user search. Total <code id=total></code> items.</h3>
+<button onclick="window.history.back();">Go back</button>
+<button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+<div id="results"></div>
+
+${<script>() => {
+  this.count = 0;
+  const 
+    addItem = key => {
+      let value = JSON.parse(localStorage.getItem(key));
+      let element = `<github-result id=${key} data-do-not-show-score='true' data-remove-on-unstar='true'></github-result>`.dom();
+      element.item = value;
+      element.details = value;
+      this.model.results.append(element);
+    };
+
+  const {subscribe} = this.template.import("ihjs/pubsub");
+
+  subscribe("item/removed", key => {
+    this.model.results.find("#" + key).remove()
+    this.model.total.html(--this.count);
+  });
+  subscribe("item/saved", key => {
+    let e = this.model.results.find("#" + key);
+    if (e.length) {
+      return;
+    }
+    addItem(key);
+    this.model.total.html(++this.count);
+  });
+  this.template.rendered = () => {
+    this.model.results.html("");
+    for(let key in localStorage) {
+      if (key.startsWith("item-")) {
+        addItem(key);
+        this.count++;
+      }
+    }
+    this.model.total.html(this.count);
+  };
+
+}
+</script>}

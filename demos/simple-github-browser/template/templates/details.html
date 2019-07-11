@@ -1,0 +1,154 @@
+${<script>
+() => this.paramsMap = params => params.length > 0 && params.length < 3 ? {login: params[0], details: (params.length === 2 ? JSON.parse(params[1]) : undefined)} : false
+</script>}
+
+${<script>async () => {
+  const {fetchGitHub, detailsList} = this.template.import("template-functions!demos/simple-github-browser/template/templates/utils.html");
+  this.fetchGitHub = fetchGitHub;
+  this.detailsList = detailsList;
+  if (!this.details) {
+    this.details = await fetchGitHub(`/users/${this.login}`);
+  }
+  this.encodedDetails = () => encodeURIComponent(JSON.stringify(this.details));
+}
+</script>}
+<h3>User details for user <code>${this.login}</code></h3>
+<p>
+${ihjs.queryString.test ?
+    `
+    <strong>Note:</strong> Currently working on local <strong>test sample</strong>. 
+    Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
+    `
+    :
+    ''
+  }
+</p>
+<button onclick="window.history.back();">Go back</button>
+<button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+${() => !this.details.message && !ihjs.queryString.test ? `
+<user-github-star class="details-star" data-item=${this.encodedDetails()}></user-github-star>
+<a class="big-link" style="right: 25px;position: relative;top: 10px;" href="#/saved-items/">view saved items</a>
+` : ""}
+<div class="panel">
+  <a href="${() => this.details.html_url}"><img src="${() => ihjs.queryString.test ? 'assets/github.ico' : this.details.avatar_url}" /></a>
+  <ul class="item-details-list" id="list">
+      <li>
+          <strong>${() => this.details.type}:</strong>&nbsp;<a href="${() => this.details.html_url}">${() => this.login}</a>
+      </li>
+      ${() => this.details.message || this.detailsList(this.details)}
+      ${() => this.details.message ? "" : `
+      <li>
+          <strong>Hireable:</strong>&nbsp;${this.details.hireable}
+      </li>
+      <li>
+          <strong>Bio:</strong>&nbsp;${this.details.bio}
+      </li>
+      `}
+  </ul>
+</div>
+<div id="loading" style="text-align: center; margin-top: -20px;">...</div>
+<div id="followers" class="panel" style="display: none"></div>
+<div id="following" class="panel" style="display: none"></div>
+<div id="repos" class="panel" style="display: none"></div>
+<div id="gists" class="panel" style="display: none"></div>
+<div id="subscriptions" class="panel" style="display: none"></div>
+<div id="starred" class="panel" style="display: none"></div>
+
+${<script>() => this.template.rendered = async  () => {
+  
+  let loading = 1; interval = setInterval(() => {
+    this.model.loading.html(".".repeat(loading++));
+    if (loading === 5) loading = 1;
+  }, 500);
+
+  const formatCodeItem = (name, lang, item, url, desc) => 
+    `<li>
+      ${typeof name === "string" ? `<strong>${name}</strong>${lang ? "&nbsp;<code>" + lang + "</code>" : ""}&nbsp;` : name.join(", ")}
+      ${item ? "<span class=info-text>(" + (item.fork ? "forked, " : "") + "&#11088;: <strong>" + item.stargazers_count + "</strong>, &#128065;: <strong>" + item.watchers_count + ")</strong></span>&nbsp;" : ""}
+      <a href="${url}" target=_blank>&#x2197;</a>
+      ${desc ? " - <span class=info-text>" + desc + "</span>" : ""}
+    </li>`;
+  const countLang = (lang, langs) => lang && (langs[lang] = {count: langs[lang] === undefined ? 1 : langs[lang].count + 1});
+  const formatCodeResult = (name, count, result, langs) => {
+    if (count === 0) {
+      return `
+      <details>
+          <summary><h4>No ${name} found!</h4></summary>
+      </details>
+      `;
+    } else {
+      let sorted = Object.entries(langs).sort((a,b) => a[1].count - b[1].count).reverse().map(i => "<code>" + i[0] + "</code>" + " (" + i[1].count + ")").join(", ");
+      return `
+        <details>
+          <summary><h4><code>${count}</code> ${name} - ${sorted}</h4></summary>
+          <ul class='item-detail-list'>${result}</ul>
+        </details>
+        `;
+    }
+  };
+  const updateRepos = async (endpoint, name) => {
+    let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+    let langs = {};
+    if (response.message) {
+      element.html(response.message).showElement();
+      return false;
+    }
+    for (let item of response) {
+      count++;
+      result += formatCodeItem(item.name, item.language, item, item.html_url, item.description);
+      countLang(item.language, langs);
+    }
+    element.html(formatCodeResult(name, count, result, langs)).showElement();
+    return true;
+  };
+  const updateGists = async (endpoint, name) => {
+    let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+    if (response.message) {
+      element.html(response.message).showElement();
+      return false;
+    }
+    langs = {};
+    for (let item of response) {
+      count++;
+      let files = [];
+      for(let file of Object.values(item.files)) {
+        files.push("<strong>" + file.filename + "</strong>" + (file.language ? "&nbsp;<code>" + file.language + "</code>" : ""));
+        countLang(file.language, langs);
+      }
+      result += formatCodeItem(files, undefined, undefined, item.html_url, item.description);
+    }
+    element.html(formatCodeResult(name, count, result, langs)).showElement();
+    return true;
+  }
+  const updateUsers = async (endpoint, name) => {
+    let result = "", count = 0, element = this.model[endpoint], response = await this.fetchGitHub(`/users/${this.login}/${endpoint}`);
+    if (response.message) {
+      element.html(response.message).showElement();
+      return false;
+    }
+    let users = [];
+    for(let user of response) {
+      users.push(`<span class="user-item"><a href="#/details/${user.login}"><img src="${user.avatar_url}" />&nbsp;${user.login}</a></span>`);
+      count++;
+    }
+    element.html(`
+        <details>
+          <summary><h4><code>${count}</code>&nbsp;${name}</h4></summary>
+          <p>
+          ${users.join("")}
+          </p>
+        </details>
+        `).showElement();
+    return true
+  }
+
+  if (!await updateUsers("followers", "Followers")) return;
+  if (!await updateUsers("following", "Following")) return;
+  if (!await updateRepos("repos", "repos")) return;
+  if (!await updateGists("gists", "gists")) return;
+  if (!await updateRepos("subscriptions", "subscriptions")) return;
+  !await updateRepos("starred", "starred");
+  clearInterval(interval);
+  this.model.loading.hideElement();
+}
+</script>}
