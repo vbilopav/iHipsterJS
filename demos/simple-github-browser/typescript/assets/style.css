@@ -4,6 +4,9 @@ button {
 button:disabled, input:disabled, select:disabled, textarea:disabled {
   cursor: default !important;
 }
+summary {
+  cursor: pointer;
+}
 .panel {
     position: relative;
     margin-bottom: 20px;

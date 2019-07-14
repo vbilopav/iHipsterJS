@@ -241,9 +241,15 @@ interface AppObject {
      */
     parse(template: string, data?: object, local?: {[key: string]: (...args: any)=>any}, name?: string): Promise<string>
     /**
-     * URL query string decoded to object
+     * URL query string decoded to any an `key: value` object
+     * If query string is single value e.g. `?some_value`, it will be a string
      */
-    queryString: any
+    queryString: string | any
+    /**
+     * Parses URL query string to any an `key: value` object
+     * If query string is single value e.g. `?some_value`, it will be a string
+     */
+    parseQueryString(url: string): string | any
     /**
      * 
      */
