@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/build/1.2.12/types/core.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.2.2/types/core.d.ts"/>
 
 export default class {
     username: string
