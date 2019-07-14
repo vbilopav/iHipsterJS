@@ -111,49 +111,59 @@ define([
         if (getter && getter.length) {
             Object.defineProperty(component, "observedAttributes", { get: () => getter });
         }
-        window.customElements.define(item.tag, component, item.options);
+        try {
+            window.customElements.define(item.tag, component, item.options);
+        } catch(e) {
+            reject(e);
+        }
+        
     });
 
-    app.customElements = {
-        define: (...args) => new Promise((resolve, reject) => {
-            let items = {};
-            for(let arg of args) {
-                items[arg.src] = arg;
-            }
-            require(Object.keys(items), (...results) => {
-                const resolved = [], promises = [];
-                for(let i = 0, l = results.length; i < l; i++) {
-                    let item = args[i], result = results[i];
+    const customElementsDefine = (...args) => new Promise((resolve, reject) => {
+        let items = {};
+        for(let arg of args) {
+            items[arg.src] = arg;
+        }
+        require(Object.keys(items), (...results) => {
+            const resolved = [], promises = [];
+            for(let i = 0, l = results.length; i < l; i++) {
+                let item = args[i], result = results[i];
 
-                    if (result.prototype instanceof HTMLElement || (result.default && result.default.prototype instanceof HTMLElement)) {
+                if (result.prototype instanceof HTMLElement || (result.default && result.default.prototype instanceof HTMLElement)) {
+                    try {
                         resolveElement(item, result);
-                        resolved.push(item);
-                        continue;
+                    } catch(e) {
+                        return reject(e);
                     }
-
-                    let type = getViewType(result, item.src);
-                    if (type === types.template || type === types.class) {
-                        promises.push(resolveModule(item, result, type));
-                        resolved.push(item);
-                    }
+                    resolved.push(item);
+                    continue;
                 }
 
-                if (resolved.length) {
-                    if (promises.length) {
-                        return Promise.all(promises).then(() => resolve(resolved)).catch((e => reject(e)));
-                    }
-                    return resolve(resolved);
+                let type = getViewType(result, item.src);
+                if (type === types.template || type === types.class) {
+                    promises.push(resolveModule(item, result, type));
+                    resolved.push(item);
                 }
-                return reject("Couldn't find components to register.");
-            });
-        })
-    };
+            }
 
-    return templates => {
-        let promises = [];
-        for(let element of templates) {
-            let t = getTemplate(undefined, element);
-            let observedAttributes = t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null
+            if (resolved.length) {
+                if (promises.length) {
+                    return Promise.all(promises).then(() => resolve(resolved)).catch((e => reject(e)));
+                }
+                return resolve(resolved);
+            }
+            return reject("Couldn't find components to register.");
+        });
+    });
+    
+
+    const promises = [];
+
+    return {
+        addElement: template => {
+            const 
+                t = getTemplate(undefined, template),
+                observedAttributes = t.data.observedAttributes ? JSON.parse(t.data.observedAttributes.replace(new RegExp("'", 'g'), '"')) : null;
             if (t.data.tag && !t.data.src) {
                 let view = (data, locale) => parseTemplate(t.html, data, locale);
                 view._isTemplate = true;
@@ -162,12 +172,16 @@ define([
                     view, 
                     types.template
                 ));
-            } else if (t.data.tag && t.data.src) {
-                promises.push(app.customElements.define({tag: t.data.tag, src: t.data.src, observedAttributes: observedAttributes}));
+            } else if (template.dataset.tag && template.dataset.src) {
+                promises.push(customElementsDefine({tag: t.data.tag, src: t.data.src, observedAttributes: observedAttributes}));
             }
-        }
-        if (promises.length) {
-            Promise.all(promises);
-        }
+        },
+        resolveElements: () => new Promise(resolve => {
+            if (promises.length) {
+                return Promise.all(promises).then(resolve()).catch(e => {throw e});
+            }
+            return resolve();
+        }),
+        customElementsDefine
     }
 });

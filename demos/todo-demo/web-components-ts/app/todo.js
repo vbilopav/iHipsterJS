@@ -1,9 +1,13 @@
-define(["require", "exports", "demos/todo-demo/web-components-ts/app/count"], function (require, exports, count_1) {
+define(["require", "exports", "demos/todo-demo/web-components-ts/app/count", "ihjs/components"], function (require, exports, count_1, components_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
         constructor(args) {
-            window.ihjs.customElements.define({
+            components_1.customElementsDefine({
+                tag: "todo-item",
+                src: "demos/todo-demo/web-components-ts/app/todo-item",
+                observedAttributes: ['id', 'data-index']
+            }, {
                 tag: "todo-item",
                 src: "demos/todo-demo/web-components-ts/app/todo-item",
                 observedAttributes: ['id', 'data-index']

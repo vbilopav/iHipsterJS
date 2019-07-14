@@ -40,7 +40,7 @@
                 this.header = header;
                 this.item = item;
 
-                this.template.rendered = ({element}) => {
+                this.template.rendered = element => {
                     console.log("Template rendered into element:");
                     console.log(element);
                     console.log("I also have following model defined:");
@@ -65,7 +65,7 @@
     </template>
 
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <!-- <script src="../../../src/ihjs/dev/ihjs.js"></script> -->
     <script type="module" src="../../../src/ihjs/build/1.2.12/ihjs.js"></script>
 
 </body>

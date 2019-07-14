@@ -56,7 +56,7 @@
                     this.template.css("/demos/shared/css/todo.css");
 
                     // define custom component
-                    ihjs.customElements.define({
+                    this.template.import("ihjs/components").customElementsDefine({
                         tag: "todo-item", 
                         src: "template!todo-item",
                         observedAttributes: ['id', 'data-index'],
@@ -88,7 +88,7 @@
             </div>
         </div>
         ${<script>
-            () => this.template.rendered = ({element}) => {
+            () => this.template.rendered = element => {
                 console.log("Main template have following components: ");
                 console.log(element.findAll("todo-item"));
                 console.log("Change some attribute value on todo-item element...");
@@ -96,7 +96,7 @@
         </script>}
     </template>
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <!-- <script src="../../../src/ihjs/dev/ihjs.js"></script> -->
     <script type="module" src="../../../src/ihjs/build/1.2.12/ihjs.js"></script>
 
 </body>

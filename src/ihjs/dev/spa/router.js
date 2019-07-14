@@ -172,7 +172,7 @@ define([], () => class {
             require([route.view], result => {
                 let paramsMap;
                 if (result && result.paramsMap) {
-                    paramsMap = paramsMap;
+                    paramsMap = result.paramsMap;
                 } else if (result && result.default && result.default.paramsMap) {
                     paramsMap = result.default.paramsMap;
                 }

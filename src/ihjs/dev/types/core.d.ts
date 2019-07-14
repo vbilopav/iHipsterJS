@@ -169,27 +169,6 @@ declare module "ihjs/models/model" {
 /**
  * 
  */
-interface DefineComponentArg {
-    /**
-    * 
-    */
-    tag: string
-    /**
-    * 
-    */
-    src: string
-    /**
-    * 
-    */
-    observedAttributes?: Array<any>
-    /**
-    * 
-    */
-    context?: any
-}
-/**
- * 
- */
 interface ParseTemplateArg {
     /**
      * 
@@ -237,15 +216,6 @@ interface AppObject {
          * 
          */
         loadCssAlways: boolean
-    }
-    /**
-     * 
-     */
-    customElements: {
-        /**
-         * 
-         */
-        define(...components: [DefineComponentArg]): void
     }
     /**
      * 

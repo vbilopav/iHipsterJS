@@ -2,14 +2,14 @@ ${this.template.css("/demos/shared/css/todo.css")}
 
 ${<script>() => {
     // register "todo-item" tag with the application
-    ihjs.customElements.define({
+    this.template.import("ihjs/components").customElementsDefine({
         tag: "todo-item", 
         src: "template!demos/todo-demo/template-components1/todo-item.html",
         observedAttributes: ['id', 'data-index'],
         context: this
     });
     this.count = 0;
-    this.template.rendered = ({element}) => {
+    this.template.rendered = element => {
         // Only rendered components that have name or id attribute will ba available in children property
         console.log("I haz following components: ");
         console.log(element.findAll("todo-item"));

@@ -1,6 +1,7 @@
-///<reference path="../../../../src/ihjs/build/1.2.12/types/core.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.2.12/types/components.d.ts"/>
 
 import {setCount, increase} from "demos/todo-demo/web-components-ts/app/count";
+import {customElementsDefine} from "ihjs/components";
 
 export default class {
     input: string
@@ -10,7 +11,11 @@ export default class {
     }
 
     constructor(args: ViewConstructorArgs) {
-        window.ihjs.customElements.define({
+        customElementsDefine({
+            tag: "todo-item", 
+            src: "demos/todo-demo/web-components-ts/app/todo-item",
+            observedAttributes: ['id', 'data-index']
+        }, {
             tag: "todo-item", 
             src: "demos/todo-demo/web-components-ts/app/todo-item",
             observedAttributes: ['id', 'data-index']

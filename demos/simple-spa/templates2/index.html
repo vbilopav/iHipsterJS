@@ -8,17 +8,19 @@
 
     <link rel="stylesheet" href="../../shared/css/water/dark.css">
     <link rel="stylesheet" href="../../shared/css/demos.css">
-
+    
     <title></title>
   </head>
   <body>
 
     <div id="app">
       <script src="../../shared/loading.js"></script>
+      <template data-route="/" data-src="template!demos/simple-spa/templates2/github-user.html"></template>
+      <template data-route="/github-user-info" data-src="template!demos/simple-spa/templates2/github-user-info"></template>
     </div>
 
-    <!-- <script data-app-module="demos/simple-spa/module2/app" src="../../../src/ihjs/dev/ihjs.js"></script> -->
-    <script type="module" data-app-module="demos/simple-spa/module2/app"src="../../../src/ihjs/build/1.2.12/ihjs.js"></script>
+    <script src="../../../src/ihjs/dev/ihjs.js"></script>
+    <!-- <script type="module" src="../../../src/ihjs/build/1.2.12/ihjs.js"></script> -->
 
   </body>
 </html>

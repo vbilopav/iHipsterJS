@@ -1,6 +1,6 @@
 ///<reference path="../../../../src/ihjs/build/1.2.12/types/core.d.ts"/>
 
-export default class implements View {
+export default class implements IView {
     
     async render(args: ViewMethodArgs) {
 

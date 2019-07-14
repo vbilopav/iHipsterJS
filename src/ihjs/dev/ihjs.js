@@ -10,7 +10,7 @@
             urlArgs: undefined,
             appUrl: "/",
             libsUrl: null,
-            appModule: "ihjs/single-view-app",
+            appModule: null,
             appElementId: "app",
             appObjectName: "ihjs",
             loaderUrl: path => `${path}loader/loader.js`

@@ -15,27 +15,25 @@ define([
     app,
     {isTemplate}
 
-) => (templates, element) => {
+) => {
 
     app.__temp = (_, ...subs) => {
         for (let [i, sub] of Object.entries(subs))  {
-            if (sub.toString().indexOf("paramsMap") === -1) {
+            if (!sub || sub.toString().indexOf("paramsMap") === -1) {
                 continue;
             }
             sub();
             delete subs[i];
             return;
         }
-    }
+    };
+    const routes = {};
 
-    (async () => {
-
-        const routes = {};
-
-        for (let template of templates) {
+    return {
+        addView: async template => {
             const path = template.dataset.route;
             if (!path) {
-                continue;
+                return;
             }
             const route = {};
             let content, view;
@@ -43,7 +41,7 @@ define([
                 let result = await ihjs.import(template.dataset.src);
                 if (!isTemplate(undefined, result)) {
                     routes[path] = template.dataset.src;
-                    continue;
+                    return;
                 } 
                 content = result._raw;
                 view = (data, locale) => {
@@ -61,7 +59,7 @@ define([
             view._isTemplate = true;
             if (path === "error" || path === "404" || path === "unknown") {
                 routes["/error"] = {view: view};
-                continue;
+                return;
             }
             route["view"] = view;
             const that = {};
@@ -70,24 +68,20 @@ define([
                 route.paramsMap = that.paramsMap;
             }
             routes[path] = route;
-        }
+        },
 
-        return routes;
+        resolveViews: element => {
+            delete app.__temp;
 
-    })().then(routes => {
-
-        delete app.__temp;
-
-        new Router({
-            routes: routes, 
-            error: event => {
-                console.error(event);
-                if (routes["/error"]) {
-                    event.router.reveal("/error");
+            new Router({
+                routes: routes, 
+                error: event => {
+                    console.error(event);
+                    if (routes["/error"]) {
+                        event.router.reveal("/error");
+                    }
                 }
-            }
-        }).useViewManager(new Manager(element.html("").showElement())).start();
-
-    });
-
+            }).useViewManager(new Manager(element.html("").showElement())).start();
+        }
+    }
 });

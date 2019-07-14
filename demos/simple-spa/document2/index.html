@@ -12,10 +12,7 @@
   <body>
 
     <template data-route="/github-user-info">
-      ${<script>() => { 
-        this.paramsMap = params => (params.length === 1 ? params[0] : false) 
-      }
-      </script>}
+      ${<script>() => this.paramsMap = params => (params.length === 1 ? params[0] : false)</script>}
         <div>
             <h2>Github user data</h2>
             <div>
@@ -65,7 +62,7 @@
       <h1>Unknown route - 404</h1>
     </template>
 
-    <!-- <script type="module" src="../../../src/ihjs/dev/ihjs.js"></script> -->
+    <!-- <script src="../../../src/ihjs/dev/ihjs.js"></script> -->
     <script type="module" src="../../../src/ihjs/build/1.2.12/ihjs.js"></script>
 
   </body>

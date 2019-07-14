@@ -24,9 +24,9 @@ node build ..\..\..\demos\remote-data\module-view3-custom-build\build-config.js
     //
     bundleComment: 'custom build: ${this.timestamp}, version: ${this.version}',
     //
-    // not using spa capabilities, so we don't need them
+    // not using spa and custom components capabilities, so we don't need them
     // 
-    skipModules: ['spa.js', 'spa/router.js', 'spa/view-manager.js'],
+    skipModules: ['spa.js', 'spa/router.js', 'spa/view-manager.js', 'components.js'],
     //
     // look for additional modules to include in custom bundle here
     //

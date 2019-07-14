@@ -1,7 +1,7 @@
-define([], () => class {
+define(["ihjs/components"], ({customElementsDefine}) => class {
 
     constructor({options}) {
-        ihjs.customElements.define({
+        customElementsDefine({
             tag: "todo-item", 
             src: "demos/todo-demo/component2/todo-item",
             observedAttributes: ['id', 'data-index'],
