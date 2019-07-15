@@ -23,22 +23,16 @@ define(["ihjs/models/model"], Model  => {
             throw new Error("unknown view type " + view);
         },
         templateRendered = (params, element, revealed=false) => {
-            if (revealed) {
-                params.model = undefined;
-            }
             if (params.model === undefined || (params.model && !(params.model instanceof Model))) {
-                params.model = new Model({model: params.model}).bind(element, params, params);
+                params.model = new Model({model: params.model}).bind(element, params, params, revealed ? null : params.context);
             }
             revealed || params.template.rendered && params.template.rendered(element);
             revealed && params.template.revealed && params.template.revealed(element);
             params.template.shown && params.template.shown(element);
         },
         moduleRendered = (instance, args, revealed=false) => {
-            if (instance._options.context === undefined) {
-                instance._options.context = instance;
-            }
-            if (instance._options.model !== null && instance._options.model instanceof Model === false && (instance._options.context || instance._options.model)) {
-                instance.model = new Model({model: instance._options.model}).bind(args.element, instance._options.context);
+            if (instance._options.model === undefined || (instance._options.model && !(instance._options instanceof Model))) {
+                instance.model = new Model({model: instance._options.model}).bind(args.element, instance, instance, revealed ? null : instance._options.context || instance.context);
             }
             revealed || instance.rendered && instance.rendered({params: args.params, element: args.element});
             revealed && instance.revealed && instance.revealed({params: args.params, element: args.element});

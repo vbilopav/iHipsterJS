@@ -1,13 +1,18 @@
 ///<reference path="../../../../src/ihjs/build/1.2.2/types/core.d.ts"/>
 
 export default class {
-    username: string
+    username: string;
     model: {
         username: HTMLInputElement
     };
+    context: {
+        username: string
+    };
 
     constructor() {
-        this.username = window.ihjs.queryString as string || "vbilopav"; // default value for the model element username
+        this.context = {
+            username: window.ihjs.queryString as string || "vbilopav" // default value for the model element username
+        }
     }
 
     render() {
@@ -20,7 +25,6 @@ export default class {
     }
 
     showClick() {
-        this.username = this.model.username.value; // model is rebind on reveal
         window.location.href = "#/github-user-info/" + this.model.username.value;
     }
 

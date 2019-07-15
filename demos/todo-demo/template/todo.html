@@ -2,7 +2,9 @@ ${<script>
 () => {
     this.template.css("/demos/shared/css/todo.css", "/demos/shared/css/todo-item.css");
     this.itemTemplate = this.template.import("template!demos/todo-demo/template/todo-item.html");
-    this.input = "initial value"; 
+    this.context = {
+        input: "initial value"
+    }
     this.count = 0;
 }
 </script>}

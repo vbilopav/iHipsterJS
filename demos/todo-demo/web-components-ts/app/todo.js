@@ -17,7 +17,9 @@ define(["require", "exports", "demos/todo-demo/web-components-ts/app/count", "ih
                 content: "content",
                 input: "input"
             };
-            this.input = "initial value";
+            this.context = {
+                input: "initial value"
+            };
         }
         async render() {
             let index = 0;

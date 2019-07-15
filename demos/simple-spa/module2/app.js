@@ -2,10 +2,10 @@ define(
     ["ihjs/spa"], ({Router, Manager}) => new Router({
         routes: {
             "/": {
-                view: "demos/simple-spa/module2/github-user"
+                view: "github-user"
             },
             "/github-user-info": {
-                view: "demos/simple-spa/module2/github-user-info",
+                view: "github-user-info",
                 paramsMap: params => (params.length === 1 ? params[0] : false)
             }
         },

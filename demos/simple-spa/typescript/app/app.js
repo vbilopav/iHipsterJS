@@ -4,10 +4,10 @@ define(["require", "exports", "ihjs/spa"], function (require, exports, spa_1) {
     new spa_1.Router({
         routes: {
             "/": {
-                view: "demos/simple-spa/typescript/app/github-user"
+                view: "github-user"
             },
             "/github-user-info": {
-                view: "demos/simple-spa/typescript/app/github-user-info",
+                view: "github-user-info",
                 paramsMap: params => (params.length === 1 ? params[0] : false)
             }
         },

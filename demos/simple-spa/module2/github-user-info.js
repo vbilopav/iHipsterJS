@@ -38,5 +38,4 @@ define([], () => class {
     revealed(args) {
         console.log("revealed", args);
     }
-
 });

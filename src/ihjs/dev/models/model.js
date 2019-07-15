@@ -14,9 +14,10 @@ define([
         applyExtensionsExcept(this.HTMLModelArray, "HTMLElement", ["find", "findAll"], true);
     }
 
-    bind(element, instance, eventContext) {
+    bind(element, instance, eventContext, defaultContext) {
         this._instance = instance || Object.assign({}, this);
         this._eventContext = eventContext;
+        this._defaultContext = defaultContext || {};// || instance;
         if (!this._model) {
             element.forEachChild(e => this._forEachDeclarative(e));
         } else {
@@ -188,7 +189,7 @@ define([
             });
         }
         this._oncreate(element);
-        const value = this._instance[name];
+        const value = this._defaultContext[name];//this._instance[name];
         if (value === undefined) {
             return true;
         }

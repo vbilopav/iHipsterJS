@@ -1,7 +1,9 @@
 define([], () => class {
 
     constructor() {
-        this.username = ihjs.queryString || "vbilopav"; // default value for the model element username
+        this.context = {
+            username: ihjs.queryString || "vbilopav" // default value for the model element username
+        }
     }
 
     render() {
@@ -18,8 +20,7 @@ define([], () => class {
     }
 
     showClick() {
-        this.username = this.model.username.value; // model is rebind on reveal
-        window.location = "#/github-user-info/" + this.username;
+        window.location = "#/github-user-info/" + this.model.username.value;
     }
 
 });

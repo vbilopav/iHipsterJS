@@ -26,7 +26,6 @@
         dev = scr.getAttribute("data-dev") === null ? defaults.dev : eval(scr.getAttribute("data-dev")),
         version = scr.getAttribute("data-version") === null ? defaults.version : scr.getAttribute("data-version"),
         urlArgs = scr.getAttribute("data-url-args") === null ? defaults.urlArgs : scr.getAttribute("data-url-args"),
-        appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url"),
         sysUrl = scr.getAttribute("src").replace("ihjs.js", ""),
         viewModule = scr.getAttribute("data-view-module"),
         containerId = scr.getAttribute("data-app-container-id"),
@@ -35,6 +34,8 @@
         settings = eval("(" + scr.getAttribute("data-settings") + ")") || {},
         loaderUrl = scr.getAttribute("data-loader-url") || defaults.loaderUrl(sysUrl),
         loadCssAlways = scr.getAttribute("data-load-css-always") === null ? true : ["true", "1", "yes"].includes(scr.getAttribute("data-load-css-always").toLowerCase());
+    let
+        appUrl = scr.getAttribute("data-app-url") === null ? defaults.appUrl : scr.getAttribute("data-app-url");
 
     const 
         relative = (from, to) => {
@@ -160,6 +161,7 @@
         baseUrl: window[appObjectName].appUrl,
         _ihjsObjName: appObjectName,
         paths: {
+            "/": appUrl,
             libs: libsPath,
             "ihjs": sysPath,
             "text": sysPath + "/plugins/text",

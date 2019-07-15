@@ -9,6 +9,9 @@ export default class {
         content: HTMLElement
         input: HTMLInputElement
     }
+    context: {
+        input: string
+    }
 
     constructor(args: ViewConstructorArgs) {
         customElementsDefine({
@@ -30,7 +33,9 @@ export default class {
             content: "content", 
             input: "input"
         };
-        this.input = "initial value";
+        this.context = {
+            input: "initial value"
+        }
     }
 
     async render() {

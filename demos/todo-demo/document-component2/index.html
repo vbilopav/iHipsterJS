@@ -49,7 +49,9 @@
                 () => {
                     this.template.css("/demos/shared/css/todo.css");
                     this.count = 0;
-                    this.input = "initial value";
+                    this.context = {
+                        input: "initial value"
+                    }
                     this.createNewToDoItem = () => this.model.content.append(
                         `<todo-item data-index="${++this.count}">${this.model.input.value}</todo-item>`.dom()
                     );

@@ -3,7 +3,9 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     class default_1 {
         constructor() {
-            this.username = window.ihjs.queryString || "vbilopav";
+            this.context = {
+                username: window.ihjs.queryString || "vbilopav"
+            };
         }
         render() {
             return String.html `
@@ -14,7 +16,6 @@ define(["require", "exports"], function (require, exports) {
             </div>`;
         }
         showClick() {
-            this.username = this.model.username.value;
             window.location.href = "#/github-user-info/" + this.model.username.value;
         }
     }

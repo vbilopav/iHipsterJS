@@ -17,7 +17,9 @@ define(["ihjs/components"], ({customElementsDefine}) => class {
             content: "content", 
             input: "input"
         };
-        this.input = "initial value";
+        this.context = {
+            input: "initial value"
+        }
         this.count = 0;
     }
 
