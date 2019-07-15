@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/dev/types/core.d.ts"/>
+///<reference path="../../../../../../src/ihjs/dev/types/core.d.ts"/>
 
 const fetchGithub = async (url: string) => {
     let response: any;

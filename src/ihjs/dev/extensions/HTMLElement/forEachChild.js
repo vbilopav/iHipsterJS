@@ -7,10 +7,15 @@ define(["ihjs/models/test-proto"], test => {
             callback(this);
         }
         for(let i = 0, l = this.children.length; i < l; i++) {
-            if (!this.children[i]) {
+            let e = this.children[i];
+            if (!e) {
                 return this;
+            };
+            if (e.children.length) {
+                e.forEachChild(callback, true);
+            } else {
+                callback(e);
             }
-            this.children[i].forEachChild(callback, true);
         }
         return this;
     }

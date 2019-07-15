@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "target": "ES2018", 
+    /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    "module": "amd",
+    /* Generates corresponding '.map' file. */
+    "sourceMap": true,
+    /* Redirect output structure to the directory. */
+    "outDir": "./web/_js",
+    /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "rootDir": "./web/_ts",
+  }
+}
