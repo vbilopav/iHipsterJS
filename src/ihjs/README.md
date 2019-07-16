@@ -68,7 +68,7 @@ And if you want to create reusable web components with its own tag and all, simp
 
 All you have to do is include script tag to library at the bottom of your document:
 ```html
-<script type="module" src="ihjs.js"></script>
+<script src="ihjs.js"></script>
 ```
 
 That is it, there is no dependencies and no configuration.
