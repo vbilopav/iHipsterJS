@@ -454,7 +454,6 @@
 
       ${<script>
       () => {
-
           const pageSize = 5;
           const {fetchGitHub} = this.template.import("template-functions!utils");
           const enableNextPrev = (next, prev, hideLast=false) => {
@@ -463,6 +462,10 @@
             this.model.next.attr("disabled", "", !next);
             this.model.resultsHeader[1].showElement(!hideLast);
           };
+
+          this.context = {
+            query: this.query
+          }
           
           this.performSearch = async () => {
               // `html` element extension acts exactly like jquery `html` method

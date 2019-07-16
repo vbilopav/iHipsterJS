@@ -11,10 +11,11 @@ define([], () => {
             };
             let url = req.toUrl(name);
             // loader bug with templates names
-            let dots = url.indexOf("../../..");
-            if (dots > 0 && url.indexOf("/plugins") > -1) {
-                let p = url.split("/");
-                url = url.substring(0, dots) + p[p.length-1];
+            let d = "../../..";
+            let dIdx = url.indexOf(d);
+            if (dIdx > 0 && url.indexOf("/plugins") > -1) {
+                let p = url.substring(dIdx + d.length, url.length).split("/");
+                url = url.substring(0, dIdx) + p.slice(p.indexOf("plugins") + 1, p.length).join("/");
             }
             fetch(url)
             .then(response => {

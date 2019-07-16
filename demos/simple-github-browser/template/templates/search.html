@@ -87,13 +87,17 @@ ${<script>
 () => {
 
     const pageSize = 5;
-    const {fetchGitHub} = this.template.import("template-functions!demos/simple-github-browser/template/templates/utils.html");
+    const {fetchGitHub} = this.template.import("template-functions!templates/utils.html");
     const enableNextPrev = (next, prev, hideLast=false) => {
       // toggle disabled attributes
       this.model.prev.attr("disabled", "", !prev);
       this.model.next.attr("disabled", "", !next);
       this.model.resultsHeader[1].showElement(!hideLast);
     };
+
+    this.context = {
+      query: this.query
+    }
     
     this.performSearch = async () => {
         // `html` element extension acts exactly like jquery `html` method
