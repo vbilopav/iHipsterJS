@@ -1,5 +1,5 @@
-///<reference path="../../../../src/ihjs/build/1.2.2/types/core.d.ts"/>
-///<reference path="../../../../src/ihjs/build/1.2.2/types/spa.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.2.3/types/core.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.2.3/types/spa.d.ts"/>
 
 import {Router, Manager} from "ihjs/spa"; 
 
