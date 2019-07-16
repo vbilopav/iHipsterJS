@@ -44,8 +44,35 @@
 ## Additional configuration
 
 - ### `data-loader-url`
+
+    Url for different module loader like RequireJS. Must comply with AMD standard.
+
+    Default is null, loader is embedded in ihjs.
+
 - ### `data-app-object-name`
-- ### `data-setting`
+
+    Name of global application object assigned to `window` object.
+
+    Default is `ihjs`.
+
+- ### `data-settings`
+
+    Custom settings in JSON format assigned to global application object (e.g. `ihjs.settings`).
+
 - ### `data-dev`
+
+    Flag `dev` indicates development environment. 
+    
+    Default `true` for unbundled and un-minified framework and `false` for builds (bundled and minified).
+
 - ### `data-version`
+
+    Custom version number.
+
+    If this attribute is not set - it is set on build from build tool by copying version number of framework from [package file](https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/package.json#L3) if not set manually in [build config file](https://github.com/vbilopav/iHipsterJS/blob/master/src/ihjs/tools/defaults.js)
+
 - ### `data-load-css-always`
+
+    Set `false` to disable loading of CSS files from within modules with `template.css` for templates or `options.css` for modules.
+
+    Default is `true`.
