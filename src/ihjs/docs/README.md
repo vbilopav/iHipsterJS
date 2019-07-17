@@ -337,9 +337,7 @@ Template:
         <h1>My component 2</h1>
         <button onclick="clicked">Click me</button>
         ${<script>
-        this.clicked = e => {
-            console.log("clicked", e);
-        }
+        this.clicked = () => window.location = "#/my-view/";
         </script>}
     </template>
 
