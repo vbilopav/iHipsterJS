@@ -334,11 +334,16 @@ var AMDLoader;
             return this.options;
         }
         ihjslyPaths(moduleId) {
+            if (moduleId.endsWith(".html")) {
+                return [moduleId];
+            }
+            if (moduleId.endsWith("__temp")) {
+                return [moduleId.substring(0, moduleId.length - 6)];
+            }
             let pathRule;
             for (let i = 0, len = this.sortedPathsRules.length; i < len; i++) {
                 pathRule = this.sortedPathsRules[i];
                 if (AMDLoader.Utilities.startsWith(moduleId, pathRule.from)) {
-                //if (moduleId.indexOf("/") !== -1 && moduleId.split("/")[0] === pathRule.from) {
                     let result = [];
                     for (let j = 0, lenJ = pathRule.to.length; j < lenJ; j++) {
                         result.push(pathRule.to[j] + moduleId.substr(pathRule.from.length));
@@ -599,6 +604,9 @@ var AMDLoader;
                 if (AMDLoader.Utilities.startsWith(result, './') || AMDLoader.Utilities.startsWith(result, '../')) {
                     result = ModuleIdResolver._normalizeModuleId(this.fromModulePath + result);
                 }
+            }
+            if (moduleId.startsWith(".") || moduleId.startsWith("/")) {
+                result = result + "__temp";
             }
             return result;
         }

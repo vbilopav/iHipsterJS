@@ -127,7 +127,7 @@ Include script tag for this library build `ihjs.js` in your document like in exa
 <script src="ihjs.js"></script>
 ```
 
-Build for current version is here: [/src/ihjs/build/1.2.3/](https://github.com/vbilopav/iHipsterJS/tree/master/src/ihjs/build/1.0.0)
+Build for current version is here: [/src/ihjs/build/1.2.4/](https://github.com/vbilopav/iHipsterJS/tree/master/src/ihjs/build/1.0.0)
 
 You can create you own custom build using build tools.
 

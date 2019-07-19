@@ -161,7 +161,6 @@
         baseUrl: window[appObjectName].appUrl,
         _ihjsObjName: appObjectName,
         paths: {
-            "/": appUrl,
             libs: libsPath,
             "ihjs": sysPath,
             "text": sysPath + "/plugins/text",

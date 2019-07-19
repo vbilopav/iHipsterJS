@@ -553,13 +553,13 @@ interface String {
     /**
      * Builds HTMLElement from HTML markup in a string
      */
-    dom(): HTMLElement | NodeList
+    dom(): HTMLElement
 }
 /**
  * List of various HTML element created by model containing element from model declared with same name or id
  */
-interface HTMLModelArray {
-        /**
+interface HTMLModelArray extends Array<HTMLElement> {
+    /**
      * - Adds CSS class to instance.
      * - Returns same instance.
      */
