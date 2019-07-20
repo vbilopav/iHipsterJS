@@ -1,7 +1,7 @@
 ///<reference path="../../../../../../../src/ihjs/dev/types/core.d.ts"/>
 
-import {title, example, notice, resultsHeader} from "views/search-templates";
-import fetchGitHub from "services/fetch-github";
+import {title, example, notice, resultsHeader} from "./search-templates";
+import fetchGitHub from "../services/fetch-github";
 
 
 type paramsType = {page: number, query: string};

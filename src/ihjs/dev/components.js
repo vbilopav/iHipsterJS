@@ -128,8 +128,10 @@ define([
             const resolved = [], promises = [];
             for(let i = 0, l = results.length; i < l; i++) {
                 let item = args[i], result = results[i];
-
-                if (result.prototype instanceof HTMLElement || (result.default && result.default.prototype instanceof HTMLElement)) {
+                if (result.default) {
+                    result = result.default;
+                }
+                if (result.prototype instanceof HTMLElement) {
                     try {
                         resolveElement(item, result);
                     } catch(e) {

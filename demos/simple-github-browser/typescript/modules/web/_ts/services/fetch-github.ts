@@ -1,4 +1,4 @@
-import {githubSearchResult, githubDetails} from "interfaces";
+import {githubSearchResult, githubDetails} from "../interfaces";
 
 interface githubResponse extends githubSearchResult, githubDetails {};
 

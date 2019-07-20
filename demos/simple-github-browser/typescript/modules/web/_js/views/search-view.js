@@ -1,5 +1,5 @@
 ///<reference path="../../../../../../../src/ihjs/dev/types/core.d.ts"/>
-define(["require", "exports", "views/search-templates", "services/fetch-github"], function (require, exports, search_templates_1, fetch_github_1) {
+define(["require", "exports", "./search-templates", "../services/fetch-github"], function (require, exports, search_templates_1, fetch_github_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const pageSize = 5;

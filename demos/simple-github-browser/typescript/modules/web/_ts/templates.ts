@@ -1,4 +1,4 @@
-import {githubDetails} from "interfaces";
+import {githubDetails} from "./interfaces";
 
 export const detailsList = (details: githubDetails) => String.html`
 <li>
