@@ -1098,9 +1098,10 @@ var AMDLoader;
             this._knownModules2[moduleId] = true;
             let strModuleId = this._moduleIdProvider.getStrModuleId(moduleId);
             
-            // easy bundling support
+            // **** easy bundling support
             if (this._config.options._modules) {
-                let _module =  this._config.options._modules[strModuleId];
+                let m = strModuleId.replace("__temp", "");
+                let _module = this._config.options._modules[m] || this._config.options._modules[this._config.options.baseUrl + m];
                 if (_module) {
                     this.defineModule(strModuleId, _module[0], _module[1], null, null);
                     return;

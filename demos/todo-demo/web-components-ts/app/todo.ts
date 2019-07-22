@@ -1,4 +1,4 @@
-///<reference path="../../../../src/ihjs/build/1.2.5/types/components.d.ts"/>
+///<reference path="../../../../src/ihjs/build/1.2.6/types/components.d.ts"/>
 
 import {setCount, increase} from "demos/todo-demo/web-components-ts/app/count";
 import {customElementsDefine} from "ihjs/components";
