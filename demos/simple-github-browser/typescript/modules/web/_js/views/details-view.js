@@ -1,4 +1,5 @@
 ///<reference path="../../../../../../../src/ihjs/dev/types/core.d.ts"/>
+///<reference path="../../../../../../../src/ihjs/dev/types/spa.d.ts"/>
 define(["require", "exports", "../services/fetch-github", "./details-templates"], function (require, exports, fetch_github_1, details_templates_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6,6 +7,9 @@ define(["require", "exports", "../services/fetch-github", "./details-templates"]
     const html = String.html;
     const countLanguage = (lang, langs) => lang && (langs[lang] = { count: langs[lang] === undefined ? 1 : langs[lang].count + 1 });
     class default_1 {
+        constructor({ route }) {
+            this.route = route;
+        }
         static paramsMap(params) {
             if (params.length > 0 && params.length < 3) {
                 return {

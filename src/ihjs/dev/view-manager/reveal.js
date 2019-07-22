@@ -17,7 +17,7 @@ define([
             params={}, 
             uri="", 
             elementOrId=(()=>{throw elementOrId})()
-        }) => new Promise(resolve => {
+        }, route) => new Promise(resolve => {
         
             let 
                 viewName, modules;
@@ -153,7 +153,7 @@ define([
                                 css: []
                             };
                         if (type === utils.types.class) {
-                            data.instance = new view({id: id, element: element, options: options}, ...injected);
+                            data.instance = new view({id: id, element: element, options: options, route: route}, ...injected);
                         } else {
                             data.instance = view;
                         }

@@ -1,4 +1,5 @@
 ///<reference path="../../../../../../../src/ihjs/dev/types/core.d.ts"/>
+///<reference path="../../../../../../../src/ihjs/dev/types/spa.d.ts"/>
 
 import fetchGitHub from "../services/fetch-github";
 import {userDetails, formatCodeItem, formatCodeResult} from "./details-templates";
@@ -25,6 +26,11 @@ export default class implements IView {
         repos: HTMLElement,
         gists: HTMLElement,
         starred: HTMLElement
+    }
+    private route: Route;
+
+    constructor({route}) {
+        this.route = route;
     }
 
     static paramsMap(params: Array<string>): false | paramsType {

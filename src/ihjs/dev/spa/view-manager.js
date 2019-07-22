@@ -49,7 +49,7 @@ define([
         window.scrollTo(item.x, item.y);
     }
 
-    async reveal({id="", view=null, params={}, uri=""}) {
+    async reveal({id="", view=null, params={}, uri=""}, route) {
 
         if (view == null) {
             throw "undefined view"
@@ -88,7 +88,7 @@ define([
                 }
             }
 
-            return reveal({id, view, params, uri, elementOrId: elementId}).then(result => {
+            return reveal({id, view, params, uri, elementOrId: elementId}, route).then(result => {
                 this._views[id] = result;
                 this._current = result.element;
                 this._container.appendChild(result.element);

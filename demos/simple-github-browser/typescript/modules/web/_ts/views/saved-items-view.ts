@@ -12,8 +12,10 @@ export default class implements IView {
         total: HTMLElement
     }
     private count: number;
+    private route: Route;
 
-    constructor() {
+    constructor({route}) {
+        this.route = route;
         this.count = 0;
         subscribe("item/removed", key => {
             this.model.results.find("#" + key).remove()
@@ -36,7 +38,7 @@ export default class implements IView {
             Total <code id=total></code> items.
         </h3>
         <button onclick="window.history.back();">Go back</button>
-        <button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+        <button onclick="() => this.route.router.navigateToRoute('/')">Return to search</button>
         <div id="results"></div>`;
     }
 

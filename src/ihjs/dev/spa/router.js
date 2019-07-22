@@ -35,7 +35,8 @@ define([], () => class {
                 name: route,
                 view: data.view,
                 paramsMap: data.paramsMap || (args => (args.length === 0 ? {} : false)),
-                data: data.data
+                data: data.data,
+                router: this
             }
             data.router = this;
             data.path = route;
@@ -158,7 +159,7 @@ define([], () => class {
                 elementId = this._current.elementId;
             }
             this._manager.leave(viewId, elementId).reveal(
-                {id: route.id, view: route.view, params: params, uri: uri}
+                {id: route.id, view: route.view, params: params, uri: uri}, route
             ).then(elementId => {
                 if (!starting) {
                     this._leave({ router: this, route: this._current});

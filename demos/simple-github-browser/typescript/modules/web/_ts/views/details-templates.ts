@@ -17,7 +17,7 @@ export const userDetails = (login: string, test: boolean, encodedDetails: string
         `}
     </p>
     <button onclick="window.history.back();">Go back</button>
-    <button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+    <button onclick="() => this.route.router.navigateToRoute('/')">Return to search</button>
 
     ${test ? "" : html`
     <user-github-star class="details-star" data-item=${encodedDetails}></user-github-star>

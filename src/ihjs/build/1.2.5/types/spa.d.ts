@@ -62,6 +62,8 @@ interface Route {
     * 
     */
     data?: any
+
+    router: RouterClass
 }
 /**
  * 
@@ -136,7 +138,7 @@ interface RouterConstructorArgs {
      * value is Route object {id?: string, name?: string, view: ViewDefinition, paramsMap?: (args: string[]) => void, data?}
      * or simple module path in a string containing view or template
      */
-    routes: {[key: string]: Route | String}
+    routes: {[key: string]: any}
 }
 /**
  * Router class to create instance of the router component.
@@ -163,6 +165,10 @@ declare class RouterClass {
     * 
     */
     reveal(location: string): RouterClass
+    /**
+    * 
+    */
+    navigateToRoute(name: string): void
 }
 
 /**

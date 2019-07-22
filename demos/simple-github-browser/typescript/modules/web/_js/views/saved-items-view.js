@@ -5,7 +5,8 @@ define(["require", "exports", "ihjs/pubsub"], function (require, exports, pubsub
     Object.defineProperty(exports, "__esModule", { value: true });
     const html = String.html;
     class default_1 {
-        constructor() {
+        constructor({ route }) {
+            this.route = route;
             this.count = 0;
             pubsub_1.subscribe("item/removed", key => {
                 this.model.results.find("#" + key).remove();
@@ -27,7 +28,7 @@ define(["require", "exports", "ihjs/pubsub"], function (require, exports, pubsub
             Total <code id=total></code> items.
         </h3>
         <button onclick="window.history.back();">Go back</button>
-        <button onclick="() => this.template.route.router.navigateToRoute('/')">Return to search</button>
+        <button onclick="() => this.route.router.navigateToRoute('/')">Return to search</button>
         <div id="results"></div>`;
         }
         rendered() {
