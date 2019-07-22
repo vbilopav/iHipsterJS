@@ -1,6 +1,5 @@
-import {githubSearchResult, githubDetails} from "../interfaces";
+import {githubResponse} from "../interfaces";
 
-interface githubResponse extends githubSearchResult, githubDetails {};
 
 const parseResponseValueToEmptyString = (response: githubResponse) => {
     for (let [key, value] of Object.entries(response)) {

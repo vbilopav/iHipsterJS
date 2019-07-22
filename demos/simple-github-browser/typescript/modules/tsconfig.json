@@ -9,6 +9,6 @@
     /* Redirect output structure to the directory. */
     "outDir": "./web/_js",
     /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    "rootDir": "./web/_ts",
+    "rootDir": "./web/_ts"
   }
 }

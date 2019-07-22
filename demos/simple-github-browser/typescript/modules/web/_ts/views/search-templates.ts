@@ -1,10 +1,12 @@
-export const title: string = String.html`
+const html = String.html;
+
+export const title: string = html`
     <h3>
         <code>GitHub <img src="assets/github.ico" /></code> user search
     </h3>
 `;
 
-export const example: string = String.html`
+export const example: string = html`
     <details class="info-text">
         <summary>
             <span>
@@ -19,21 +21,21 @@ export const example: string = String.html`
     </details>
 `;
 
-export const notice = (test: boolean): string => String.html`
+export const notice = (test: boolean): string => html`
     <details class="info-text">
         <summary>
-        ${test ? String.html`
+        ${test ? html`
             <strong>Note:</strong> Currently working on local <strong>test sample of 100 records</strong>. 
-        ` : String.html`
+        ` : html`
             <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
         `}
         </summary>
-        ${test ? String.html`
+        ${test ? html`
             Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
-        ` : String.html`
+        ` : html`
             To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
             <code>
-                <a href="authorize" onclick="authorizeClick">login to your GitHub account</a>
+                <a href="authorize" onclick="() => {e.preventDefault(); window.open('authorize.html', '_blank', 'menubar=no, width=800,height=600'); }">login to your GitHub account</a>
             </code>
             or click 
             <a href="${document.location.pathname + '?test=true' + document.location.hash}">
@@ -44,11 +46,13 @@ export const notice = (test: boolean): string => String.html`
     </details>
 `;
 
-export const resultsHeader: string = String.html`
-    <div id="results-header" class="results-info">
-        <code id="msg">results</code>
-        <button id="next" onclick="nextClick">next</button>
-        <button id="prev" onclick="prevClick">prev</button>
-    </div>
+export const resultsHeader: string = html`
+    <p>
+        <div id="results-header" class="results-info">
+            <code id="msg">results</code>
+            <button id="next" onclick="nextClick">next</button>
+            <button id="prev" onclick="prevClick">prev</button>
+        </div>
+    </p>
 `;
 

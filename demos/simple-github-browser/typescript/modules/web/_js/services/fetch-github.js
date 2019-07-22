@@ -1,7 +1,6 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    ;
     const parseResponseValueToEmptyString = (response) => {
         for (let [key, value] of Object.entries(response)) {
             if (!value) {

@@ -9,6 +9,7 @@ class Element extends HTMLElement {
     details: githubDetails;
     item: githubSearchItem;
 }
+const html = String.html;
 
 export default class implements IView {
     private element: Element;
@@ -19,16 +20,16 @@ export default class implements IView {
         }
         let error: string = null;
         if (this.element.details.message) {
-            error = String.html`<li>${this.element.details.message}</li>`; 
+            error = html`<li>${this.element.details.message}</li>`; 
         }
         let encodedDetails: string = encodeURIComponent(JSON.stringify(this.element.details));
 
-        return String.html`
+        return html`
         <div class="panel">
-            ${!error && !test ? String.html`<user-github-star data-item=${encodedDetails}></user-github-star>` : ""}
+            ${!error && !test ? html`<user-github-star data-item=${encodedDetails}></user-github-star>` : ""}
             <span class="panel-info">
-                ${error != null ? "" : String.html`<a href="#/details/${this.element.item.login + (this.element.details ? '/' + encodedDetails : '')}">See more details</a>`}
-                ${this.element.dataset.doNotShowScore ? "" : String.html`<div>Search score = ${this.element.item.score}</div>`}
+                ${error != null ? "" : html`<a href="#/details/${this.element.item.login + (this.element.details ? '/' + encodedDetails : '')}">See more details</a>`}
+                ${this.element.dataset.doNotShowScore ? "" : html`<div>Search score = ${this.element.item.score}</div>`}
             </span>
             <a href="${this.element.item.html_url}"><img src="${this.element.item.avatar_url}" /></a>
             <span class="item-info">

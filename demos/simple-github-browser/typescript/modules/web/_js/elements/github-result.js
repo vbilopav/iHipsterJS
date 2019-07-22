@@ -5,6 +5,7 @@ define(["require", "exports", "../services/fetch-github", "../templates"], funct
     const test = window.ihjs.queryString.test;
     class Element extends HTMLElement {
     }
+    const html = String.html;
     class default_1 {
         async render() {
             if (!this.element.details) {
@@ -12,15 +13,15 @@ define(["require", "exports", "../services/fetch-github", "../templates"], funct
             }
             let error = null;
             if (this.element.details.message) {
-                error = String.html `<li>${this.element.details.message}</li>`;
+                error = html `<li>${this.element.details.message}</li>`;
             }
             let encodedDetails = encodeURIComponent(JSON.stringify(this.element.details));
-            return String.html `
+            return html `
         <div class="panel">
-            ${!error && !test ? String.html `<user-github-star data-item=${encodedDetails}></user-github-star>` : ""}
+            ${!error && !test ? html `<user-github-star data-item=${encodedDetails}></user-github-star>` : ""}
             <span class="panel-info">
-                ${error != null ? "" : String.html `<a href="#/details/${this.element.item.login + (this.element.details ? '/' + encodedDetails : '')}">See more details</a>`}
-                ${this.element.dataset.doNotShowScore ? "" : String.html `<div>Search score = ${this.element.item.score}</div>`}
+                ${error != null ? "" : html `<a href="#/details/${this.element.item.login + (this.element.details ? '/' + encodedDetails : '')}">See more details</a>`}
+                ${this.element.dataset.doNotShowScore ? "" : html `<div>Search score = ${this.element.item.score}</div>`}
             </span>
             <a href="${this.element.item.html_url}"><img src="${this.element.item.avatar_url}" /></a>
             <span class="item-info">

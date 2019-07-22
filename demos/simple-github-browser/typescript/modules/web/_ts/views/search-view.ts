@@ -12,7 +12,7 @@ const test: boolean = window.ihjs.queryString.test;
 
 export default class implements IView {
 
-    model: {
+    private model: {
         query: HTMLInputElement,
         search: HTMLButtonElement,
         resultsHeader: HTMLModelArray,
@@ -21,8 +21,7 @@ export default class implements IView {
         next: HTMLModelArray,
         prev: HTMLModelArray
     }
-
-    params: paramsType
+    private params: paramsType
 
     static paramsMap(params: Array<string>): false | paramsType {
         if (params.length > 2) {
@@ -44,7 +43,7 @@ export default class implements IView {
         <p>
             <label for="query">
                 ${title}
-                <p></p>
+                <p>
                     ${example}
                 </p>
                 ${notice(test)}
@@ -63,6 +62,7 @@ export default class implements IView {
             <a class="big-link" href="#/saved-items/">view saved items</a>
             <button id="search" onclick="searchClick">search</button>
         </p>
+
         ${resultsHeader}
         <div id="results"></div>
         ${resultsHeader}
@@ -76,11 +76,6 @@ export default class implements IView {
     exampleClick(e: MouseEvent) {
         this.model.query.value = (e.target as HTMLElement).innerText.trim(); 
         this.model.query.focus();
-    }
-
-    authorizeClick(e: MouseEvent) {
-        e.preventDefault(); 
-        window.open("authorize.html", "_blank", "menubar=no, width=800,height=600");
     }
 
     queryKeyPress(e: KeyboardEvent) {

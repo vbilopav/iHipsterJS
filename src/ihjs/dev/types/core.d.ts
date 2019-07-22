@@ -275,6 +275,7 @@ interface AppObject {
      */
     version: string
 }
+declare class HTMLElementResult extends HTMLElement { length: number }
 /**
  * Set of JQuery-like extensions on HTMLElement prototype.
  */
@@ -315,7 +316,7 @@ interface HTMLElement {
      * - Returns all element descendants of node that match selectors (executes `instance.querySelector`).
      * - If no matches found for selector - returns dummy parameter with result length property set to 0 (to avoid unnecessary nestings in code)
      */
-    find(search: string): HTMLElement
+    find(search: string): HTMLElementResult;
     /**
      * - Returns all element descendants of node that match selectors (executes `instance.querySelectorAll`).
      */
@@ -490,7 +491,7 @@ interface Document {
      * - Returns all element descendants of node that match selectors (executes `instance.querySelector`).
      * - If no matches found for selector - returns dummy parameter with result length property set to 0 (to avoid unnecessary nestings in code)
      */
-    find(search: string): HTMLElement
+    find(search: string): HTMLElementResult
     /**
      * - Returns all element descendants of node that match selectors (executes `instance.querySelectorAll`).
      */

@@ -24,7 +24,7 @@ define(["require", "exports", "./search-templates", "../services/fetch-github"],
         <p>
             <label for="query">
                 ${search_templates_1.title}
-                <p></p>
+                <p>
                     ${search_templates_1.example}
                 </p>
                 ${search_templates_1.notice(test)}
@@ -43,6 +43,7 @@ define(["require", "exports", "./search-templates", "../services/fetch-github"],
             <a class="big-link" href="#/saved-items/">view saved items</a>
             <button id="search" onclick="searchClick">search</button>
         </p>
+
         ${search_templates_1.resultsHeader}
         <div id="results"></div>
         ${search_templates_1.resultsHeader}
@@ -54,10 +55,6 @@ define(["require", "exports", "./search-templates", "../services/fetch-github"],
         exampleClick(e) {
             this.model.query.value = e.target.innerText.trim();
             this.model.query.focus();
-        }
-        authorizeClick(e) {
-            e.preventDefault();
-            window.open("authorize.html", "_blank", "menubar=no, width=800,height=600");
         }
         queryKeyPress(e) {
             e.keyCode === 13 && this.model.search.click();

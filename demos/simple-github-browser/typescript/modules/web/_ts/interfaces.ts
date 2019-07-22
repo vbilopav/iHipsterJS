@@ -1,3 +1,11 @@
+export interface githubCodeRepo { 
+    fork: boolean
+    stargazers_count: number,
+    watchers_count: number,
+    description: string
+    files: Array<{filename: string, language: string}>
+}
+
 export interface githubDetails { 
     login: string,
     id: string,
@@ -61,3 +69,5 @@ export interface githubSearchResult {
     items: Array<githubSearchItem>
     message?: string
 }
+
+export interface githubResponse extends githubSearchResult, githubDetails, githubCodeRepo, Iterator<githubResponse> {};

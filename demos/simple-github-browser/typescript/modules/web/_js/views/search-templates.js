@@ -1,12 +1,13 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.title = String.html `
+    const html = String.html;
+    exports.title = html `
     <h3>
         <code>GitHub <img src="assets/github.ico" /></code> user search
     </h3>
 `;
-    exports.example = String.html `
+    exports.example = html `
     <details class="info-text">
         <summary>
             <span>
@@ -20,21 +21,21 @@ define(["require", "exports"], function (require, exports) {
             </span>
     </details>
 `;
-    exports.notice = (test) => String.html `
+    exports.notice = (test) => html `
     <details class="info-text">
         <summary>
-        ${test ? String.html `
+        ${test ? html `
             <strong>Note:</strong> Currently working on local <strong>test sample of 100 records</strong>. 
-        ` : String.html `
+        ` : html `
             <strong>Note:</strong> Rate limit for unauthenticated requests associated with the originating IP address is up to <strong>60 requests per hour</strong>. 
         `}
         </summary>
-        ${test ? String.html `
+        ${test ? html `
             Click <a href="${document.location.pathname + document.location.hash}"><code>here</code></a> to use real <code>GitHub <img src="assets/github.ico" /></code> data.
-        ` : String.html `
+        ` : html `
             To increase your requests limit up to <strong>5000 requests per hour</strong>, you'll need to 
             <code>
-                <a href="authorize" onclick="authorizeClick">login to your GitHub account</a>
+                <a href="authorize" onclick="() => {e.preventDefault(); window.open('authorize.html', '_blank', 'menubar=no, width=800,height=600'); }">login to your GitHub account</a>
             </code>
             or click 
             <a href="${document.location.pathname + '?test=true' + document.location.hash}">
@@ -44,12 +45,14 @@ define(["require", "exports"], function (require, exports) {
         `}
     </details>
 `;
-    exports.resultsHeader = String.html `
-    <div id="results-header" class="results-info">
-        <code id="msg">results</code>
-        <button id="next" onclick="nextClick">next</button>
-        <button id="prev" onclick="prevClick">prev</button>
-    </div>
+    exports.resultsHeader = html `
+    <p>
+        <div id="results-header" class="results-info">
+            <code id="msg">results</code>
+            <button id="next" onclick="nextClick">next</button>
+            <button id="prev" onclick="prevClick">prev</button>
+        </div>
+    </p>
 `;
 });
 //# sourceMappingURL=search-templates.js.map
