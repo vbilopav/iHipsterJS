@@ -159,7 +159,7 @@
     const 
         sysPath = relative(appUrl, sysUrl),
         libsPath = relative(appUrl, libsUrl),
-        loaderLoaded = () => window.require != undefined;
+        loaderLoaded = () => window.require.getConfig != undefined;
     
     const config = {
         urlArgs: urlArgs,
