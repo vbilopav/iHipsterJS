@@ -9,7 +9,7 @@ interface ViewConstructorOptions {
     /**
     * 
     */
-    model: {[key: string]: string | (() => boolean)} 
+    model: {[key: string]: string | ((e: HTMLElement) => boolean)} 
 }
 /**
  * 
@@ -279,7 +279,7 @@ declare class HTMLElementResult extends HTMLElement { length: number }
 /**
  * Set of JQuery-like extensions on HTMLElement prototype.
  */
-interface HTMLElement {
+interface Element {
     /**
      * - Adds CSS class to instance.
      * - Returns same instance.
@@ -388,6 +388,90 @@ interface HTMLElement {
  * Set of JQuery-like extensions on NodeList prototype.
  */
 interface NodeList {
+    /**
+     * - Adds CSS class to instance.
+     * - Returns same instance.
+     */
+    addClass(className: string): NodeList
+    /**
+     * - Appends child element to instance.
+     * - Returns same instance.
+     */
+    appendElement(e: HTMLElement): NodeList
+    /*
+    * - Appends append instance as child element to node.
+    * - Returns same instance.
+    */
+    appendElementTo(e: HTMLElement): NodeList
+    /**
+     * - If `key` is only parameter, returns value of instance attribute with same key (does not apply to `NodeList` and `HTMLModelArray`).
+     * - If `value` is present, sets value to instance attribute with same key and returns same instance.
+     * - If `toggle` is present, toggles presence of attribute with same key and returns same instance.
+     */
+    attr(key: string, value?: string , toggle?: boolean): String | NodeList
+    /*
+     * - If `property` is only parameter, returns value of instance css property (does not apply to `NodeList` and `HTMLModelArray`).
+     * - If `value` is present, sets instance css property to that value and returns same instance.
+     */
+    css(property: string, value?: string): String | NodeList
+    /**
+     * - If `key` is only parameter, returns value of instance of data attribute (does not apply to `NodeList` and `HTMLModelArray`).
+     * - If `value` is present, sets instance css property to that value and returns same instance.
+     * - Note: setting value doesn't mutate the DOM, it caches value on element instance.
+     */
+    dataAttr(key: string, value?: string): any | NodeList
+    /**
+     * - Iterates recursively trough child elements tree and execute `callback` for each element.
+     * - `callFirst` - if true, skips root, default is false
+     */
+    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): NodeList
+    /**
+     * Sets innerHTML value of element or elements and returns same instance.
+     */
+    html(content?: string): NodeList
+    /**
+     * Removes event listeners from element or elements (calls `removeEventListener`) and returns same instance.
+     */
+    off(type: string, listener: EventListenerOrEventListenerObject): NodeList
+    /**
+     * Adds event listeners to element or elements (calls `addEventListener`) and returns same instance.
+     */
+    on(type: string, listener: EventListenerOrEventListenerObject): HTMLElement
+    /**
+     * Removes attribute by key and returns same instance.
+     */
+    removeAttr(key: string): NodeList
+    /**
+     * Removes attribute by key and returns same instance.
+     */
+    removeClass(className: string): NodeList
+    /**
+     * - Toggles class with className (adds or removes if present) and returns same instance.
+     */
+    toggleClass(className: string, state?: boolean): NodeList
+    /**
+     * - Check if element has class with `className`.
+     */
+    hasClass(className: string): NodeList
+    /**
+     * - If state parameter is not present sets display css attribute to empty (inherit) and returns same instance.
+     * - If state parameter not present toggles display css attribute none or empty and returns same instance.
+     */
+    showElement(state?: boolean): NodeList
+    /**
+     * Sets display to none and returns same instance.
+     */
+    hideElement(): NodeList
+    /**
+     * Dispatches a synthetic event to target (calls `dispatchEvent`) and returns same instance.
+     */
+    trigger(eventName: string): Document
+    /**
+     * If state is not present, adds visibility: visible attribute, otherwise toggles between visible and hidden and returns same instance.
+     */
+    visible(state?: boolean): NodeList
+}
+interface HTMLCollection {
     /**
      * - Adds CSS class to instance.
      * - Returns same instance.

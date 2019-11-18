@@ -10,6 +10,7 @@ define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions, applyExtens
     }).then(() => {
     
         applyExtensionsExcept("NodeList", "HTMLElement", ["find", "findAll"], true);
+        applyExtensionsExcept("HTMLCollection", "HTMLElement", ["find", "findAll"], true);
         applyExtensions("Document", ["on", "off", "trigger", "find", "findAll"]);
         applyExtensions("Window", ["on", "off", "trigger"]);
 
