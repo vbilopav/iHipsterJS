@@ -17,9 +17,10 @@ define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions, applyExtens
         require([
             "ihjs/app",
             "ihjs/view-manager/reveal",
-            "ihjs/template/parser"
-
-        ], (ihjs, {reveal}) => {
+            "ihjs/models/model",
+            "ihjs/template/parser",
+            
+        ], (ihjs, {reveal}, Model) => {
         
                 ihjs.import = m => new Promise(resolve => require([m], r => resolve(r)));
                 ihjs.fetch = async (url, opts) => await(await fetch(url, opts)).json();
@@ -33,6 +34,7 @@ define(["ihjs/extensions/apply"], ({loadExtensions, applyExtensions, applyExtens
                     return v.map(s => s.split('=').map(decodeURIComponent)).reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
                 };
                 ihjs.queryString = ihjs.parseQueryString (document.location.search);
+                ihjs.Model = Model;
 
                 const 
                     getDefaultElement = () => {

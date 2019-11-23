@@ -9,7 +9,7 @@ interface ViewConstructorOptions {
     /**
     * 
     */
-    model: {[key: string]: string | ((e: HTMLElement) => boolean)} 
+    model: {[key: string]: string | ((e: Element) => boolean)} 
 }
 /**
  * 
@@ -22,7 +22,7 @@ interface ViewConstructorArgs {
     /**
     * 
     */
-    element: HTMLElement, 
+    element: Element, 
     /**
     * 
     */
@@ -39,7 +39,7 @@ interface ViewMethodArgs {
     /**
     * 
     */
-    element?: HTMLElement
+    element?: Element
 }
 /**
  * `interface` for **`ihjs` view** object that can be either
@@ -118,7 +118,7 @@ interface ModelConstructorArgs {
     /**
     * 
     */
-    oncreate?: (element: HTMLElement) => void
+    oncreate?: (element: Element) => void
 }
 /**
  * 
@@ -131,11 +131,20 @@ interface ModelInterface {
     /**
     * 
     */
-    bind(element: HTMLElement, instance?: any, eventContext?: any): any
+    bind(element: Element, instance?: any, eventContext?: any): any
     /**
     * 
     */
-    each(element: HTMLElement, name?: string): void
+    each(element: Element, name?: string): void
+}
+/**
+ * 
+ */
+interface ModelInterface {
+    /**
+    * 
+    */
+    new (args?: ModelConstructorArgs) : ModelClass
 }
 /**
  * 
@@ -144,15 +153,11 @@ declare class ModelClass {
     /**
     * 
     */
-    constructor(args?: ModelConstructorArgs)
+    bind(element: Element, instance?: any, eventContext?: any): ModelInterface
     /**
     * 
     */
-    bind(element: HTMLElement, instance?: any, eventContext?: any): ModelInterface
-    /**
-    * 
-    */
-    each(element: HTMLElement, name?: string): void
+    each(element: Element, name?: string): void
 }
 
 
@@ -160,12 +165,11 @@ declare class ModelClass {
 /**
 * 
 */
+/*
 declare module "ihjs/models/model" {
-    /**
-    * 
-    */
     export default class Model extends ModelClass {}
 }
+*/
 /**
  * 
  */
@@ -190,7 +194,7 @@ interface ParseTemplateArg {
 /**
  * defines global constants
  */
-interface AppObject {
+declare class AppObject {
     /**
      * 
      */
@@ -257,7 +261,7 @@ interface AppObject {
     /**
      * 
      */
-    render(view: ViewDefinition, elementOrId: HTMLElement | string, params?: object): Promise<{data: object, element: HTMLElement}>
+    render(view: ViewDefinition, elementOrId: Element | string, params?: object): Promise<{data: object, element: Element}>
     /**
      * 
      */
@@ -274,49 +278,53 @@ interface AppObject {
      * 
      */
     version: string
+    /**
+     * 
+     */
+    Model: ModelInterface
 }
-declare class HTMLElementResult extends HTMLElement { length: number }
+declare class ElementResult extends Element { length: number }
 /**
- * Set of JQuery-like extensions on HTMLElement prototype.
+ * Set of JQuery-like extensions on Element prototype.
  */
 interface Element {
     /**
      * - Adds CSS class to instance.
      * - Returns same instance.
      */
-    addClass(className: string): HTMLElement
+    addClass(className: string): Element
     /**
      * - Appends child element to instance.
      * - Returns same instance.
      */
-    appendElement(e: HTMLElement): HTMLElement
+    appendElement(e: Element): Element
     /**
      * - Appends append instance as child element to node.
      * - Returns same instance.
      */
-    appendElementTo(e: HTMLElement): HTMLElement
+    appendElementTo(e: Element): Element
     /**
      * - If `key` is only parameter, returns value of instance attribute with same key (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets value to instance attribute with same key and returns same instance.
      * - If `toggle` is present, toggles presence of attribute with same key and returns same instance.
      */
-    attr(key: string, value?: string , toggle?: boolean): String | HTMLElement
+    attr(key: string, value?: string , toggle?: boolean): String | Element
     /**
      * - If `property` is only parameter, returns value of instance css property (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets instance css property to that value and returns same instance.
      */
-    css(property: string, value?: string): String | HTMLElement
+    css(property: string, value?: string): String | Element
     /**
      * - If `key` is only parameter, returns value of instance of data attribute (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets instance css property to that value and returns same instance.
      * - Note: setting value doesn't mutate the DOM, it caches value on element instance.
      */
-    dataAttr(key: string, value?: string): any | HTMLElement
+    dataAttr(key: string, value?: string): any | Element
     /**
      * - Returns all element descendants of node that match selectors (executes `instance.querySelector`).
      * - If no matches found for selector - returns dummy parameter with result length property set to 0 (to avoid unnecessary nestings in code)
      */
-    find(search: string): HTMLElementResult;
+    find(search: string): ElementResult;
     /**
      * - Returns all element descendants of node that match selectors (executes `instance.querySelectorAll`).
      */
@@ -325,7 +333,7 @@ interface Element {
      * - Iterates recursively trough child elements tree and execute `callback` for each element.
      * - `callFirst` - if true, skips root, default is false
      */
-    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): HTMLElement
+    forEachChild(callback: (e: Element)=>void, callFirst?: boolean): Element
     /**
      * 
      */
@@ -333,19 +341,19 @@ interface Element {
     /**
      * Sets display to none and returns same instance.
      */
-    hideElement(): HTMLElement
+    hideElement(): Element
     /**
      * Sets innerHTML value of element or elements and returns same instance.
      */
-    html(content?: string): HTMLElement
+    html(content?: string): Element
     /**
      * Removes event listeners from element or elements (calls `removeEventListener`) and returns same instance.
      */
-    off(type: string, listener: EventListenerOrEventListenerObject): HTMLElement
+    off(type: string, listener: EventListenerOrEventListenerObject): Element
     /**
      * Adds event listeners to element or elements (calls `addEventListener`) and returns same instance.
      */
-    on(type: string, listener: EventListenerOrEventListenerObject): HTMLElement
+    on(type: string, listener: EventListenerOrEventListenerObject): Element
     /**
      * Checks element overflown state horizontally.
      */
@@ -357,32 +365,32 @@ interface Element {
     /**
      * Removes attribute by key and returns same instance.
      */
-    removeAttr(key: string): HTMLElement
+    removeAttr(key: string): Element
     /**
      * Removes attribute by key and returns same instance.
      */
-    removeClass(className: string): HTMLElement
+    removeClass(className: string): Element
     /**
      * Sets focus to element instance and returns same instance.
      */
-    setFocus(): HTMLElement
+    setFocus(): Element
     /**
      * - If state parameter is not present sets display css attribute to empty (inherit) and returns same instance.
      * - If state parameter not present toggles display css attribute none or empty and returns same instance.
      */
-    showElement(state?: boolean): HTMLElement
+    showElement(state?: boolean): Element
     /**
      * Toggles class with className (adds or removes if present) and returns same instance.
      */
-    toggleClass(className: string, state?: boolean): HTMLElement
+    toggleClass(className: string, state?: boolean): Element
     /**
      * Dispatches a synthetic event to target (calls dispatchEvent) and returns same instance.
      */
-    trigger(eventName: string): HTMLElement
+    trigger(eventName: string): Element
     /**
      * If state is not present, adds visibility: visible attribute, otherwise toggles between visible and hidden and returns same instance.
      */
-    visible(state?: boolean): HTMLElement
+    visible(state?: boolean): Element
 }
 /**
  * Set of JQuery-like extensions on NodeList prototype.
@@ -397,12 +405,12 @@ interface NodeList {
      * - Appends child element to instance.
      * - Returns same instance.
      */
-    appendElement(e: HTMLElement): NodeList
+    appendElement(e: Element): NodeList
     /*
     * - Appends append instance as child element to node.
     * - Returns same instance.
     */
-    appendElementTo(e: HTMLElement): NodeList
+    appendElementTo(e: Element): NodeList
     /**
      * - If `key` is only parameter, returns value of instance attribute with same key (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets value to instance attribute with same key and returns same instance.
@@ -424,7 +432,7 @@ interface NodeList {
      * - Iterates recursively trough child elements tree and execute `callback` for each element.
      * - `callFirst` - if true, skips root, default is false
      */
-    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): NodeList
+    forEachChild(callback: (e: Element)=>void, callFirst?: boolean): NodeList
     /**
      * Sets innerHTML value of element or elements and returns same instance.
      */
@@ -436,7 +444,7 @@ interface NodeList {
     /**
      * Adds event listeners to element or elements (calls `addEventListener`) and returns same instance.
      */
-    on(type: string, listener: EventListenerOrEventListenerObject): HTMLElement
+    on(type: string, listener: EventListenerOrEventListenerObject): Element
     /**
      * Removes attribute by key and returns same instance.
      */
@@ -481,12 +489,12 @@ interface HTMLCollection {
      * - Appends child element to instance.
      * - Returns same instance.
      */
-    appendElement(e: HTMLElement): NodeList
+    appendElement(e: Element): NodeList
     /*
     * - Appends append instance as child element to node.
     * - Returns same instance.
     */
-    appendElementTo(e: HTMLElement): NodeList
+    appendElementTo(e: Element): NodeList
     /**
      * - If `key` is only parameter, returns value of instance attribute with same key (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets value to instance attribute with same key and returns same instance.
@@ -508,7 +516,7 @@ interface HTMLCollection {
      * - Iterates recursively trough child elements tree and execute `callback` for each element.
      * - `callFirst` - if true, skips root, default is false
      */
-    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): NodeList
+    forEachChild(callback: (e: Element)=>void, callFirst?: boolean): NodeList
     /**
      * Sets innerHTML value of element or elements and returns same instance.
      */
@@ -520,7 +528,7 @@ interface HTMLCollection {
     /**
      * Adds event listeners to element or elements (calls `addEventListener`) and returns same instance.
      */
-    on(type: string, listener: EventListenerOrEventListenerObject): HTMLElement
+    on(type: string, listener: EventListenerOrEventListenerObject): Element
     /**
      * Removes attribute by key and returns same instance.
      */
@@ -575,7 +583,7 @@ interface Document {
      * - Returns all element descendants of node that match selectors (executes `instance.querySelector`).
      * - If no matches found for selector - returns dummy parameter with result length property set to 0 (to avoid unnecessary nestings in code)
      */
-    find(search: string): HTMLElementResult
+    find(search: string): ElementResult
     /**
      * - Returns all element descendants of node that match selectors (executes `instance.querySelectorAll`).
      */
@@ -634,16 +642,16 @@ interface String {
     /**
      * Creates element from tag name in a String and adds id and content if those params are present.
      */
-    createElement(id?: string, content?: string): HTMLElement
+    createElement(id?: string, content?: string): Element
     /**
-     * Builds HTMLElement from HTML markup in a string
+     * Builds Element from HTML markup in a string
      */
-    dom(): HTMLElement
+    dom(): Element
 }
 /**
  * List of various HTML element created by model containing element from model declared with same name or id
  */
-interface HTMLModelArray extends Array<HTMLElement> {
+interface HTMLModelArray extends Array<Element> {
     /**
      * - Adds CSS class to instance.
      * - Returns same instance.
@@ -653,12 +661,12 @@ interface HTMLModelArray extends Array<HTMLElement> {
      * - Appends child element to instance.
      * - Returns same instance.
      */
-    appendElement(e: HTMLElement): HTMLModelArray
+    appendElement(e: Element): HTMLModelArray
     /**
      * - Appends append instance as child element to node.
      * - Returns same instance.
      */
-    appendElementTo(e: HTMLElement): HTMLModelArray
+    appendElementTo(e: Element): HTMLModelArray
     /**
      * - If `key` is only parameter, returns value of instance attribute with same key (does not apply to `NodeList` and `HTMLModelArray`).
      * - If `value` is present, sets value to instance attribute with same key and returns same instance.
@@ -680,7 +688,7 @@ interface HTMLModelArray extends Array<HTMLElement> {
      * - Iterates recursively trough child elements tree and execute `callback` for each element.
      * - `callFirst` - if true, skips root, default is false
      */
-    forEachChild(callback: (e: HTMLElement)=>void, callFirst?: boolean): HTMLModelArray
+    forEachChild(callback: (e: Element)=>void, callFirst?: boolean): HTMLModelArray
     /**
      * Sets display to none and returns same instance.
      */

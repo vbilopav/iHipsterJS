@@ -2,19 +2,19 @@ define([
     "ihjs/app", 
     "ihjs/view-manager/utils", 
     "ihjs/template/load-text",
-    "ihjs/template/parser",
-    "ihjs/models/model"
+    "ihjs/template/parser"
 ], (
     app, 
     {types, getViewType}, 
     {getTemplate},
     {parseTemplate},
-    Model
 ) => {
 
     if (!window.customElements) {
         throw new Error("customElements are not supported! Please update your browser...");
     }
+
+    const Model = ihjs.Model;
 
     const resolveElement = (item, result) => {
         let component = class extends (result.default || result) {

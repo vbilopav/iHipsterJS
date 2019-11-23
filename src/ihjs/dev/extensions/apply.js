@@ -1,4 +1,4 @@
-define(["ihjs/app", "ihjs/models/test-proto"], (app, test) => {
+define(["ihjs/models/test-proto"], test => {
     
     let 
         loaded,
